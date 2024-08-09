@@ -1,8 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
 import dotenv from 'dotenv';
-import errorHandler from '../utils/errorHandler';
+import User from '../models/User';
 
 dotenv.config();
 
@@ -27,10 +25,7 @@ const generateToken = (user: User) => {
   });
 };
 
-const decodeToken =
-  (token: string) =>
-    async(req: Request, res: Response, next: NextFunction) => {
-      return jwt.verify(token, process.env.JWT_SECRET as string);
-    };
-
+const decodeToken = (token: string) => {
+  return jwt.verify(token, process.env.JWT_SECRET as string);
+};
 export { generateToken, decodeToken };

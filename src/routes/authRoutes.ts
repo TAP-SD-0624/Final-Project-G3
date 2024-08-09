@@ -13,7 +13,7 @@ authRouter.route('/signup').post(validateJoiRequest(registerValidation), signup)
 authRouter.route('/login').post(validateJoiRequest(loginValidation), login);
 authRouter.route('/logout').get(authMiddleware, logout);
 
-authRouter.route('/protected').get(authMiddleware, (req, res) => {
+authRouter.route('/protected').get(authMiddleware,adminMiddleware, (req, res) => {
   res.send('Hello, authenticated user!');
 });
 

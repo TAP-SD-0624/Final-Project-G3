@@ -42,7 +42,8 @@ const login = errorHandler(
     const token = generateToken(user);
 
     res.cookie('jwt', token, {
-      httpOnly: true, // Ensures the cookie is only sent via HTTP(S) and not accessible via JavaScript
+      // Ensures the cookie is only sent via HTTP(S) and not accessible via JavaScript
+      httpOnly: true,
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day expiration
     });
 
@@ -52,6 +53,7 @@ const login = errorHandler(
 
 // Logout handler
 const logout = errorHandler(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async(req: Request, res: Response, next: NextFunction) => {
     res.clearCookie('token', { httpOnly: true });
     res.status(200).json({ message: 'Successfully logged out' });

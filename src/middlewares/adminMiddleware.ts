@@ -4,7 +4,8 @@ import User from '../models/User';
 import errorHandler from '../utils/errorHandler';
 
 const adminMiddleware = errorHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async(req: Request, res: Response, next: NextFunction) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const user = (req as any).user as User;
 
     if (!user) {
