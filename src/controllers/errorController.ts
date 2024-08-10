@@ -12,6 +12,7 @@ const errorController = (err: Error, req: Request, res: Response, next: NextFunc
     res.status(500).json({
       status: 'error',
       message: err.message,
+      stack: err.stack,
     });
   }
 };

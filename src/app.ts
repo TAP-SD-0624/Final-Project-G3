@@ -7,6 +7,7 @@ import {
   endpointNotImplemented,
   tooManyRequests,
 } from './controllers/suspicionController';
+import cookieParser from 'cookie-parser';
 
 const app: Express = express();
 
@@ -14,6 +15,7 @@ const app: Express = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser()); // For parsing cookies
 
 // limit the number of requests sent to the server to under 500 requests per minute.
 app.use(

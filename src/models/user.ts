@@ -31,6 +31,11 @@ User.init(
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
+      validate: {
+        isEmail: {
+          msg: 'Invalid email format',
+        },
+      },
     },
     dateOfBirth: {
       type: DataTypes.DATEONLY,
