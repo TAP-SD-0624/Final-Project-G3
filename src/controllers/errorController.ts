@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import APIError from '../utils/APIError';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorController = (err: Error, req: Request, res: Response, next: NextFunction): void => {
   if (err instanceof APIError) {
     res.status(err.statusCode).json({
