@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
+import categoryRouter from './routes/categoryRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
 import {
@@ -28,6 +29,7 @@ app.use(
 
 // authentication routes
 app.use('/api/auth', authRouter);
+app.use('/api/categories', categoryRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response
