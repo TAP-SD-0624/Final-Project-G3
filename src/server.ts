@@ -1,9 +1,13 @@
 import dotenv from 'dotenv';
+// to get local configuration for your system,
+// see .env.example to understand what are the required variables.
+dotenv.config({ path: './config/.env.local' });
+// to get global configuration that should be applied on all systems.
+dotenv.config({ path: './config/.env' });
+
 import app from './app';
 import sequelize from './database';
 import associateModels from './models/associations';
-
-dotenv.config();
 
 const PORT: number | undefined = Number(process.env.PORT) || 80;
 

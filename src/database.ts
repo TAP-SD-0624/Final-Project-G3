@@ -1,8 +1,5 @@
 import { Sequelize } from 'sequelize';
 import dbLogger from './utils/dbLogger';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const DB_NAME: string | undefined = process.env.DB_NAME || 'ecommerce_system';
 const DB_USERNAME: string | undefined = process.env.DB_USER || 'root';
