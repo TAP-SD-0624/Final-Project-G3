@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 const categoryValidation = Joi.object({
   name: Joi.string()
+    .min(3)
     .max(15)
     .required()
     .messages({
