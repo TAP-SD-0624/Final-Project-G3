@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express'; 
+import { Request, Response, NextFunction } from 'express';
 import Category from '../models/Category';
 import errorHandler from '../utils/errorHandler';
-import checkIfCategoryExists from '../services/categoryService'
+import checkIfCategoryExists from '../services/categoryService';
 
 const createCategory = errorHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async(req: Request, res: Response, next: NextFunction) => {
     const { name, description } = req.body;
 
     // Check if the category already exists
@@ -17,4 +17,4 @@ const createCategory = errorHandler(
   },
 );
 
-export { createCategory }
+export { createCategory };
