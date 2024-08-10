@@ -9,7 +9,7 @@ const SECURE_ALGORITH = process.env.SECURE_ALGORITH || 'HS256';
 const ECOMMERCE_SYSTEM = process.env.ECOMMERCE_SYSTEM || 'E-commerce-System';
 const secretTokenKey = process.env.JWT_SECRET as string;
 
-const generateToken = (user: User) => {
+const generateToken = (user: User):string => {
   const payload = {
     sub: user.id,
     iss: ECOMMERCE_SYSTEM,

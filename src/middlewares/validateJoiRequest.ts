@@ -1,16 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
+import APIError from '../utils/APIError';
 
 const validateJoiRequest = (schema: Joi.ObjectSchema) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction):void =>  {
     const { error } = schema.validate(req.body, { abortEarly: false });
-
     if (error) {
-      return res.status(400).json({
-        errors: error.details.map((detail) => detail.message),
-      });
+      const errors: string = error.details.map((err) => err.message).toString();
+      return next(new APIError(errors, 400));
     }
-
     next();
   };
 };

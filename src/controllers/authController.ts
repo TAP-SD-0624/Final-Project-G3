@@ -55,7 +55,7 @@ const login = errorHandler(
 const logout = errorHandler(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async(req: Request, res: Response, next: NextFunction) => {
-    res.clearCookie('token', { httpOnly: true });
+    res.clearCookie('jwt', { httpOnly: true });
     res.status(200).json({ message: 'Successfully logged out' });
   },
 );

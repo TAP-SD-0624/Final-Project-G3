@@ -9,14 +9,14 @@ import { Identifier } from 'sequelize';
 const authMiddleware = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return next(new APIError('Unauthorized: No token provided', 401));
+    let token;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      [, token] = authHeader.split(' ');
     }
 
-    let [, token] = authHeader.split(' ');
     // If not found in the header, try to get it from cookies
     if (!token) {
-      token = req.cookies?.token;
+      token = req.cookies.jwt;
     }
 
     // If token is still not found

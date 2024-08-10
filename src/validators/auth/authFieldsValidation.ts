@@ -34,28 +34,22 @@ const registerValidation = Joi.object({
   password: Joi.string()
     .min(8)
     .required()
-    .pattern(/[A-Z]/)
-    .pattern(/[a-z]/)
-    .pattern(/\d/)
-    .pattern(/[\W_]/)
+    .pattern(/[A-Z]/, 'uppercase letter')
+    .pattern(/[a-z]/, 'lowercase letter')
+    .pattern(/\d/, 'number')
+    .pattern(/[\W_]/, 'special character')
     .messages({
       'string.min': 'Password must be at least 8 characters long',
-      'string.pattern.base': {
-        'regex.base': `Password must contain at least one uppercase letter, one lowercase letter,
-        one number, and one special character`,
-      },
+      'string.pattern.name': 'Password must contain at least one {#name}',
       'any.required': 'Password is required',
     }),
-  confirmPassword: Joi.string()
-    .valid(Joi.ref('password'))
+  confirmPassword: Joi.any()
+    .equal(Joi.ref('password'))
     .required()
     .messages({
       'any.only': 'Passwords do not match',
-      'any.required': 'Confirm password is required',
+      'any.required': 'Password confirmation is required',
     }),
-  role: Joi.string().valid('admin', 'user').optional().messages({
-    'any.only': 'Role must be either admin or user',
-  }),
 });
 
 const loginValidation = Joi.object({
