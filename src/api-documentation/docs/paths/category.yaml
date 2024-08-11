@@ -1,0 +1,16 @@
+paths:
+  /api/category/create:
+    post:
+      summary: Create a new category
+      tags: [Category]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategory'
+      responses:
+        201:
+          description: Category created successfully
+        400:
+          description: Invalid input data

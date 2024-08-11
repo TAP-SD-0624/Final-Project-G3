@@ -1,0 +1,18 @@
+CreateCategory:
+  type: object
+  required:
+    - name
+    - description
+  properties:
+    name:
+      type: string
+      description: The name of the category
+      minLength: 3
+      maxLength: 15
+    description:
+      type: string
+      description: A brief description of the category
+      maxLength: 150
+  example:
+    name: Electronics
+    description: Devices and gadgets related to electronics.

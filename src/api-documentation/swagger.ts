@@ -4,8 +4,8 @@ import { Application } from 'express';
 import path from 'path';
 
 // Load the YAML file
-const swaggerDocument = YAML.load(path.join(__dirname, '../swagger.yaml'));
+const swaggerDocument = YAML.load(path.join(__dirname, '../api-documentation/swagger.yaml'));
 
-export const setupSwagger = (app: Application) => {
+export const setupSwagger = (app: Application): void  => {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 };

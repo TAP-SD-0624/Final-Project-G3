@@ -9,7 +9,7 @@ import {
   tooManyRequests,
 } from './controllers/suspicionController';
 import cookieParser from 'cookie-parser';
-import { setupSwagger } from '../config/swagger';
+import { setupSwagger } from './api-documentation/swagger';
 
 const app: Express = express();
 
