@@ -7,6 +7,11 @@ import { addBrandValidation } from '../validators/brandFilesValidation';
 
 const brandRouter = Router();
 
-brandRouter.route('/createBrand').post(authMiddleware,adminMiddleware,validateJoiRequest(addBrandValidation), createNewBrand);
+brandRouter.route('/createBrand').post(
+  authMiddleware,
+  adminMiddleware,
+  validateJoiRequest(addBrandValidation),
+  createNewBrand,
+);
 
 export default brandRouter;

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
 import Brand from '../models/Brand';
 import APIError from '../utils/APIError';
-import { checkIfUserExists } from '../services/userService';
 import checkIfBrandExists from '../services/brandService';
 
 const createNewBrand = errorHandler(
