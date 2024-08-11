@@ -67,7 +67,7 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
-        { argsIgnorePattern: '^_' },
+        { argsIgnorePattern: '^_|req|res|next|err' },
       ],
       '@typescript-eslint/no-empty-function': 'error',
       '@typescript-eslint/no-inferrable-types': 'error',
