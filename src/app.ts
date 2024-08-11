@@ -8,6 +8,7 @@ import {
   tooManyRequests,
 } from './controllers/suspicionController';
 import cookieParser from 'cookie-parser';
+import { setupSwagger } from '../config/swagger';
 
 const app: Express = express();
 
@@ -25,6 +26,9 @@ app.use(
     handler: tooManyRequests,
   }),
 );
+
+// Setup Swagger
+setupSwagger(app);
 
 // authentication routes
 app.use('/api/auth', authRouter);
