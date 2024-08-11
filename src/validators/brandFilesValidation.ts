@@ -11,4 +11,11 @@ const addBrandValidation = Joi.object({
       'string.max': 'Brand name must be less than or equal to 20 characters long',
     }),
 });
-export {  addBrandValidation };
+const getBrandValidator = Joi.object({
+  id: Joi.string()
+    .required()
+    .messages({
+      'any.required': 'brand ID is required',
+    }),
+});
+export { addBrandValidation, getBrandValidator };
