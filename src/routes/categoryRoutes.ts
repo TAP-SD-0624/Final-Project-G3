@@ -11,7 +11,8 @@ const categoryRouter = Router();
 
 categoryRouter.use(authMiddleware);
 categoryRouter.use(adminMiddleware);
-categoryRouter.route('/create').post(validateJoiRequest(categoryValidation), createCategory);
+categoryRouter.route('/createCategory')
+  .post(validateJoiRequest(categoryValidation), createCategory);
 
 categoryRouter.route('*').all(methodNotAllowed);
 
