@@ -3,7 +3,7 @@ import errorHandler from '../utils/errorHandler';
 import Brand from '../models/Brand';
 import APIError from '../utils/APIError';
 import { checkIfUserExists } from '../services/userService';
-import checkIfBrandExists from '../services/brandServices';
+import checkIfBrandExists from '../services/brandService';
 
 const createNewBrand = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {

@@ -3,7 +3,7 @@ import authMiddleware from '../middlewares/authMiddleware';
 import adminMiddleware from '../middlewares/adminMiddleware';
 import { createNewBrand } from '../controllers/brandsController';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
-import { addBrandValidation } from '../validators/brand/brandFilesValidation';
+import { addBrandValidation } from '../validators/brandFilesValidation';
 
 const brandRouter = Router();
 

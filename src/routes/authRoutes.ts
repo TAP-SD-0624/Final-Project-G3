@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { signup, login, logout } from '../controllers/authController';
 import { methodNotAllowed } from '../controllers/suspicionController';
-import { registerValidation, loginValidation } from '../validators/auth/authFieldsValidation';
+import { registerValidation, loginValidation } from '../validators/authFieldsValidation';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 
 import  authMiddleware  from '../middlewares/authMiddleware';
