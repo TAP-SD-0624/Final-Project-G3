@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 import APIError from '../utils/APIError';
 
-const validateJoiRequest = (options: { bodySchema?: Joi.ObjectSchema, paramsSchema?: Joi.ObjectSchema }) => {
+const validateJoiRequest = (options: {
+  bodySchema?: Joi.ObjectSchema, paramsSchema?: Joi.ObjectSchema
+}) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const { bodySchema, paramsSchema } = options;
 

@@ -11,7 +11,7 @@ const brandRouter = Router();
 brandRouter.route('/createBrand').post(
   authMiddleware,
   adminMiddleware,
-  validateJoiRequest({bodySchema:addBrandValidation}),
+  validateJoiRequest({ bodySchema: addBrandValidation }),
   createNewBrand,
 );
 brandRouter.route('/getAllBrands').get(
@@ -20,7 +20,7 @@ brandRouter.route('/getAllBrands').get(
 );
 brandRouter.route('/:id').get(
   authMiddleware,
-  validateJoiRequest({paramsSchema:getBrandValidator}),
+  validateJoiRequest({ paramsSchema: getBrandValidator }),
   getBrandById,
 );
 
