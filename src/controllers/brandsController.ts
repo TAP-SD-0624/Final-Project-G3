@@ -5,7 +5,7 @@ import APIError from '../utils/APIError';
 import checkIfBrandExists from '../services/brandService';
 
 const createNewBrand = errorHandler(
-  async(req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const brandName = req.body.name;
     if (await checkIfBrandExists(brandName)) {
       return next(new APIError('Brand already exist', 400));
@@ -18,5 +18,15 @@ const createNewBrand = errorHandler(
     });
   },
 );
+const getAllBrands = errorHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const brands = await Brand.findAll({
+      attributes: ["id", "name"],
+    });
+    res.status(201).json({
+      brands: brands,
+    });
+  },
+);
 
-export { createNewBrand };
+export { createNewBrand, getAllBrands };
