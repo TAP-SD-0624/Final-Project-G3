@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
+import categoryRouter from './routes/categoryRoutes';
 import brandRouter from './routes/brandRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
@@ -29,6 +30,7 @@ app.use(
 
 // authentication routes
 app.use('/api/auth', authRouter);
+app.use('/api/categories', categoryRouter);
 // product routes
 app.use('/api/brand', brandRouter);
 
