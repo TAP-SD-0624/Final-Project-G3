@@ -23,4 +23,15 @@ const categoryValidation = Joi.object({
     }),
 });
 
-export default categoryValidation;
+const categoryIdValidation = Joi.object({
+  id: Joi.string()
+    .uuid({ version: 'uuidv4' })
+    .required()
+    .messages({
+      'string.base': 'ID should be a type of string.',
+      'string.guid': 'ID must be a valid UUID.',
+      'any.required': 'ID is a required field.',
+    }),
+});
+
+export  { categoryValidation , categoryIdValidation };

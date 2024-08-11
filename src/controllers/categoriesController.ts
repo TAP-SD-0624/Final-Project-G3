@@ -24,4 +24,18 @@ const getAllCategories = errorHandler(
   },
 );
 
-export { createCategory , getAllCategories };
+const getCategoryById = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const category = await Category.findByPk(id);
+
+    if (!category) {
+      res.status(404).json({ message: 'Category not found.' });
+      return;
+    }
+
+    res.status(200).json(category);
+  },
+);
+
+export { createCategory , getCategoryById , getAllCategories };
