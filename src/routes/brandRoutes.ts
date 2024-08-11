@@ -4,6 +4,7 @@ import adminMiddleware from '../middlewares/adminMiddleware';
 import { createNewBrand } from '../controllers/brandsController';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import { addBrandValidation } from '../validators/brandFilesValidation';
+import { methodNotAllowed } from '../controllers/suspicionController';
 
 const brandRouter = Router();
 
@@ -14,4 +15,5 @@ brandRouter.route('/createBrand').post(
   createNewBrand,
 );
 
+brandRouter.route('*').all(methodNotAllowed);
 export default brandRouter;
