@@ -35,8 +35,7 @@ const getCategoryById = errorHandler(
     const category = await Category.findByPk(id);
 
     if (!category) {
-      res.status(404).json({ message: 'Category not found.' });
-      return;
+      return next(new APIError('Category not found.', 404));
     }
 
     res.status(200).json(category);
