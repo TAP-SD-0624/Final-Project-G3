@@ -24,9 +24,15 @@ const getAllBrands = errorHandler(
     const brands = await Brand.findAll({
       attributes: ['id', 'name'],
     });
-    res.status(201).json({
-      brands,
-    });
+    if (brands.length <= 0) {
+      res.status(200).send({
+        message: 'No brands found',
+      });
+    } else {
+      res.status(200).json({
+        brands,
+      });
+    }
   },
 );
 
