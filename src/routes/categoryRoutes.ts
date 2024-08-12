@@ -3,7 +3,7 @@ import {
   createCategory,
   getAllCategories,
   getCategoryById,
-  // deleteCategoryById,
+  deleteCategoryById,
   updateCategory,
 } from '../controllers/categoriesController';
 import { methodNotAllowed } from '../controllers/suspicionController';
@@ -32,8 +32,8 @@ categoryRouter.route('/updateCategory')
   .put(validateJoiRequest(updateCategoryValidation),
     validateJoiRequest(categoryIdValidation, 'params'),
     updateCategory);
-// categoryRouter.route('/:id')
-//   .delete(validateJoiRequest(categoryIdValidation, 'params'),deleteCategoryById);
+categoryRouter.route('/:id')
+  .delete(validateJoiRequest(categoryIdValidation, 'params'),deleteCategoryById);
 
 categoryRouter.route('*').all(methodNotAllowed);
 
