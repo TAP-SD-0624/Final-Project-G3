@@ -13,16 +13,20 @@ const addBrandValidation = Joi.object({
 });
 const getBrandValidator = Joi.object({
   id: Joi.string()
+    .uuid({ version: 'uuidv4' })
     .required()
     .messages({
+      'string.guid': 'ID must be a valid UUID.',
       'any.required': 'Brand ID is required',
       'string.base': 'Brand ID must be a string',
     }),
 });
 const updateBrandValidator = Joi.object({
   id: Joi.string()
+    .uuid({ version: 'uuidv4' })
     .required()
     .messages({
+      'string.guid': 'ID must be a valid UUID.',
       'any.required': 'Brand ID is required',
       'string.base': 'Brand ID must be a string',
     }),
