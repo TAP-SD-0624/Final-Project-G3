@@ -3,7 +3,7 @@ import Joi from 'joi';
 const categoryValidation = Joi.object({
   name: Joi.string()
     .min(3)
-    .max(15)
+    .max(50)
     .required()
     .messages({
       'string.base': 'Name should be a type of text.',
