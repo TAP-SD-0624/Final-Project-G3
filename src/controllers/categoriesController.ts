@@ -42,4 +42,42 @@ const getCategoryById = errorHandler(
   },
 );
 
-export { createCategory , getCategoryById , getAllCategories };
+
+const deleteCategoryById = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const category = await Category.findByPk(id);
+
+    if (!category) {
+      return next(new APIError('Category not found.', 404));
+    }
+
+    await category.destroy();
+    res.status(200).json(category);
+  },
+);
+
+const updateCategory = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const { name, description } = req.body;
+
+    const category = await Category.findByPk(id);
+    if (!category) {
+      return next(new APIError('Category not found.', 404));
+    }
+
+    category.name = name;
+    category.description = description;
+    await category.save();
+    res.status(200).json(category);
+  },
+);
+
+export {
+  createCategory,
+  getAllCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategoryById,
+};
