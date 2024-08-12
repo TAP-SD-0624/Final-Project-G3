@@ -6,9 +6,14 @@ import {
   deleteBrandById,
   getAllBrands,
   getBrandById,
+  updateBrandById,
 } from '../controllers/brandsController';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
-import { addBrandValidation, getBrandValidator } from '../validators/brandFilesValidation';
+import {
+  addBrandValidation,
+  getBrandValidator,
+  updateBrandValidator,
+} from '../validators/brandFilesValidation';
 import { methodNotAllowed } from '../controllers/suspicionController';
 
 const brandRouter = Router();
@@ -27,6 +32,12 @@ brandRouter.route('/:id').get(
   authMiddleware,
   validateJoiRequest({ paramsSchema: getBrandValidator }),
   getBrandById,
+);
+brandRouter.route('/updateBrand').put(
+  authMiddleware,
+  adminMiddleware,
+  validateJoiRequest({ bodySchema: updateBrandValidator }),
+  updateBrandById,
 );
 brandRouter.route('/:id').delete(
   authMiddleware,

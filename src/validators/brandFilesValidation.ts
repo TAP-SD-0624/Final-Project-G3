@@ -19,4 +19,18 @@ const getBrandValidator = Joi.object({
       'string.base': 'Brand ID must be a string',
     }),
 });
-export { addBrandValidation, getBrandValidator };
+const updateBrandValidator = Joi.object({
+  id: Joi.string()
+    .required()
+    .messages({
+      'any.required': 'Brand ID is required',
+      'string.base': 'Brand ID must be a string',
+    }),
+  name: Joi.string()
+    .required()
+    .messages({
+      'any.required': 'Brand name is required',
+      'string.base': 'Brand name must be a string',
+    }),
+});
+export { addBrandValidation, getBrandValidator, updateBrandValidator };

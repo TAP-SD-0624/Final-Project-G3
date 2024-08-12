@@ -43,6 +43,32 @@ const getBrandById = errorHandler(
     res.status(201).json(brand);
   },
 );
+const updateBrandById = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id, name } = req.body;
+    const brand = await Brand.findOne({
+      where: { id },
+    });
+    if (!brand) {
+      return next(new APIError('Brand not found', 404));
+    }
+    await Brand.update(
+      { name },
+      {
+        where: { id },
+        returning: true,
+      },
+    );
+    const updatedBrand = await Brand.findOne({
+      where: { id },
+      attributes: ['id', 'name'],
+    });
+    res.status(200).json({
+      message: 'Brand updated successfully',
+      brand: updatedBrand,
+    });
+  },
+);
 
 const deleteBrandById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -61,4 +87,4 @@ const deleteBrandById = errorHandler(
     });
   },
 );
-export { createNewBrand, getAllBrands, getBrandById,deleteBrandById };
+export { createNewBrand, getAllBrands, getBrandById, updateBrandById, deleteBrandById };
