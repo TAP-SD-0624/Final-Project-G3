@@ -18,5 +18,21 @@ const createNewBrand = errorHandler(
     });
   },
 );
+const getAllBrands = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const brands = await Brand.findAll({
+      attributes: ['id', 'name'],
+    });
+    if (brands.length <= 0) {
+      res.status(200).send({
+        message: 'No brands found',
+      });
+    } else {
+      res.status(200).json({
+        brands,
+      });
+    }
+  },
+);
 
-export { createNewBrand };
+export { createNewBrand, getAllBrands };
