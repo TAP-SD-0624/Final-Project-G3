@@ -43,7 +43,10 @@ const getBrandById = errorHandler(
       where: { id: brandId },
       attributes: ['id', 'name'],
     });
-    res.status(201).json(brand);
+    if (!brand){
+      return next(new APIError('Brand doesn\'t exist', 404));
+    }
+    res.status(200).json(brand);
   },
 );
 
