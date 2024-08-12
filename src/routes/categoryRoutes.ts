@@ -1,12 +1,15 @@
 import { Router } from 'express';
-import { 
+import {
   createCategory,
   getAllCategories,
   getCategoryById,
-  deleteCategoryById,
+  // deleteCategoryById,
+  updateCategory,
 } from '../controllers/categoriesController';
 import { methodNotAllowed } from '../controllers/suspicionController';
-import { categoryValidation , categoryIdValidation } from '../validators/categoryFieldsValidation';
+import { createCategoryValidation
+  , categoryIdValidation
+  , updateCategoryValidation } from '../validators/categoryFieldsValidation';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 
 import authMiddleware  from '../middlewares/authMiddleware';
@@ -24,9 +27,13 @@ categoryRouter.route('/:id')
 // -------------- Admin User Routes -----------------
 categoryRouter.use(adminMiddleware);
 categoryRouter.route('/createCategory')
-  .post(validateJoiRequest(categoryValidation), createCategory);
-categoryRouter.route('/:id')
-  .delete(validateJoiRequest(categoryIdValidation, 'params'),deleteCategoryById);
+  .post(validateJoiRequest(createCategoryValidation), createCategory);
+categoryRouter.route('/updateCategory')
+  .put(validateJoiRequest(updateCategoryValidation),
+    validateJoiRequest(categoryIdValidation, 'params'),
+    updateCategory);
+// categoryRouter.route('/:id')
+//   .delete(validateJoiRequest(categoryIdValidation, 'params'),deleteCategoryById);
 
 categoryRouter.route('*').all(methodNotAllowed);
 

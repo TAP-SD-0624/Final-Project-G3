@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const categoryValidation = Joi.object({
+const createCategoryValidation = Joi.object({
   name: Joi.string()
     .min(3)
     .max(50)
@@ -34,4 +34,25 @@ const categoryIdValidation = Joi.object({
     }),
 });
 
-export  { categoryValidation , categoryIdValidation };
+const updateCategoryValidation = Joi.object({
+  name: Joi.string()
+    .min(3)
+    .max(50)
+    .messages({
+      'string.base': 'Name should be a type of text.',
+      'string.empty': 'Name cannot be empty.',
+      'string.max': 'Name should have a maximum length of {#limit}.',
+    }),
+
+  description: Joi.string()
+    .max(150)
+    .messages({
+      'string.base': 'Description should be a type of text.',
+      'string.empty': 'Description cannot be empty.',
+      'string.max': 'Description should have a maximum length of {#limit}.',
+    }),
+}).min(1).messages({
+  'object.min': 'At least one field is required.',
+});
+
+export  { createCategoryValidation , categoryIdValidation ,updateCategoryValidation };
