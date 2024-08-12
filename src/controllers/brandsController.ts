@@ -37,8 +37,28 @@ const getBrandById = errorHandler(
       where: { id: brandId },
       attributes: ['id', 'name'],
     });
+    if (!brand){
+      return next(new APIError('Brand doesn\'t exist', 404));
+    }
     res.status(201).json(brand);
   },
 );
 
-export { createNewBrand, getAllBrands, getBrandById };
+const deleteBrandById = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const brandId = req.params.id;
+    const brand = await Brand.findOne({
+      where: { id: brandId },
+    });
+    if (!brand) {
+      return next(new APIError('Brand not found', 404));
+    }
+    await Brand.destroy({
+      where: { id: brandId },
+    });
+    res.status(200).json({
+      message: 'Brand deleted successfully',
+    });
+  },
+);
+export { createNewBrand, getAllBrands, getBrandById,deleteBrandById };

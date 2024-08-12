@@ -15,7 +15,8 @@ const getBrandValidator = Joi.object({
   id: Joi.string()
     .required()
     .messages({
-      'any.required': 'brand ID is required',
+      'any.required': 'Brand ID is required',
+      'string.base': 'Brand ID must be a string',
     }),
 });
 export { addBrandValidation, getBrandValidator };
