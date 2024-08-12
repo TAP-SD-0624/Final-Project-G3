@@ -11,7 +11,7 @@ const brandRouter = Router();
 brandRouter.route('/createBrand').post(
   authMiddleware,
   adminMiddleware,
-  validateJoiRequest(addBrandValidation),
+  validateJoiRequest({ bodySchema: addBrandValidation }),
   createNewBrand,
 );
 

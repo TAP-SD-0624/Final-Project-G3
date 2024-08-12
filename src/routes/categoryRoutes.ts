@@ -20,20 +20,25 @@ const categoryRouter = Router();
 
 // -------------- Auth User Routes -----------------
 categoryRouter.use(authMiddleware);
+
 categoryRouter.route('/getAllCategories').get(getAllCategories);
+
 categoryRouter.route('/:id')
-  .get(validateJoiRequest(categoryIdValidation, 'params'),getCategoryById);
+  .get(validateJoiRequest({ paramsSchema: categoryIdValidation }),getCategoryById);
 
 // -------------- Admin User Routes -----------------
 categoryRouter.use(adminMiddleware);
+
 categoryRouter.route('/createCategory')
-  .post(validateJoiRequest(createCategoryValidation), createCategory);
-categoryRouter.route('/updateCategory')
-  .put(validateJoiRequest(updateCategoryValidation),
-    validateJoiRequest(categoryIdValidation, 'params'),
-    updateCategory);
+  .post(validateJoiRequest({ bodySchema: createCategoryValidation }), createCategory);
+
 categoryRouter.route('/:id')
-  .delete(validateJoiRequest(categoryIdValidation, 'params'),deleteCategoryById);
+  .put(validateJoiRequest({ bodySchema: updateCategoryValidation
+    , paramsSchema: categoryIdValidation }),
+  updateCategory);
+
+categoryRouter.route('/:id')
+  .delete(validateJoiRequest({ paramsSchema: categoryIdValidation }),deleteCategoryById);
 
 categoryRouter.route('*').all(methodNotAllowed);
 

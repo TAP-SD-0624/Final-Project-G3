@@ -42,7 +42,6 @@ const getCategoryById = errorHandler(
   },
 );
 
-
 const deleteCategoryById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
@@ -53,7 +52,9 @@ const deleteCategoryById = errorHandler(
     }
 
     await category.destroy();
-    res.status(200).json(category);
+    res.status(201).json({
+      message: 'Category deleted successfully',
+    });
   },
 );
 
@@ -67,10 +68,13 @@ const updateCategory = errorHandler(
       return next(new APIError('Category not found.', 404));
     }
 
-    category.name = name;
-    category.description = description;
+    // Update only the fields that are provided in the request
+    Object.assign(category, { ...(name && { name }), ...(description && { description }) });
+
     await category.save();
-    res.status(200).json(category);
+    res.status(200).json({
+      message: 'Category updated successfully',
+      category });
   },
 );
 
