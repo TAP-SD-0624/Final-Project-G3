@@ -1,0 +1,45 @@
+CreateNewBrand:
+  type: object
+  properties:
+    name:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: Apple
+  required:
+    - name
+
+UpdateBrand:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+    name:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: Apple
+  required:
+    - id
+    - name
+
+BrandResponse:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    name:
+      type: string
+
+BrandListResponse:
+  type: object
+  properties:
+    status:
+      type: string
+    brands:
+      type: array
+      items:
+        $ref: '#/components/schemas/BrandResponse'

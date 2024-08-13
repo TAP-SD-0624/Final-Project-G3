@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import {
-  createCategory,
+  createNewCategory,
   getAllCategories,
   getCategoryById,
   deleteCategoryById,
-  updateCategory,
+  updateCategoryById,
 } from '../controllers/categoriesController';
 import { methodNotAllowed } from '../controllers/suspicionController';
 import { createCategoryValidation
@@ -18,27 +18,37 @@ import adminMiddleware from '../middlewares/adminMiddleware';
 
 const categoryRouter = Router();
 
-// -------------- Auth User Routes -----------------
-categoryRouter.use(authMiddleware);
-
-categoryRouter.route('/getAllCategories').get(getAllCategories);
-
-categoryRouter.route('/:id')
-  .get(validateJoiRequest({ paramsSchema: categoryIdValidation }),getCategoryById);
-
-// -------------- Admin User Routes -----------------
-categoryRouter.use(adminMiddleware);
-
-categoryRouter.route('/createCategory')
-  .post(validateJoiRequest({ bodySchema: createCategoryValidation }), createCategory);
+categoryRouter.route('/')
+  .get(
+    authMiddleware,
+    getAllCategories,
+  )
+  .post(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ bodySchema: createCategoryValidation }),
+    createNewCategory,
+  );
 
 categoryRouter.route('/:id')
-  .put(validateJoiRequest({ bodySchema: updateCategoryValidation
-    , paramsSchema: categoryIdValidation }),
-  updateCategory);
-
-categoryRouter.route('/:id')
-  .delete(validateJoiRequest({ paramsSchema: categoryIdValidation }),deleteCategoryById);
+  .get(
+    authMiddleware,
+    validateJoiRequest({ paramsSchema: categoryIdValidation }),
+    getCategoryById,
+  )
+  .put(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: categoryIdValidation }),
+    validateJoiRequest({ bodySchema: updateCategoryValidation }),
+    updateCategoryById,
+  )
+  .delete(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: categoryIdValidation }),
+    deleteCategoryById,
+  );
 
 categoryRouter.route('*').all(methodNotAllowed);
 

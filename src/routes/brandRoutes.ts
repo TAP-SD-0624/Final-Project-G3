@@ -10,39 +10,43 @@ import {
 } from '../controllers/brandsController';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import {
-  addBrandValidation, brandIdValidation, updateBrandValidation,
+  createBrandValidation, brandIdValidation, updateBrandValidation,
 } from '../validators/brandFilesValidation';
 import { methodNotAllowed } from '../controllers/suspicionController';
 
 const brandRouter = Router();
 
-brandRouter.route('/').post(
-  authMiddleware,
-  adminMiddleware,
-  validateJoiRequest({ bodySchema: addBrandValidation }),
-  createNewBrand,
-);
-brandRouter.route('/').get(
-  authMiddleware,
-  getAllBrands,
-);
-brandRouter.route('/:id').get(
-  authMiddleware,
-  validateJoiRequest({ paramsSchema: brandIdValidation }),
-  getBrandById,
-);
-brandRouter.route('/').put(
-  authMiddleware,
-  adminMiddleware,
-  validateJoiRequest({ bodySchema: updateBrandValidation , paramsSchema: brandIdValidation }),
-  updateBrandById,
-);
-brandRouter.route('/:id').delete(
-  authMiddleware,
-  adminMiddleware,
-  validateJoiRequest({ paramsSchema: brandIdValidation }),
-  deleteBrandById,
-);
+brandRouter.route('/')
+  .get(
+    authMiddleware,
+    getAllBrands,
+  )
+  .post(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ bodySchema: createBrandValidation }),
+    createNewBrand,
+  );
+
+brandRouter.route('/:id')
+  .get(
+    authMiddleware,
+    validateJoiRequest({ paramsSchema: brandIdValidation }),
+    getBrandById,
+  )
+  .put(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: brandIdValidation }),
+    validateJoiRequest({ bodySchema: updateBrandValidation }),
+    updateBrandById,
+  )
+  .delete(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: brandIdValidation }),
+    deleteBrandById,
+  );
 
 brandRouter.route('*').all(methodNotAllowed);
 export default brandRouter;

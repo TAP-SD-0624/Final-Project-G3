@@ -1,50 +1,51 @@
-paths:
-  /api/auth/signup:
-    post:
-      summary: Register a new user
-      tags: [Auth]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterUser'
-      responses:
-        201:
-          description: User registered successfully
-        400:
-          description: Email already in use or passwords do not match
+/api/auth/signup:
+  post:
+    tags: [Auth]
+    summary: Register a new user
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegisterUser'
+    responses:
+      '201':
+        description: User registered successfully
+      '400':
+        description: Bad request
+      '500':
+        description: Internal server error
 
-  /api/auth/login:
-    post:
-      summary: Log in a user
-      tags: [Auth]
-      requestBody:
-        required: true
+/api/auth/login:
+  post:
+    tags: [Auth]
+    summary: Login a user
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginUser'
+    responses:
+      '200':
+        description: User logged in successfully
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/LoginUser'
-      responses:
-        200:
-          description: Logged in successfully
-        401:
-          description: Invalid email or password
+      '401':
+        description: Unauthorized
+      '500':
+        description: Internal server error
 
-  /api/auth/logout:
-    get:
-      summary: Log out the current user
-      tags: [Auth]
-      responses:
-        200:
-          description: Successfully logged out
-
-  /api/auth/protected:
-    get:
-      summary: Access a protected route
-      tags: [Auth]
-      security:
-        - bearerAuth: []
-      responses:
-        200:
-          description: Access to protected route granted
+/api/auth/logout:
+  get:
+    tags: [Auth]
+    summary: Logout a user
+    security:
+      - bearerAuth: []
+    responses:
+      '200':
+        description: Successfully logged out
+      '401':
+        description: Unauthorized
+      '500':
+        description: Internal server error

@@ -34,9 +34,9 @@ setupSwagger(app);
 
 // authentication routes
 app.use('/api/auth', authRouter);
+// brands routes
+app.use('/api/brands', brandRouter);
 app.use('/api/categories', categoryRouter);
-// product routes
-app.use('/api/brand', brandRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response

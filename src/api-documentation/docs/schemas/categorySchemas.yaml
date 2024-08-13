@@ -1,18 +1,52 @@
-CreateCategory:
+CreateNewCategory:
   type: object
-  required:
-    - name
-    - description
   properties:
     name:
       type: string
-      description: The name of the category
       minLength: 3
-      maxLength: 15
+      maxLength: 50
+      example: Electronics
     description:
       type: string
-      description: A brief description of the category
       maxLength: 150
-  example:
-    name: Electronics
-    description: Devices and gadgets related to electronics.
+      example: All kinds of electronic items
+  required:
+    - name
+    - description
+
+UpdateCategory:
+  type: object
+  properties:
+    name:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: Electronics
+    description:
+      type: string
+      maxLength: 150
+      example: Updated description of the category
+  anyOf:
+    - required: [name]
+    - required: [description]
+
+CategoryResponse:
+  type: object
+  properties:
+    id:
+      type: string
+      format: uuid
+    name:
+      type: string
+    description:
+      type: string
+
+CategoryListResponse:
+  type: object
+  properties:
+    status:
+      type: string
+    categories:
+      type: array
+      items:
+        $ref: '#/components/schemas/CategoryResponse'

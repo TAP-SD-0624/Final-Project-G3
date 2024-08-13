@@ -4,7 +4,7 @@ import errorHandler from '../utils/errorHandler';
 import checkIfCategoryExists from '../services/categoryService';
 import APIError from '../utils/APIError';
 
-const createCategory = errorHandler(
+const createNewCategory = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { name, description } = req.body;
 
@@ -63,7 +63,7 @@ const deleteCategoryById = errorHandler(
   },
 );
 
-const updateCategory = errorHandler(
+const updateCategoryById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { name, description } = req.body;
@@ -93,9 +93,9 @@ const updateCategory = errorHandler(
 );
 
 export {
-  createCategory,
+  createNewCategory,
   getAllCategories,
   getCategoryById,
-  updateCategory,
+  updateCategoryById,
   deleteCategoryById,
 };

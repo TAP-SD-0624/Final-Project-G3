@@ -6,14 +6,6 @@ info:
 servers:
   - url: 'http://localhost:4000'
     description: Development server
-openapi: 3.0.0
-info:
-  title: E-Commerce API
-  version: 1.0.0
-  description: API documentation for E-Commerce system
-servers:
-  - url: 'http://localhost:4000'
-    description: Development server
 
 paths:
   /api/auth/signup:
@@ -68,7 +60,7 @@ paths:
         '500':
           description: Internal server error
 
-  /api/categories/createCategory:
+  /api/categories:
     post:
       tags: [Category]
       summary: Create a new category
@@ -78,7 +70,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCategory'
+              $ref: '#/components/schemas/CreateNewCategory'
       responses:
         '201':
           description: Category created successfully
@@ -89,7 +81,6 @@ paths:
         '500':
           description: Internal server error
 
-  /api/categories/getAllCategories:
     get:
       tags: [Category]
       summary: Get all categories
@@ -173,7 +164,7 @@ paths:
         '500':
           description: Internal server error
 
-  /api/brand:
+  /api/brands:
     post:
       tags: [Brand]
       summary: Create a new brand
@@ -183,7 +174,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateBrand'
+              $ref: '#/components/schemas/CreateNewBrand'
       responses:
         '201':
           description: Brand created successfully
@@ -205,7 +196,7 @@ paths:
         '500':
           description: Internal server error
 
-  /api/brand/{id}:
+  /api/brands/{id}:
     get:
       tags: [Brand]
       summary: Get a brand by ID
@@ -327,7 +318,7 @@ components:
         - email
         - password
 
-    CreateCategory:
+    CreateNewCategory:
       type: object
       properties:
         name:
@@ -380,7 +371,7 @@ components:
           items:
             $ref: '#/components/schemas/CategoryResponse'
 
-    CreateBrand:
+    CreateNewBrand:
       type: object
       properties:
         name:
@@ -426,33 +417,8 @@ components:
           items:
             $ref: '#/components/schemas/BrandResponse'
 
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-
-
-# paths:
-#   /signup:
-#     $ref: './docs/paths/auth.yaml#/paths/api/auth/signup'
-#   /login:
-#     $ref: './docs/paths/auth.yaml#/paths/api/auth/login'
-#   /category/create:
-#     $ref: './docs/paths/category.yaml#/paths/api/category/create'
-
-# components:
-#   schemas:
-#     RegisterUser:
-#       $ref: './docs/schemas/authSchemas.yaml#/RegisterUser'
-#     LoginUser:
-#       $ref: './docs/schemas/authSchemas.yaml#/LoginUser'
-#     CreateCategory:
-#       $ref: './docs/schemas/categorySchemas.yaml#/CreateCategory'
