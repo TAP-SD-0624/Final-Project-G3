@@ -8,10 +8,8 @@ import adminMiddleware from '../middlewares/adminMiddleware';
 
 const authRouter = Router();
 
-authRouter.route('/signup').post(validateJoiRequest(registerValidation), signup);
-
-authRouter.route('/login').post(validateJoiRequest(loginValidation), login);
-
+authRouter.route('/signup').post(validateJoiRequest({ bodySchema: registerValidation }), signup);
+authRouter.route('/login').post(validateJoiRequest({ bodySchema: loginValidation }), login);
 authRouter.route('/logout').get(authMiddleware, logout);
 
 authRouter.route('/protected').get(authMiddleware, adminMiddleware, (req, res) => {
