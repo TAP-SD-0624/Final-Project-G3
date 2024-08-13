@@ -30,6 +30,7 @@ const getAllBrands = errorHandler(
       });
     } else {
       res.status(200).json({
+        status: 'success',
         brands,
       });
     }
@@ -46,26 +47,25 @@ const getBrandById = errorHandler(
     if (!brand) {
       return next(new APIError('Brand doesn\'t exist', 404));
     }
-    res.status(200).json(brand);
+    res.status(200).json({
+      status: 'success',
+      brand,
+    });
   },
 );
 const updateBrandById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const { id, name } = req.body;
+    const { name } = req.body;
+    const { id } = req.params;
     const brand: Brand | null = await checkIfBrandExists({ id });
     if (brand === null) {
       return next(new APIError('Brand doesn\'t exist', 400));
     }
-    await Brand.update(
-      { name },
-      {
-        where: { id },
-        returning: true,
-      },
-    );
+    brand.name = name;
+    await brand.save();
     res.status(200).json({
-      message: 'Brand updated successfully',
-      brand: await Brand.findByPk(id),
+      status: 'success',
+      brand,
     });
   },
 );
@@ -73,7 +73,7 @@ const updateBrandById = errorHandler(
 const deleteBrandById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const brandId = req.params.id;
-    const brand: Brand | null = await checkIfBrandExists({ name: brandId });
+    const brand: Brand | null = await checkIfBrandExists({ id: brandId });
     if (brand === null) {
       return next(new APIError('Brand doesn\'t exist', 400));
     }

@@ -29,8 +29,8 @@ app.use(
 
 // authentication routes
 app.use('/api/auth', authRouter);
-// product routes
-app.use('/api/brand', brandRouter);
+// brands routes
+app.use('/api/brands', brandRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response

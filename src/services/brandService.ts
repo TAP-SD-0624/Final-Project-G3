@@ -1,11 +1,10 @@
 import Brand from '../models/Brand';
 
 const checkIfBrandExists = async(
-  options: { name?: string, id?: number },
+  options: { name?: string, id?: string },
 ): Promise<Brand|null> => {
   const { name, id } = options;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const query: { [key: string]: any } = {};
+  const query: { [key: string]: string } = {};
 
   if (name) {
     query.name = name;
@@ -16,7 +15,6 @@ const checkIfBrandExists = async(
   }
 
   const existingBrand = await Brand.findOne({ where: query });
-
   return existingBrand;
 };
 
