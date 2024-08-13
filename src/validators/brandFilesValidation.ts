@@ -11,4 +11,30 @@ const addBrandValidation = Joi.object({
       'string.max': 'Brand name must be less than or equal to 20 characters long',
     }),
 });
-export {  addBrandValidation };
+const brandIdValidation = Joi.object({
+  id: Joi.string()
+    .uuid({ version: 'uuidv4' })
+    .required()
+    .messages({
+      'string.guid': 'ID must be a valid UUID.',
+      'any.required': 'Brand ID is required',
+      'string.base': 'Brand ID must be a string',
+    }),
+});
+const updateBrandValidation = Joi.object({
+  id: Joi.string()
+    .uuid({ version: 'uuidv4' })
+    .required()
+    .messages({
+      'string.guid': 'ID must be a valid UUID.',
+      'any.required': 'Brand ID is required',
+      'string.base': 'Brand ID must be a string',
+    }),
+  name: Joi.string()
+    .required()
+    .messages({
+      'any.required': 'Brand name is required',
+      'string.base': 'Brand name must be a string',
+    }),
+});
+export { addBrandValidation, brandIdValidation, updateBrandValidation };

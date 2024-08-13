@@ -18,7 +18,7 @@ const createCategory = errorHandler(
     // Create the new category
     const category = await Category.create({ name, description });
 
-    res.status(201).json(category);
+    res.status(201).json({ status: 'success',category });
   },
 );
 
@@ -41,7 +41,9 @@ const getCategoryById = errorHandler(
       return next(new APIError('Category not found.', 404));
     }
 
-    res.status(200).json(category);
+    res.status(200).json({
+      status: 'success',
+      category });
   },
 );
 
@@ -56,7 +58,7 @@ const deleteCategoryById = errorHandler(
 
     await category.destroy();
     res.status(202).json({
-      message: 'Category deleted successfully',
+      status: 'success',
     });
   },
 );
@@ -71,12 +73,21 @@ const updateCategory = errorHandler(
       return next(new APIError('Category not found.', 404));
     }
 
-    // Update only the fields that are provided in the request
-    Object.assign(category, { ...(name && { name }), ...(description && { description }) });
+    // Check if the updated name already exists, if name is provided
+    if (name && name !== category.name) {
+      const categoryExists = await checkIfCategoryExists(name);
+      if (categoryExists) {
+        return next(new APIError('Category name already exists', 400));
+      }
+    }
+
+    // Update category with only the provided fields
+    const updatedFields = { ...(name && { name }), ...(description && { description }) };
+    await category.update(updatedFields);
 
     await category.save();
     res.status(200).json({
-      message: 'Category updated successfully',
+      status: 'success',
       category });
   },
 );
