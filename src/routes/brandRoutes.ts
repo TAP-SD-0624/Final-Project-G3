@@ -11,7 +11,7 @@ import {
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import {
   createBrandValidation, brandIdValidation, updateBrandValidation,
-} from '../validators/brandFilesValidation';
+} from '../validators/brandFileldsValidation';
 import { methodNotAllowed } from '../controllers/suspicionController';
 
 const brandRouter = Router();
