@@ -7,7 +7,7 @@ import checkIfBrandExists from '../services/brandService';
 const createNewBrand = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const brandName = req.body.name;
-    if (await checkIfBrandExists(brandName)) {
+    if (await checkIfBrandExists({ name: brandName }) !== null) {
       return next(new APIError('Brand already exist', 400));
     }
     await Brand.create({
@@ -24,7 +24,7 @@ const getAllBrands = errorHandler(
     const brands = await Brand.findAll({
       attributes: ['id', 'name'],
     });
-    if (brands.length <= 0) {
+    if (brands.length = 0) {
       res.status(200).send({
         message: 'No brands found',
       });
@@ -43,20 +43,18 @@ const getBrandById = errorHandler(
       where: { id: brandId },
       attributes: ['id', 'name'],
     });
-    if (!brand){
+    if (!brand) {
       return next(new APIError('Brand doesn\'t exist', 404));
     }
-    res.status(201).json(brand);
+    res.status(200).json(brand);
   },
 );
 const updateBrandById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id, name } = req.body;
-    const brand = await Brand.findOne({
-      where: { id },
-    });
-    if (!brand) {
-      return next(new APIError('Brand not found', 404));
+    const brand: Brand | null = await checkIfBrandExists({ id });
+    if (brand === null) {
+      return next(new APIError('Brand doesn\'t exist', 400));
     }
     await Brand.update(
       { name },
@@ -65,13 +63,9 @@ const updateBrandById = errorHandler(
         returning: true,
       },
     );
-    const updatedBrand = await Brand.findOne({
-      where: { id },
-      attributes: ['id', 'name'],
-    });
     res.status(200).json({
       message: 'Brand updated successfully',
-      brand: updatedBrand,
+      brand: await Brand.findByPk(id),
     });
   },
 );
@@ -79,18 +73,14 @@ const updateBrandById = errorHandler(
 const deleteBrandById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const brandId = req.params.id;
-    const brand = await Brand.findOne({
-      where: { id: brandId },
-    });
-    if (!brand) {
-      return next(new APIError('Brand not found', 404));
+    const brand: Brand | null = await checkIfBrandExists({ name: brandId });
+    if (brand === null) {
+      return next(new APIError('Brand doesn\'t exist', 400));
     }
     await Brand.destroy({
       where: { id: brandId },
     });
-    res.status(200).json({
-      message: 'Brand deleted successfully',
-    });
+    res.sendStatus(204);
   },
 );
 export { createNewBrand, getAllBrands, getBrandById, updateBrandById, deleteBrandById };

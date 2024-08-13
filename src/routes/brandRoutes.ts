@@ -18,13 +18,13 @@ import { methodNotAllowed } from '../controllers/suspicionController';
 
 const brandRouter = Router();
 
-brandRouter.route('/createBrand').post(
+brandRouter.route('/').post(
   authMiddleware,
   adminMiddleware,
   validateJoiRequest({ bodySchema: addBrandValidation }),
   createNewBrand,
 );
-brandRouter.route('/getAllBrands').get(
+brandRouter.route('/').get(
   authMiddleware,
   getAllBrands,
 );
@@ -33,7 +33,7 @@ brandRouter.route('/:id').get(
   validateJoiRequest({ paramsSchema: getBrandValidator }),
   getBrandById,
 );
-brandRouter.route('/updateBrand').put(
+brandRouter.route('/').put(
   authMiddleware,
   adminMiddleware,
   validateJoiRequest({ bodySchema: updateBrandValidator }),
