@@ -25,7 +25,10 @@ const createCategory = errorHandler(
 const getAllCategories = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const categories = await Category.findAll();
-    res.status(200).json(categories);
+    res.status(200).json({
+      status: 'success',
+      categories: categories.length > 0 ? categories : 'No categories found.',
+    });
   },
 );
 
@@ -52,7 +55,7 @@ const deleteCategoryById = errorHandler(
     }
 
     await category.destroy();
-    res.status(201).json({
+    res.status(202).json({
       message: 'Category deleted successfully',
     });
   },
