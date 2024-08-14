@@ -54,6 +54,14 @@ const createProductValidation: ObjectSchema = Joi.object({
       'any.required': 'Brand ID is required',
       'string.base': 'Brand ID must be a string',
     }),
+  categoryId: Joi.string()
+    .uuid({ version: 'uuidv4' })
+    .required()
+    .messages({
+      'string.guid': 'Category ID must be a valid UUID.',
+      'any.required': 'Category ID is required',
+      'string.base': 'Category ID must be a string',
+    }),
   discountRate: Joi.number()
     .precision(2)
     .min(0.01)
