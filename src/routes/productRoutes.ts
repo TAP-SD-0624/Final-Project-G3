@@ -9,6 +9,7 @@ import {
 import {
   createProduct,
   getProduct,
+  deleteProduct,
   getAllProducts } from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
@@ -30,9 +31,12 @@ productsRouter.route('/:id')
     validateJoiRequest({ paramsSchema: getProductValidation }),
     getProduct,
   )
-  .post()
   .put()
-  .delete();
+  .delete(authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: getProductValidation }),
+    deleteProduct,
+  );
 
 productsRouter.route('*').all(methodNotAllowed);
 

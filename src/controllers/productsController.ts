@@ -86,8 +86,25 @@ const getAllProducts = errorHandler(
   },
 );
 
+const deleteProduct = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const product = await Product.findOne({
+      where: {
+        id,
+      },
+    });
+    if (! product){
+      return next(new APIError('Product not found', 404));
+    }
+    await product.destroy();
+    res.sendStatus(204);
+  },
+);
+
 export {
   createProduct,
   getProduct,
   getAllProducts,
+  deleteProduct,
 };
