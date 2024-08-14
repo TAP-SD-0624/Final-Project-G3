@@ -5,12 +5,14 @@ import adminMiddleware from '../middlewares/adminMiddleware';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import {
   createProductValidation,
-  getProductValidation } from '../validators/productFieldsValidation';
+  productIdValidation,
+  updateProductValidation } from '../validators/productFieldsValidation';
 import {
   createProduct,
   getProduct,
   deleteProduct,
-  getAllProducts } from '../controllers/productsController';
+  getAllProducts,
+  updateProduct } from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
 
@@ -28,13 +30,20 @@ productsRouter.route('/')
 productsRouter.route('/:id')
   .get(
     authMiddleware,
-    validateJoiRequest({ paramsSchema: getProductValidation }),
+    validateJoiRequest({ paramsSchema: productIdValidation }),
     getProduct,
   )
-  .put()
-  .delete(authMiddleware,
+  .put(
+    authMiddleware,
     adminMiddleware,
-    validateJoiRequest({ paramsSchema: getProductValidation }),
+    validateJoiRequest({ paramsSchema: productIdValidation }),
+    validateJoiRequest({ bodySchema: updateProductValidation }),
+    updateProduct,
+  )
+  .delete(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: productIdValidation }),
     deleteProduct,
   );
 

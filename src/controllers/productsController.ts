@@ -6,6 +6,7 @@ import Product from '../models/Product';
 import checkIfCategoryExists from '../services/categoryService';
 import Category from '../models/Category';
 import Brand from '../models/Brand';
+import { getProductService } from '../services/productService';
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -89,12 +90,8 @@ const getAllProducts = errorHandler(
 const deleteProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await Product.findOne({
-      where: {
-        id,
-      },
-    });
-    if (! product){
+    const product = await getProductService({ id });
+    if (!product){
       return next(new APIError('Product not found', 404));
     }
     await product.destroy();
@@ -102,9 +99,33 @@ const deleteProduct = errorHandler(
   },
 );
 
+const updateProduct = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const { categoryId, brandId } = req.body;
+    if (! await checkIfBrandExists({ id: brandId })){
+      return next(new APIError('Brand not found', 404));
+    }
+    if (! await checkIfCategoryExists({ id: categoryId })){
+      return next(new APIError('Category not found', 404));
+    }
+    const product = await getProductService({ id });
+    if (!product){
+      return next(new APIError('Product not found', 404));
+    }
+    product.update(req.body);
+    await product.save();
+    res.status(200).json({
+      status: 'success',
+      product,
+    });
+  },
+);
+
 export {
-  createProduct,
-  getProduct,
   getAllProducts,
+  getProduct,
+  createProduct,
   deleteProduct,
+  updateProduct,
 };
