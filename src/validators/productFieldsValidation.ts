@@ -55,7 +55,7 @@ const createProductValidation = Joi.object({
       'any.required': 'Category name is a required field.',
     }),
 
-    brandName: Joi.string()
+  brandName: Joi.string()
     .min(3)
     .max(50)
     .required()
