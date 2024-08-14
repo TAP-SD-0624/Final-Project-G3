@@ -6,12 +6,18 @@ import validateJoiRequest from '../middlewares/validateJoiRequest';
 import {
   createProductValidation,
   getProductValidation } from '../validators/productFieldsValidation';
-import { createProduct, getProduct } from '../controllers/productsController';
+import {
+  createProduct,
+  getProduct,
+  getAllProducts } from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
 
 productsRouter.route('/')
-  .get()
+  .get(
+    authMiddleware,
+    getAllProducts,
+  )
   .post(
     authMiddleware,
     adminMiddleware,

@@ -62,7 +62,32 @@ const getProduct = errorHandler(
   },
 );
 
+const getAllProducts = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const products = await Product.findAll({
+      attributes: {
+        exclude: ['brandId', 'categoryId'],
+      },
+      include: [
+        {
+          model: Category,
+          attributes: ['name', 'id'],
+        },
+        {
+          model: Brand,
+          attributes: ['name', 'id'],
+        },
+      ],
+    });
+    res.status(200).json({
+      status: 'success',
+      products: products.length > 0 ? products : 'No products found.',
+    });
+  },
+);
+
 export {
   createProduct,
   getProduct,
+  getAllProducts,
 };
