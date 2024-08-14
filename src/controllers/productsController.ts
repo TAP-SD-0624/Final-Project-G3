@@ -4,6 +4,8 @@ import checkIfBrandExists from '../services/brandService';
 import APIError from '../utils/APIError';
 import Product from '../models/Product';
 import checkIfCategoryExists from '../services/categoryService';
+import Category from '../models/Category';
+import Brand from '../models/Brand';
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +31,38 @@ const createProduct = errorHandler(
   },
 );
 
+const getProduct = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const product = await Product.findOne({
+      where: {
+        id,
+      },
+      attributes: {
+        exclude: ['brandId', 'categoryId'],
+      },
+      include: [
+        {
+          model: Category,
+          attributes: ['name', 'id'],
+        },
+        {
+          model: Brand,
+          attributes: ['name', 'id'],
+        },
+      ],
+    });
+    if (!product){
+      return next(new APIError('Product not found', 404));
+    }
+    res.status(200).json({
+      status: 'success',
+      product,
+    });
+  },
+);
+
 export {
   createProduct,
+  getProduct,
 };

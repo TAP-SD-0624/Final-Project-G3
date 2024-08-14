@@ -3,8 +3,8 @@ import { methodNotAllowed } from '../controllers/suspicionController';
 import authMiddleware from '../middlewares/authMiddleware';
 import adminMiddleware from '../middlewares/adminMiddleware';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
-import { createProductValidation } from '../validators/productFieldsValidation';
-import { createProduct } from '../controllers/productsController';
+import { createProductValidation, getProductValidation } from '../validators/productFieldsValidation';
+import { createProduct, getProduct } from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
 
@@ -17,7 +17,11 @@ productsRouter.route('/')
     createProduct);
 
 productsRouter.route('/:id')
-  .get()
+  .get(
+    authMiddleware,
+    validateJoiRequest({ paramsSchema: getProductValidation }),
+    getProduct,
+  )
   .post()
   .put()
   .delete();
