@@ -38,7 +38,11 @@ Product.init(
     rating: {
       type: DataTypes.DOUBLE,
       allowNull: false,
-      defaultValue: 5.0,
+      defaultValue: 0.0,
+      validate: {
+        min: 0,
+        max: 5,
+      },
     },
     isLimitedEdition: {
       type: DataTypes.VIRTUAL,

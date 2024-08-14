@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Category from '../models/Category';
 import errorHandler from '../utils/errorHandler';
-import checkIfCategoryExists from '../services/categoryService';
+import   checkIfCategoryExists   from '../services/categoryService';
 import APIError from '../utils/APIError';
 
 const createNewCategory = errorHandler(

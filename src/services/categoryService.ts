@@ -1,8 +1,21 @@
 import Category from '../models/Category';
 
-const checkIfCategoryExists = async(name: string): Promise<boolean> => {
-  const category = await Category.findOne({ where: { name } });
-  return category !== null;
+const checkIfCategoryExists = async(
+  options: { name?: string, id?: string },
+): Promise<Category | null> => {
+  const { name, id } = options;
+  const query: { [key: string]: string } = {};
+
+  if (name) {
+    query.name = name;
+  }
+
+  if (id) {
+    query.id = id;
+  }
+
+  const category = await Category.findOne({ where: query });
+  return category; // Return the category object or null
 };
 
-export default checkIfCategoryExists ;
+export default  checkIfCategoryExists ;
