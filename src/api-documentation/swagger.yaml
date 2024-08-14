@@ -1,0 +1,424 @@
+openapi: 3.0.0
+info:
+  title: E-Commerce API
+  version: 1.0.0
+  description: API documentation for E-Commerce system
+servers:
+  - url: 'http://localhost:4000'
+    description: Development server
+
+paths:
+  /api/auth/signup:
+    post:
+      tags: [Auth]
+      summary: Register a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Login a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUser'
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUser'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /api/auth/logout:
+    get:
+      tags: [Auth]
+      summary: Logout a user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully logged out
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /api/categories:
+    post:
+      tags: [Category]
+      summary: Create a new category
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNewCategory'
+      responses:
+        '201':
+          description: Category created successfully
+        '400':
+          description: Bad request
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+    get:
+      tags: [Category]
+      summary: Get all categories
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryListResponse'
+        '500':
+          description: Internal server error
+
+  /api/categories/{id}:
+    get:
+      tags: [Category]
+      summary: Get a category by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Category details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '404':
+          description: Category not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags: [Category]
+      summary: Update a category by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCategory'
+      responses:
+        '200':
+          description: Category updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Category not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+    delete:
+      tags: [Category]
+      summary: Delete a category by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Category deleted successfully
+        '404':
+          description: Category not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+  /api/brands:
+    post:
+      tags: [Brand]
+      summary: Create a new brand
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNewBrand'
+      responses:
+        '201':
+          description: Brand created successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+    get:
+      tags: [Brand]
+      summary: Get all brands
+      responses:
+        '200':
+          description: List of brands
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandListResponse'
+        '500':
+          description: Internal server error
+
+  /api/brands/{id}:
+    get:
+      tags: [Brand]
+      summary: Get a brand by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Brand details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandResponse'
+        '404':
+          description: Brand not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags: [Brand]
+      summary: Update a brand by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBrand'
+      responses:
+        '200':
+          description: Brand updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Brand not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+    delete:
+      tags: [Brand]
+      summary: Delete a brand by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Brand deleted successfully
+        '404':
+          description: Brand not found
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    RegisterUser:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 3
+          maxLength: 20
+          example: John
+        lastName:
+          type: string
+          minLength: 3
+          maxLength: 20
+          example: Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+        dateOfBirth:
+          type: string
+          format: date
+          example: 1990-01-01
+        password:
+          type: string
+          minLength: 8
+          example: Password123!
+        confirmPassword:
+          type: string
+          example: Password123!
+      required:
+        - firstName
+        - lastName
+        - email
+        - dateOfBirth
+        - password
+        - confirmPassword
+
+    LoginUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+        password:
+          type: string
+          example: Password123!
+      required:
+        - email
+        - password
+
+    CreateNewCategory:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: Electronics
+        description:
+          type: string
+          maxLength: 150
+          example: All kinds of electronic items
+      required:
+        - name
+        - description
+
+    UpdateCategory:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: Electronics
+        description:
+          type: string
+          maxLength: 150
+          example: Updated description of the category
+      anyOf:
+        - required: [name]
+        - required: [description]
+
+    CategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+
+    CategoryListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryResponse'
+
+    CreateNewBrand:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: Apple
+      required:
+        - name
+
+    UpdateBrand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: Apple
+      required:
+        - id
+        - name
+
+    BrandResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    BrandListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        brands:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrandResponse'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
