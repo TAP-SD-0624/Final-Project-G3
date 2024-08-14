@@ -3,7 +3,9 @@ import { methodNotAllowed } from '../controllers/suspicionController';
 import authMiddleware from '../middlewares/authMiddleware';
 import adminMiddleware from '../middlewares/adminMiddleware';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
-import { createProductValidation, getProductValidation } from '../validators/productFieldsValidation';
+import {
+  createProductValidation,
+  getProductValidation } from '../validators/productFieldsValidation';
 import { createProduct, getProduct } from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
