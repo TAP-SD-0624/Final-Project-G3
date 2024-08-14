@@ -13,7 +13,7 @@ const checkIfBrandExists = async(
   if (id) {
     query.id = id;
   }
-
+  console.log(query);
   const existingBrand = await Brand.findOne({ where: query });
   return existingBrand;
 };
