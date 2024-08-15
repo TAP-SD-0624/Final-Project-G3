@@ -1,9 +1,12 @@
 import Product from '../models/Product';
 import Review from '../models/Review';
+import OrderItem from '../models/OrderItem';
+import Category from '../models/Category';
 
+// Function to check if a product exists by name or ID
 const checkIfProductExists = async(
   options: { name?: string, id?: string },
-): Promise<boolean> => {
+): Promise<Product | null> => {
   const { name, id } = options;
   const query: { [key: string]: string } = {};
 
@@ -15,34 +18,61 @@ const checkIfProductExists = async(
     query.id = id;
   }
 
-  const product = await Product.findOne({ where: query });
-  return product !== null;
+  return await Product.findOne({ where: query });
 };
 
 // Function to calculate the average rating
 const calculateAverageRating = async(productId: string): Promise<number> => {
-  // Count the number of reviews for the given product
-  const reviewCount = await Review.count({
-    where: { productId },
-  });
+  const reviewCount = await Review.count({ where: { productId } });
 
-  // Check if there are no reviews
   if (reviewCount === 0) {
     return 0;
-  };
+  }
 
-  // Fetch all reviews for the given product
   const reviews = await Review.findAll({
-    attributes: ['rating'], // Only select the rating field to optimize performance
+    attributes: ['rating'],
     where: { productId },
   });
 
-  // Calculate the average rating
   const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-  const averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
-
-  // Return the calculated average rating
-  return averageRating;
+  return reviewCount > 0 ? totalRating / reviewCount : 0;
 };
 
-export { checkIfProductExists,calculateAverageRating };
+// Check if product is related to any order items
+const isProductInAnyOrderItems = async(productId: string): Promise<boolean> => {
+  const orderItemCount = await OrderItem.count({ where: { productId } });
+  return orderItemCount > 0;
+};
+
+// Utility function to create a product response object
+const createProductResponse = ({
+  product,
+  averageRating,
+  categoryName,
+  brandName,
+}: {
+  product: Product;
+  averageRating: number;
+  categoryName: string;
+  brandName: string;
+}) => {
+  return {
+    isLimitedEdition: product.isLimitedEdition,
+    id: product.id,
+    name: product.name,
+    brief: product.brief,
+    description: product.description,
+    stock: product.stock,
+    price: product.price,
+    discountRate: product.discountRate,
+    rating: averageRating,
+    brandName,
+    categoryName,
+  };
+};
+
+export {
+  checkIfProductExists,
+  calculateAverageRating,
+  createProductResponse,
+  isProductInAnyOrderItems };

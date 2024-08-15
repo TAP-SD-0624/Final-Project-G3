@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import Category from '../models/Category';
 import errorHandler from '../utils/errorHandler';
-import   checkIfCategoryExists   from '../services/categoryService';
+import   { checkIfCategoryExists }   from '../services/categoryService';
 import APIError from '../utils/APIError';
 
 const createNewCategory = errorHandler(
@@ -35,7 +35,7 @@ const getAllCategories = errorHandler(
 const getCategoryById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const category = await Category.findByPk(id);
+    const category = await checkIfCategoryExists({ id });
 
     if (!category) {
       return next(new APIError('Category not found.', 404));
@@ -50,7 +50,7 @@ const getCategoryById = errorHandler(
 const deleteCategoryById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const category = await Category.findByPk(id);
+    const category = await checkIfCategoryExists({ id });
 
     if (!category) {
       return next(new APIError('Category not found.', 404));
@@ -68,7 +68,7 @@ const updateCategoryById = errorHandler(
     const { id } = req.params;
     const { name, description } = req.body;
 
-    const category = await Category.findByPk(id);
+    const category = await checkIfCategoryExists({ id });
     if (!category) {
       return next(new APIError('Category not found.', 404));
     }

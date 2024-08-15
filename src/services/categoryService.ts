@@ -18,4 +18,11 @@ const checkIfCategoryExists = async(
   return category; // Return the category object or null
 };
 
-export default  checkIfCategoryExists ;
+const getCategoryNameById = async(categoryId: string): Promise<string | null> => {
+  const category = await Category.findByPk(categoryId, {
+    attributes: ['name'],
+  });
+  return category?.name || null;
+};
+
+export   { checkIfCategoryExists,getCategoryNameById } ;
