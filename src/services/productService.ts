@@ -1,4 +1,4 @@
-import { FindOptions, Includeable, Op } from 'sequelize';
+import { FindOptions, Includeable } from 'sequelize';
 import Product from '../models/Product';
 import { productQueryInterface } from '../utils/interfaces/productQueryOptionsInterface';
 import Brand from '../models/Brand';
