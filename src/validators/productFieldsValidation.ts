@@ -151,8 +151,24 @@ const updateProductValidation = Joi.object({
   'object.min': 'At least one field is required.',
 });
 
+const getProductsQueryValidation = Joi.object({
+  category: Joi.string()
+    .max(50)
+    .messages({
+      'string.base': 'Category name query must be a string',
+      'string.max': 'Cateogry name must be less than or equal to 50 characters long',
+    }),
+  brand: Joi.string()
+    .max(50)
+    .messages({
+      'string.base': 'Brand name query must be a string',
+      'string.max': 'Brand name must be less than or equal to 50 characters long',
+    }),
+});
+
 export {
   createProductValidation,
   productIdValidation,
   updateProductValidation,
+  getProductsQueryValidation,
 };

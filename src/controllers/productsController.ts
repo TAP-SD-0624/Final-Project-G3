@@ -6,7 +6,7 @@ import Product from '../models/Product';
 import checkIfCategoryExists from '../services/categoryService';
 import Category from '../models/Category';
 import Brand from '../models/Brand';
-import { getProductService } from '../services/productService';
+import { productsService, oneProductService } from '../services/productService';
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -35,7 +35,7 @@ const createProduct = errorHandler(
 const getProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await Product.findOne({
+    const product = await oneProductService({
       where: {
         id,
       },
@@ -65,23 +65,17 @@ const getProduct = errorHandler(
 
 const getAllProducts = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const products = await Product.findAll({
-      attributes: {
-        exclude: ['brandId', 'categoryId'],
+    const products = await productsService(
+      {
+        attributes: {
+          exclude: ['brandId', 'categoryId'],
+        },
       },
-      include: [
-        {
-          model: Category,
-          attributes: ['name', 'id'],
-        },
-        {
-          model: Brand,
-          attributes: ['name', 'id'],
-        },
-      ],
-    });
+      req.query,
+    );
     res.status(200).json({
       status: 'success',
+      numberOfRecords: products.length,
       products: products.length > 0 ? products : 'No products found.',
     });
   },
@@ -90,7 +84,7 @@ const getAllProducts = errorHandler(
 const deleteProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await getProductService({ id });
+    const product = await oneProductService({ where: { id } });
     if (!product){
       return next(new APIError('Product not found', 404));
     }
@@ -109,7 +103,7 @@ const updateProduct = errorHandler(
     if (! await checkIfCategoryExists({ id: categoryId })){
       return next(new APIError('Category not found', 404));
     }
-    const product = await getProductService({ id });
+    const product = await oneProductService({ where: { id } });
     if (!product){
       return next(new APIError('Product not found', 404));
     }

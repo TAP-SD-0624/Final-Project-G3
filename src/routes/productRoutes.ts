@@ -5,6 +5,7 @@ import adminMiddleware from '../middlewares/adminMiddleware';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import {
   createProductValidation,
+  getProductsQueryValidation,
   productIdValidation,
   updateProductValidation } from '../validators/productFieldsValidation';
 import {
@@ -19,6 +20,7 @@ const productsRouter: Router = express.Router();
 productsRouter.route('/')
   .get(
     authMiddleware,
+    validateJoiRequest({ querySchema: getProductsQueryValidation }),
     getAllProducts,
   )
   .post(
