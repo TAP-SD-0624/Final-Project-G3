@@ -44,6 +44,17 @@ const createProductValidation = Joi.object({
       'any.required': 'Stock is a required field.',
     }),
 
+  price: Joi.number().min(0).required().messages({
+    'number.base': 'Price must be a number',
+    'number.min': 'Price must be greater than or equal to 0',
+    'any.required': 'Price is required',
+  }),
+  discountRate: Joi.number().min(0).max(100).optional().messages({
+    'number.base': 'Discount rate must be a number',
+    'number.min': 'Discount rate cannot be less than 0',
+    'number.max': 'Discount rate cannot be greater than 100',
+  }),
+
   categoryName: Joi.string()
     .min(3)
     .max(50)

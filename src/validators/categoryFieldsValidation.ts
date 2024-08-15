@@ -38,6 +38,7 @@ const updateCategoryValidation = Joi.object({
   name: Joi.string()
     .min(3)
     .max(50)
+    .optional()
     .messages({
       'string.base': 'Name should be a type of text.',
       'string.max': 'Name should have a maximum length of {#limit}.',
@@ -45,6 +46,7 @@ const updateCategoryValidation = Joi.object({
 
   description: Joi.string()
     .max(150)
+    .optional()
     .messages({
       'string.base': 'Description should be a type of text.',
       'string.max': 'Description should have a maximum length of {#limit}.',

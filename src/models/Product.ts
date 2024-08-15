@@ -6,8 +6,10 @@ class Product extends Model {
   name!: string;
   brief!: string;
   description!: string;
+  price!: number;
+  discountRate!: number;
   stock!: number;
-  rating!: number;
+  rating!: number; // Discount percentage (e.g., 20 for 20%)
   isLimitedEdition!: boolean;
 }
 
@@ -29,6 +31,22 @@ Product.init(
     description: {
       type: DataTypes.TEXT('medium'),
       allowNull: false,
+    },
+    price: {
+      type: DataTypes.DOUBLE,
+      allowNull: false,
+      get() {
+        return this.price - (this.price * (this.discountRate / 100));
+      },
+    },
+    discountRate: {
+      type: DataTypes.DOUBLE,
+      allowNull: false,
+      defaultValue: 0,  // Default to no discount
+      validate: {
+        min: 0,
+        max: 100,
+      },
     },
     stock: {
       type: DataTypes.INTEGER,

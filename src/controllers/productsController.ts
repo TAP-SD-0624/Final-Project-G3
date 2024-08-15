@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import Product from '../models/Product';
 import errorHandler from '../utils/errorHandler';
-import { checkIfProductExists } from '../services/productService';
+import APIError from '../utils/APIError';
+import { calculateAverageRating , checkIfProductExists } from '../services/productService';
 import   checkIfBrandExists   from '../services/brandService';
 import  checkIfCategoryExists  from '../services/categoryService';
-import APIError from '../utils/APIError';
 
 const createNewProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { name, brief, description, stock, categoryName, brandName } = req.body;
+    const { name, brief, description, stock, price, discountRate, categoryName, brandName } = req.body;
 
     // Validate product existence
     const productExists = await checkIfProductExists({ name });
@@ -29,9 +29,13 @@ const createNewProduct = errorHandler(
       brief,
       description,
       stock,
+      price,
+      discountRate,
       categoryId: category.id,
       brandId: brand.id,
     });
+
+    const averageRating = await calculateAverageRating(product.id);
 
     // Construct the response product object
     const responseProduct = {
@@ -41,7 +45,9 @@ const createNewProduct = errorHandler(
       brief: product.brief,
       description: product.description,
       stock: product.stock,
-      rating: product.rating,
+      price: product.price,
+      discountRate: product.discountRate,
+      rating: averageRating,
       brandName: brand.name,
       categoryName: category.name,
     };
