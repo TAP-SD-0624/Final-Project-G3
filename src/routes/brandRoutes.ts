@@ -10,10 +10,8 @@ import {
 } from '../controllers/brandsController';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import {
-  addBrandValidation,
-  getBrandValidator,
-  updateBrandValidator,
-} from '../validators/brandFilesValidation';
+  createBrandValidation, brandIdValidation, updateBrandValidation,
+} from '../validators/brandFileldsValidation';
 import { methodNotAllowed } from '../controllers/suspicionController';
 import upload from '../middlewares/multerMiddleware';
 
@@ -28,28 +26,28 @@ brandRouter.route('/')
     upload.single('image'),
     authMiddleware,
     adminMiddleware,
-    validateJoiRequest({ bodySchema: addBrandValidation }),
+    validateJoiRequest({ bodySchema: createBrandValidation }),
     createNewBrand,
   );
 
 brandRouter.route('/:id')
   .get(
     authMiddleware,
-    validateJoiRequest({ paramsSchema: getBrandValidator }),
+    validateJoiRequest({ paramsSchema: brandIdValidation }),
     getBrandById,
   )
   .put(
     upload.single('image'),
     authMiddleware,
     adminMiddleware,
-    validateJoiRequest({ paramsSchema: getBrandValidator }),
-    validateJoiRequest({ bodySchema: updateBrandValidator }),
+    validateJoiRequest({ paramsSchema: brandIdValidation }),
+    validateJoiRequest({ bodySchema: updateBrandValidation }),
     updateBrandById,
   )
   .delete(
     authMiddleware,
     adminMiddleware,
-    validateJoiRequest({ paramsSchema: getBrandValidator }),
+    validateJoiRequest({ paramsSchema: brandIdValidation }),
     deleteBrandById,
   );
 

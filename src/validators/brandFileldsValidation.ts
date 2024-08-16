@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const addBrandValidation = Joi.object({
+const createBrandValidation = Joi.object({
   name: Joi.string()
     .required()
     .min(3)
@@ -11,7 +11,7 @@ const addBrandValidation = Joi.object({
       'string.max': 'Brand name must be less than or equal to 20 characters long',
     }),
 });
-const getBrandValidator = Joi.object({
+const brandIdValidation = Joi.object({
   id: Joi.string()
     .uuid({ version: 'uuidv4' })
     .required()
@@ -21,10 +21,10 @@ const getBrandValidator = Joi.object({
       'string.base': 'Brand ID must be a string',
     }),
 });
-const updateBrandValidator = Joi.object({
+const updateBrandValidation = Joi.object({
   name: Joi.string()
     .messages({
       'string.base': 'Brand name must be a string',
     }),
 });
-export { addBrandValidation, getBrandValidator, updateBrandValidator };
+export { createBrandValidation, brandIdValidation, updateBrandValidation };

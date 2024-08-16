@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
+import categoryRouter from './routes/categoryRoutes';
 import brandRouter from './routes/brandRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
@@ -9,6 +10,7 @@ import {
   tooManyRequests,
 } from './controllers/suspicionController';
 import cookieParser from 'cookie-parser';
+import { setupSwagger } from './api-documentation/swagger';
 
 const app: Express = express();
 
@@ -27,10 +29,14 @@ app.use(
   }),
 );
 
+// Setup Swagger
+setupSwagger(app);
+
 // authentication routes
 app.use('/api/auth', authRouter);
 // brands routes
 app.use('/api/brands', brandRouter);
+app.use('/api/categories', categoryRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response

@@ -97,7 +97,7 @@ const updateBrandById = errorHandler(
       const fileExtension = path.extname(image.originalname);
       const tempName = getTempName(fileExtension);
       const newBrandImagePath = createImageFileName(brand.name, image);
-      
+
       removeFile(brand.imagePath);
       renameFile(tempName, newBrandImagePath);
       brand.imagePath = newBrandImagePath;
