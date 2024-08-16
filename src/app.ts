@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
 import categoryRouter from './routes/categoryRoutes';
+import carouselSlideRouter from './routes/crouselSlideRoutes';
 import brandRouter from './routes/brandRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
@@ -37,6 +38,7 @@ app.use('/api/auth', authRouter);
 // brands routes
 app.use('/api/brands', brandRouter);
 app.use('/api/categories', categoryRouter);
+app.use('/api/carouselSlides', carouselSlideRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response

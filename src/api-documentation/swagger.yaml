@@ -266,6 +266,104 @@ paths:
         '500':
           description: Internal server error
 
+  /api/carouselSlides:
+    post:
+      tags: [CarouselSlide]
+      summary: Create a new carousel slide
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCarouselSlide'
+      responses:
+        '201':
+          description: Carousel slide created successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+    get:
+      tags: [CarouselSlide]
+      summary: Get all carousel slides
+      responses:
+        '200':
+          description: List of carousel slides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarouselSlideListResponse'
+        '500':
+          description: Internal server error
+
+  /api/carouselSlides/{id}:
+    get:
+      tags: [CarouselSlide]
+      summary: Get a carousel slide by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Carousel slide details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarouselSlideResponse'
+        '404':
+          description: Carousel slide not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags: [CarouselSlide]
+      summary: Update a carousel slide by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCarouselSlide'
+      responses:
+        '200':
+          description: Carousel slide updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Carousel slide not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags: [CarouselSlide]
+      summary: Delete a carousel slide by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Carousel slide deleted successfully
+        '404':
+          description: Carousel slide not found
+        '500':
+          description: Internal server error
+
 components:
   schemas:
     RegisterUser:
@@ -416,6 +514,81 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BrandResponse'
+
+    CreateCarouselSlide:
+      type: object
+      properties:
+        slideOrder:
+          type: integer
+          example: 1
+        imageUrl:
+          type: string
+          format: uri
+          example: https://example.com/image.jpg
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: "Summer Sale"
+        description:
+          type: string
+          maxLength: 500
+          example: "Don't miss out on our summer sale with up to 50% off on selected items."
+      required:
+        - slideOrder
+        - imageUrl
+        - title
+
+    UpdateCarouselSlide:
+      type: object
+      properties:
+        slideOrder:
+          type: integer
+          example: 2
+        imageUrl:
+          type: string
+          format: uri
+          example: https://example.com/image2.jpg
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: "Winter Sale"
+        description:
+          type: string
+          maxLength: 500
+          example: "Our winter sale is here! Enjoy discounts on winter wear."
+      anyOf:
+        - required: [slideOrder]
+        - required: [imageUrl]
+        - required: [title]
+
+    CarouselSlideResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        slideOrder:
+          type: integer
+        imageUrl:
+          type: string
+          format: uri
+        title:
+          type: string
+        description:
+          type: string
+
+    CarouselSlideListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        slides:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselSlideResponse'
+
 
   securitySchemes:
     bearerAuth:
