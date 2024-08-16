@@ -4,6 +4,7 @@ import sequelize from '../database';
 class Brand extends Model {
   id!: string;
   name!: string;
+  imagePath!: string;
 }
 
 Brand.init(
@@ -15,6 +16,11 @@ Brand.init(
     },
     name: {
       type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true,
+    },
+    imagePath: {
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
