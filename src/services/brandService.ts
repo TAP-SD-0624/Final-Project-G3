@@ -21,12 +21,11 @@ const checkIfBrandExists = async(
 
 const createImageFileName = (brandName: string, image: Express.Multer.File): string => {
   const fileExtension = path.extname(image.originalname);
-  console.log(fileExtension);
   const brandImageFileName = `${brandName}${fileExtension}`;
   const imagePath = `./images/${brandImageFileName}`;
   return imagePath;
 };
-const renameFile = (oldName: string, newName: string) => {
+const renameFile = (oldName: string, newName: string): void => {
   fs.rename(oldName, newName, (err) => {
     if (err) {
       throw err;
@@ -34,7 +33,7 @@ const renameFile = (oldName: string, newName: string) => {
   });
 };
 
-const removeFile = (path: string) => {
+const removeFile = (path: string): void => {
   fs.unlink(path, (err) => {
     if (err) {
       throw err;
@@ -42,7 +41,7 @@ const removeFile = (path: string) => {
   });
 };
 
-const getTempName = (fileExtension: string) => {
+const getTempName = (fileExtension: string): string => {
   return `./images/temp${fileExtension}`;
 };
 const updateImagePath = (oldPath: string, name: string): string => {

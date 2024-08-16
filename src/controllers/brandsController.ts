@@ -72,7 +72,6 @@ const getBrandById = errorHandler(
 );
 const updateBrandById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     const { name } = req.body;
     const { id } = req.params;
     const image = req.file as Express.Multer.File;
