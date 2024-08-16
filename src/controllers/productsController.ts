@@ -6,28 +6,36 @@ import Product from '../models/Product';
 import checkIfCategoryExists from '../services/categoryService';
 import Category from '../models/Category';
 import Brand from '../models/Brand';
-import { productsService, oneProductService } from '../services/productService';
+import {
+  productsService,
+  oneProductService,
+  productResponseFormatter } from '../services/productService';
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const { name, brief, description, price, brandId, categoryId } = req.body;
-    if ((await checkIfBrandExists({ id: brandId })) === null){
-      return next(new APIError('Brand does not exist.', 400));
+    const { name, brief, description, price, brandName, categoryName, discountRate } = req.body;
+    const category = await checkIfCategoryExists({ name: categoryName });
+    const brand = await checkIfBrandExists({ name: brandName });
+
+    if (!category) {
+      return next(new APIError('Category does not exist.', 400));
     }
-    if ((await checkIfCategoryExists({ id: categoryId })) === null) {
-      return next(new APIError('Category does not exist', 400));
+    if (!brand) {
+      return next(new APIError('Brand does not exist.', 400));
     }
     const newProduct = await Product.create({
       name,
       brief,
       description,
       price,
-      brandId,
-      categoryId,
+      discountRate,
+      brandId: brand.id,
+      categoryId: category.id,
     });
+    const product = productResponseFormatter(newProduct, categoryName, brandName);
     res.status(201).json({
       status: 'success',
-      product: newProduct,
+      product,
     });
   },
 );

@@ -40,13 +40,25 @@ const productsService = async(
   return products;
 };
 
-export { oneProductService, productsService };
+const productResponseFormatter = (
+  product: Product,
+  category: string,
+  brand: string,
+): object => {
+  const responseObject: { [key: string]: string | number | boolean | undefined } = {};
+  responseObject.name = product.name;
+  responseObject.brief = product.brief;
+  responseObject.description = product.description;
+  responseObject.price = product.price;
+  responseObject.stock = product.stock;
+  responseObject.discountRate = product.discountRate;
+  responseObject.rating = product.rating;
+  responseObject.category = category;
+  responseObject.brand = brand;
+  responseObject.newPrice =
+    product.discountRate < 1 ? product.price * (1 - product.discountRate) : undefined;
+  responseObject.isLimitedEdition = product.isLimitedEdition;
+  return responseObject;
+};
 
-/*
-options?.include?[0].where = {
-      name: {
-        [Op.iLike] : `%${query.category}%`,
-      },
-    }
-
-*/
+export { oneProductService, productsService, productResponseFormatter };

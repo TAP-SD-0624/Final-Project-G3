@@ -8,6 +8,7 @@ class Product extends Model {
   description!: string;
   price!: number;
   stock!: number;
+  discountRate!:number;
   rating!: number;
   isLimitedEdition!: boolean;
 }
