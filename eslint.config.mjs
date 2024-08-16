@@ -46,7 +46,7 @@ export default [
       'prefer-const': 'error',
 
       // Style Rules
-      // 'max-len': ['error', { 'code': 100 }],
+      'max-len': ['error', { 'code': 100 }],
       'indent': ['error', 2],
       'no-tabs': 'error',
       'comma-dangle': ['error', 'always-multiline'],

@@ -4,16 +4,29 @@ import path from 'path';
 
 // Define Multer storage engine
 const storage: StorageEngine = multer.diskStorage({
-  destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
+  destination: (
+    req: Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null, destination: string) => void,
+  ) => {
     cb(null, './images');
   },
-  filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
+  filename: (
+    req: Request,
+    file: Express.Multer.File,
+    cb: (error: Error | null, filename: string) => void,
+  ) => {
     const fileExtension = path.extname(file.originalname);
     cb(null, `temp${fileExtension}`);
   },
 });
 
 // Create Multer instance with defined storage
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 2000000, // 2 MB limit for file size.
+  },
+});
 
 export default upload;

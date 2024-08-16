@@ -57,4 +57,11 @@ const updateImagePath = (oldPath: string, name: string): string => {
   // Combine the prefix, new name, and suffix
   return `${prefix}${name}${suffix}`;
 };
-export { checkIfBrandExists, createImageFileName, renameFile, removeFile, getTempName, updateImagePath };
+export {
+  checkIfBrandExists,
+  createImageFileName,
+  renameFile,
+  removeFile,
+  getTempName,
+  updateImagePath,
+};
