@@ -15,6 +15,7 @@ import {
   updateBrandValidator,
 } from '../validators/brandFilesValidation';
 import { methodNotAllowed } from '../controllers/suspicionController';
+import upload from '../middlewares/multerMiddleware';
 
 const brandRouter = Router();
 
@@ -24,6 +25,7 @@ brandRouter.route('/')
     getAllBrands,
   )
   .post(
+    upload.single('image'),
     authMiddleware,
     adminMiddleware,
     validateJoiRequest({ bodySchema: addBrandValidation }),

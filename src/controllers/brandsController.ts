@@ -3,26 +3,47 @@ import errorHandler from '../utils/errorHandler';
 import Brand from '../models/Brand';
 import APIError from '../utils/APIError';
 import checkIfBrandExists from '../services/brandService';
+import fs from 'fs';
+import path from 'path';
 
 const createNewBrand = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const brandName = req.body.name;
-    if (await checkIfBrandExists({ name: brandName }) !== null) {
-      return next(new APIError('Brand already exist', 400));
+    const { name } = req.body;
+    const image = req.file;
+    if (image) {
+      const fileExtension = path.extname(image.originalname);
+      const brandImageFileName = `${name}${fileExtension}`;
+      if (await checkIfBrandExists({ name }) !== null) {
+        // delete the image
+        fs.unlink(`./images/temp${fileExtension}`, (err) => {
+          if (err) {
+            throw err;
+          }
+        });
+        return next(new APIError('Brand already exist', 400));
+      }
+      await Brand.create({
+        name,
+        imagePath: `./images/${brandImageFileName}`,
+      });
+      fs.rename(`./images/temp${fileExtension}`, `./images/${brandImageFileName}`, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+      res.status(201).json({
+        message: 'Brand added successfully',
+      });
+    } else {
+      return next(new APIError('Brand image is required', 400));
     }
-    await Brand.create({
-      name: brandName,
-    });
-    res.status(201).json({
-      message: 'Brand added successfully',
-    });
   },
 );
 
 const getAllBrands = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const brands = await Brand.findAll({
-      attributes: ['id', 'name'],
+      attributes: ['id', 'name', 'imagePath'],
     });
     if (brands.length === 0) {
       res.status(200).send({
@@ -42,7 +63,7 @@ const getBrandById = errorHandler(
     const brandId = req.params.id;
     const brand = await Brand.findOne({
       where: { id: brandId },
-      attributes: ['id', 'name'],
+      attributes: ['id', 'name','imagePath'],
     });
     if (!brand) {
       return next(new APIError('Brand doesn\'t exist', 404));
