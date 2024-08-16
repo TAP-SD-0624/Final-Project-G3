@@ -2,42 +2,38 @@ import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
 import Brand from '../models/Brand';
 import APIError from '../utils/APIError';
-import checkIfBrandExists from '../services/brandService';
-import fs from 'fs';
+import {
+  checkIfBrandExists,
+  createImageFileName,
+  renameFile,
+  removeFile,
+  getTempName,
+  updateImagePath,
+} from '../services/brandService';
 import path from 'path';
 
 const createNewBrand = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { name } = req.body;
-    const image = req.file;
-    if (image) {
-      const fileExtension = path.extname(image.originalname);
-      const brandImageFileName = `${name}${fileExtension}`;
-      if (await checkIfBrandExists({ name }) !== null) {
-        // delete the image
-        fs.unlink(`./images/temp${fileExtension}`, (err) => {
-          if (err) {
-            throw err;
-          }
-        });
-        return next(new APIError('Brand already exist', 400));
-      }
-      await Brand.create({
-        name,
-        imagePath: `./images/${brandImageFileName}`,
-      });
-      fs.rename(`./images/temp${fileExtension}`, `./images/${brandImageFileName}`, (err) => {
-        if (err) {
-          throw err;
-        }
-      });
-      res.status(201).json({
-        message: 'Brand added successfully',
-      });
-    } else {
-      return next(new APIError('Brand image is required', 400));
+    const image = req.file as Express.Multer.File;
+    const fileExtension = path.extname(image.originalname);
+
+    const newBrandImagePath = createImageFileName(name, image);
+    const tempName = getTempName(fileExtension);
+    if (await checkIfBrandExists({ name }) !== null) {
+      removeFile(tempName);
+      return next(new APIError('Brand already exist', 400));
     }
+    await Brand.create({
+      name,
+      imagePath: newBrandImagePath,
+    });
+    renameFile(tempName, newBrandImagePath);
+    res.status(201).json({
+      message: 'Brand added successfully',
+    });
   },
+
 );
 
 const getAllBrands = errorHandler(
@@ -63,7 +59,7 @@ const getBrandById = errorHandler(
     const brandId = req.params.id;
     const brand = await Brand.findOne({
       where: { id: brandId },
-      attributes: ['id', 'name','imagePath'],
+      attributes: ['id', 'name', 'imagePath'],
     });
     if (!brand) {
       return next(new APIError('Brand doesn\'t exist', 404));
@@ -76,14 +72,37 @@ const getBrandById = errorHandler(
 );
 const updateBrandById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body);
     const { name } = req.body;
     const { id } = req.params;
+    const image = req.file as Express.Multer.File;
     const brand: Brand | null = await checkIfBrandExists({ id });
+
     if (brand === null) {
+      if (image){
+        const fileExtension = path.extname(image.originalname);
+        const tempName = getTempName(fileExtension);
+        removeFile(tempName);
+      }
       return next(new APIError('Brand doesn\'t exist', 400));
     }
-    brand.name = name;
-    await brand.save();
+    if (name) {
+      brand.name = name;
+      const newPath = updateImagePath(brand.imagePath,name);
+      renameFile(brand.imagePath, newPath);
+      brand.imagePath = newPath;
+      await brand.save();
+    }
+    if (image) {
+      const fileExtension = path.extname(image.originalname);
+      const tempName = getTempName(fileExtension);
+      const newBrandImagePath = createImageFileName(brand.name, image);
+      
+      removeFile(brand.imagePath);
+      renameFile(tempName, newBrandImagePath);
+      brand.imagePath = newBrandImagePath;
+      await brand.save();
+    }
     res.status(200).json({
       status: 'success',
       brand,

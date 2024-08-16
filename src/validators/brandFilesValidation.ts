@@ -23,9 +23,7 @@ const getBrandValidator = Joi.object({
 });
 const updateBrandValidator = Joi.object({
   name: Joi.string()
-    .required()
     .messages({
-      'any.required': 'Brand name is required',
       'string.base': 'Brand name must be a string',
     }),
 });

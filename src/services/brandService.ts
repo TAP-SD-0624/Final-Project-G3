@@ -1,8 +1,9 @@
 import Brand from '../models/Brand';
-
+import fs from 'fs';
+import path from 'path';
 const checkIfBrandExists = async(
   options: { name?: string, id?: string },
-): Promise<Brand|null> => {
+): Promise<Brand | null> => {
   const { name, id } = options;
   const query: { [key: string]: string } = {};
 
@@ -18,4 +19,42 @@ const checkIfBrandExists = async(
   return existingBrand;
 };
 
-export default checkIfBrandExists;
+const createImageFileName = (brandName: string, image: Express.Multer.File): string => {
+  const fileExtension = path.extname(image.originalname);
+  console.log(fileExtension);
+  const brandImageFileName = `${brandName}${fileExtension}`;
+  const imagePath = `./images/${brandImageFileName}`;
+  return imagePath;
+};
+const renameFile = (oldName: string, newName: string) => {
+  fs.rename(oldName, newName, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+};
+
+const removeFile = (path: string) => {
+  fs.unlink(path, (err) => {
+    if (err) {
+      throw err;
+    }
+  });
+};
+
+const getTempName = (fileExtension: string) => {
+  return `./images/temp${fileExtension}`;
+};
+const updateImagePath = (oldPath: string, name: string): string => {
+  // Find the last '/' to determine the prefix
+  const lastSlashIndex = oldPath.lastIndexOf('/');
+  const prefix = oldPath.substring(0, lastSlashIndex + 1);
+
+  // Find the last '.' to determine the suffix
+  const lastDotIndex = oldPath.lastIndexOf('.');
+  const suffix = oldPath.substring(lastDotIndex);
+
+  // Combine the prefix, new name, and suffix
+  return `${prefix}${name}${suffix}`;
+};
+export { checkIfBrandExists, createImageFileName, renameFile, removeFile, getTempName, updateImagePath };

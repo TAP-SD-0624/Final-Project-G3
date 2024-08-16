@@ -39,6 +39,7 @@ brandRouter.route('/:id')
     getBrandById,
   )
   .put(
+    upload.single('image'),
     authMiddleware,
     adminMiddleware,
     validateJoiRequest({ paramsSchema: getBrandValidator }),
