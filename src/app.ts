@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
 import categoryRouter from './routes/categoryRoutes';
 import brandRouter from './routes/brandRoutes';
+import productsRouter from './routes/productRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
 import {
@@ -36,7 +37,10 @@ setupSwagger(app);
 app.use('/api/auth', authRouter);
 // brands routes
 app.use('/api/brands', brandRouter);
+// categories routes
 app.use('/api/categories', categoryRouter);
+// products routes
+app.use('/api/products', productsRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response

@@ -9,7 +9,7 @@ const createNewCategory = errorHandler(
     const { name, description } = req.body;
 
     // Check if the category already exists
-    const categoryExists = await checkIfCategoryExists(name);
+    const categoryExists = await checkIfCategoryExists({ name });
 
     if (categoryExists) {
       return next(new APIError('Category name already exists', 400));
@@ -75,7 +75,7 @@ const updateCategoryById = errorHandler(
 
     // Check if the updated name already exists, if name is provided
     if (name && name !== category.name) {
-      const categoryExists = await checkIfCategoryExists(name);
+      const categoryExists = await checkIfCategoryExists({ name });
       if (categoryExists) {
         return next(new APIError('Category name already exists', 400));
       }
