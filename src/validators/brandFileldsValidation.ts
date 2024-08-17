@@ -4,7 +4,7 @@ const createBrandValidation = Joi.object({
   name: Joi.string()
     .required()
     .min(3)
-    .max(20)
+    .max(50)
     .messages({
       'any.required': 'brand name is required',
       'string.min': 'Brand name must be at least 3 characters long',
