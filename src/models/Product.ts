@@ -6,7 +6,9 @@ class Product extends Model {
   name!: string;
   brief!: string;
   description!: string;
+  price!: number;
   stock!: number;
+  discountRate!:number;
   rating!: number;
   isLimitedEdition!: boolean;
 }
@@ -27,7 +29,11 @@ Product.init(
       allowNull: false,
     },
     description: {
-      type: DataTypes.TEXT('medium'),
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.FLOAT(7, 2),
       allowNull: false,
     },
     stock: {
@@ -35,8 +41,16 @@ Product.init(
       allowNull: false,
       defaultValue: 0,
     },
+    discountRate: {
+      type: DataTypes.FLOAT(3, 2),
+      defaultValue: 1,
+      validate: {
+        min: 0.01,
+        max: 1.0,
+      },
+    },
     rating: {
-      type: DataTypes.DOUBLE,
+      type: DataTypes.FLOAT(2, 1),
       allowNull: false,
       defaultValue: 5.0,
     },

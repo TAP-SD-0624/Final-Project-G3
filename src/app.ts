@@ -4,6 +4,7 @@ import authRouter from './routes/authRoutes';
 import categoryRouter from './routes/categoryRoutes';
 import carouselSlideRouter from './routes/crouselSlideRoutes';
 import brandRouter from './routes/brandRoutes';
+import productsRouter from './routes/productRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
 import {
@@ -34,10 +35,10 @@ app.use(
 setupSwagger(app);
 
 // authentication routes
-app.use('/api/auth', authRouter);
-// brands routes
-app.use('/api/brands', brandRouter);
-app.use('/api/categories', categoryRouter);
+app.use('/api/auth', authRouter); 
+app.use('/api/brands', brandRouter); 
+app.use('/api/categories', categoryRouter); 
+app.use('/api/products', productsRouter);
 app.use('/api/carouselSlides', carouselSlideRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
