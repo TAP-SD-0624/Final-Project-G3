@@ -22,4 +22,18 @@ const checkIfSlideTitleExists = async(title: string): Promise<boolean> => {
   return existingSlide !== null;
 };
 
-export  { checkIfSlideOrderExists , checkIfCarouselSlideExists , checkIfSlideTitleExists };
+const caroselSlideResponseFormatter = (
+  caroselSlide: CarouselSlide,
+): object => {
+  const responseObject: { [key: string]: string | number | boolean | undefined } = {};
+  responseObject.title = caroselSlide.title;
+  responseObject.description = caroselSlide.description;
+  responseObject.slideOrder = caroselSlide.slideOrder;
+  responseObject.imageUrl = caroselSlide.imageUrl;
+  responseObject.category = caroselSlide.categoryName;
+  responseObject.brand = caroselSlide.brandName;
+  return responseObject;
+};
+
+export  { checkIfSlideOrderExists , checkIfCarouselSlideExists ,
+  checkIfSlideTitleExists , caroselSlideResponseFormatter };

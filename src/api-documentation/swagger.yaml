@@ -569,13 +569,13 @@ components:
         id:
           type: string
           format: uuid
-        slideOrder:
-          type: integer
+        title:
+          type: string
         imageUrl:
           type: string
           format: uri
-        title:
-          type: string
+        slideOrder:
+          type: integer
         description:
           type: string
 

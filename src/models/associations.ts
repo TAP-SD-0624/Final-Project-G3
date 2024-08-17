@@ -153,6 +153,18 @@ const associateModels = (): void => {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   });
+
+  // A Brand has one carousel slide and a carousel slide belongs to one Brand
+  Brand.hasOne(CarouselSlide, {
+    foreignKey: 'brandId',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  });
+  CarouselSlide.belongsTo(Brand, {
+    foreignKey: 'brandId',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  });
 };
 
 export default associateModels;
