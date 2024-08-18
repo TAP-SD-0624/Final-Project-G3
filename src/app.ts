@@ -35,9 +35,9 @@ app.use(
 setupSwagger(app);
 
 // authentication routes
-app.use('/api/auth', authRouter); 
-app.use('/api/brands', brandRouter); 
-app.use('/api/categories', categoryRouter); 
+app.use('/api/auth', authRouter);
+app.use('/api/brands', brandRouter);
+app.use('/api/categories', categoryRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carouselSlides', carouselSlideRouter);
 

@@ -8,7 +8,6 @@ import { checkIfCarouselSlideExists,checkIfSlideOrderExists,
 import   checkIfBrandExists   from '../services/brandService';
 import   checkIfCategoryExists   from '../services/categoryService';
 
-
 const createNewCarouselSlide = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { slideOrder, imageUrl, title, description, categoryName, brandName } = req.body;
@@ -74,32 +73,38 @@ const getCarouselSlideById = errorHandler(
 const updateCarouselSlideById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const { slideOrder, imageUrl, title, description , categoryName , brandName } = req.body;
+    const { slideOrder , title , categoryName, brandName } = req.body;
 
     const carouselSlide = await checkIfCarouselSlideExists({ id });
-    const titleExists = await checkIfSlideTitleExists(title);
-    const slideOrderExists = await checkIfSlideOrderExists(slideOrder);
-    const category = await checkIfCategoryExists({ name: categoryName });
-    const brand = await checkIfBrandExists({ name: brandName });
-
     if (!carouselSlide) {
       return next(new APIError('Carousel Slide not found.', 404));
-    } else  if (slideOrderExists) {
-      return next(new APIError('Slide order already exists.', 400));
-    } else if (titleExists) {
-      return next(new APIError('Title already exists.', 400));
-    } else if (categoryName && !category) {
-      return next(new APIError('Category does not exist.', 400));
-    } else if (brandName && !brand) {
-      return next(new APIError('Brand does not exist.', 400));
+    } else if (slideOrder) {
+      const slideOrderExists = await checkIfSlideOrderExists(slideOrder);
+      if (slideOrderExists) {
+        return next(new APIError('Slide order already exists.', 400));
+      }
+    } else if (title) {
+      const titleExists = await checkIfSlideTitleExists(title);
+      if (titleExists) {
+        return next(new APIError('Title already exists.', 400));
+      }
+    } else if (categoryName) {
+      const category = await checkIfCategoryExists({ name: categoryName });
+      if (!category) {
+        return next(new APIError('Category does not exist.', 400));
+      }
+    } else if (brandName) {
+      const brand = await checkIfBrandExists({ name: brandName });
+      if (!brand) {
+        return next(new APIError('Brand does not exist.', 400));
+      }
     }
 
-    // Update carousel slide with only the provided fields
     await carouselSlide.update(req.body);
     await carouselSlide.save();
+
     res.status(200).json({ status: 'success', carouselSlide });
-  },
-);
+  });
 
 const deleteCarouselSlideById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
