@@ -20,7 +20,7 @@ const createNewBrand = errorHandler(
     const fileExtension = path.extname(image.originalname);
     const newBrandImagePath = createImageFileName(name, image);
     const tempName = getTempName(fileExtension);
-    if(!isValidFileName(name)){
+    if (!isValidFileName(name)){
       removeFile(tempName);
       return next(new APIError('Invalid brand name', 400));
     }
@@ -80,12 +80,12 @@ const updateBrandById = errorHandler(
     const { id } = req.params;
     const image = req.file as Express.Multer.File;
     const brand: Brand | null = await checkIfBrandExists({ id });
-    if(!isValidFileName(name)){
+    if (!isValidFileName(name)){
       if (image){
         const fileExtension = path.extname(image.originalname);
         const tempName = getTempName(fileExtension);
         removeFile(tempName);
-      }      
+      }
       return next(new APIError('Invalid brand name', 400));
     }
     if (brand === null) {

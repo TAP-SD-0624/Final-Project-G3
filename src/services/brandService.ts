@@ -57,10 +57,14 @@ const updateImagePath = (oldPath: string, name: string): string => {
   return `${prefix}${name}${suffix}`;
 };
 const isValidFileName = (name: string): boolean => {
-  const notAllowedCharacters: RegExp = /[/\\?%*:|"<>]/;
-	if (name.length === 0) return false;
-	if (notAllowedCharacters.test(name)) return false;
-	return true;
+  const notAllowedCharacters = /[/\\?%*:|"<>]/;
+  if (name.length === 0) {
+    return false;
+  }
+  if (notAllowedCharacters.test(name)) {
+    return false;
+  }
+  return true;
 };
 export {
   checkIfBrandExists,
