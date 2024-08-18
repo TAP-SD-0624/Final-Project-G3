@@ -7,10 +7,6 @@ const isValidFileName = (name: string): boolean => {
   if (notAllowedCharacters.test(name)) {
     return false;
   }
-  const splittedString: string[] = name.split('.');
-  if (splittedString.length < 2) {
-    return false;
-  }
   return true;
 };
 

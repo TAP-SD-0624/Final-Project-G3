@@ -56,16 +56,7 @@ const updateImagePath = (oldPath: string, name: string): string => {
   // Combine the prefix, new name, and suffix
   return `${prefix}${name}${suffix}`;
 };
-const isValidFileName = (name: string): boolean => {
-  const notAllowedCharacters = /[/\\?%*:|"<>]/;
-  if (name.length === 0) {
-    return false;
-  }
-  if (notAllowedCharacters.test(name)) {
-    return false;
-  }
-  return true;
-};
+
 export {
   checkIfBrandExists,
   createImageFileName,
@@ -73,5 +64,4 @@ export {
   removeFile,
   getTempName,
   updateImagePath,
-  isValidFileName,
 };

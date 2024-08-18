@@ -9,8 +9,8 @@ import {
   removeFile,
   getTempName,
   updateImagePath,
-  isValidFileName,
 } from '../services/brandService';
+import isValidFileName from '../validators/fileNameValidator';
 import path from 'path';
 
 const createNewBrand = errorHandler(
