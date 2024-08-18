@@ -127,6 +127,7 @@ const deleteBrandById = errorHandler(
     if (brand === null) {
       return next(new APIError('Brand doesn\'t exist', 400));
     }
+    removeFile(brand.imagePath);
     await Brand.destroy({
       where: { id: brandId },
     });
