@@ -10,11 +10,12 @@ const createNewBrand = errorHandler(
     if (await checkIfBrandExists({ name: brandName }) !== null) {
       return next(new APIError('Brand already exist', 400));
     }
-    await Brand.create({
+    const brand = await Brand.create({
       name: brandName,
     });
     res.status(201).json({
       message: 'Brand added successfully',
+      brand,
     });
   },
 );

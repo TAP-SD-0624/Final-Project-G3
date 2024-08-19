@@ -168,21 +168,38 @@ paths:
     post:
       tags: [Brand]
       summary: Create a new brand
+      description: Creates a new Brand instance in the database.
       security:
         - bearerAuth: []
       requestBody:
+        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CreateNewBrand'
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the brand (must be unique).
+                  example: "BrandName"
+                image:
+                  type: string
+                  format: binary
+                  description: Image file for the brand.
+              required:
+                - name
+                - image
       responses:
         '201':
           description: Brand created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
         '400':
           description: Bad request
         '500':
           description: Internal server error
-
     get:
       tags: [Brand]
       summary: Get all brands
@@ -221,7 +238,10 @@ paths:
 
     put:
       tags: [Brand]
-      summary: Update a brand by ID
+      summary: Update a Brand's Data
+      description: Updates the name and/or image of a specific brand. Both fields are optional.
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -229,14 +249,30 @@ paths:
           schema:
             type: string
             format: uuid
+          description: Unique identifier of the brand to update.
       requestBody:
+        required: false
         content:
-          application/json:
+          multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UpdateBrand'
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: New name of the brand (must be unique).
+                  example: "UpdatedBrandName"
+                image:
+                  type: string
+                  format: binary
+                  description: New image file for the brand.
+              required: []
       responses:
         '200':
           description: Brand updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Brand'
         '400':
           description: Bad request
         '404':
@@ -249,6 +285,8 @@ paths:
     delete:
       tags: [Brand]
       summary: Delete a brand by ID
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -371,32 +409,22 @@ components:
           items:
             $ref: '#/components/schemas/CategoryResponse'
 
-    CreateNewBrand:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 3
-          maxLength: 50
-          example: Apple
-      required:
-        - name
-
-    UpdateBrand:
+    Brand:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          example: 123e4567-e89b-12d3-a456-426614174000
+          description: Unique identifier for the brand.
         name:
           type: string
           minLength: 3
           maxLength: 50
-          example: Apple
-      required:
-        - id
-        - name
+          description: Name of the brand.
+        imagePath:
+          type: string
+          description: Path to the image file stored on the server.
+          example: "/images/brands/brandname.jpg"
 
     BrandResponse:
       type: object
