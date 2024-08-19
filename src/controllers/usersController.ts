@@ -13,16 +13,12 @@ import {
 // Get all users
 const getAllUsers = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    try {
       const users = await User.findAll();
       const formattedUsers = users.map(userResponseFormatter);
       res.status(200).json({
         status: 'success',
         users: formattedUsers.length > 0 ? formattedUsers : 'No users found.',
       });
-    } catch (error) {
-      next(error);
-    }
   },
 );
 
@@ -31,7 +27,6 @@ const getUserById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const user = await checkIfUserExists({ id });
-    console.log('Request Body:', req.body);
 
     if (!user) {
       return next(new APIError('User not found.', 404));
@@ -48,12 +43,14 @@ const updateUserById = errorHandler(
     const { id } = req.params;
     const { email } = req.body;
 
+    // only admin or the actual user 
     const user = await checkIfUserExists({ id });
 
     if (!user) {
       return next(new APIError('User not found.', 404));
     }
 
+    // don't change email 
     if (email) {
       if (await checkIfEmailExists(email)) {
         return next(new APIError('Email already in use', 400));
@@ -77,7 +74,9 @@ const deleteUserById = errorHandler(
       return next(new APIError('User not found.', 404));
     }
 
+    // reviews & wishlists & orders => delete ..
     await user.destroy();
+    //status
     res.status(202).json({ status: 'success' });
   },
 );
