@@ -20,11 +20,14 @@ const createNewCarouselSlide = errorHandler(
 
     if (slideOrderExists) {
       return next(new APIError('Slide order already exists.', 400));
-    } else if (titleExists) {
+    }
+    if (titleExists) {
       return next(new APIError('Title already exists.', 400));
-    } else if (!category) {
+    }
+    if (categoryName && !category) {
       return next(new APIError('Category does not exist.', 400));
-    } else if (!brand) {
+    }
+    if (brandName && !brand) {
       return next(new APIError('Brand does not exist.', 400));
     }
 
@@ -36,8 +39,8 @@ const createNewCarouselSlide = errorHandler(
       description,
       categoryName,
       brandName,
-      brandId: brand.id,
-      categoryId: category.id,
+      brandId: brand?.id,
+      categoryId: category?.id,
     });
 
     const newCarouselSlide =
@@ -78,22 +81,26 @@ const updateCarouselSlideById = errorHandler(
     const carouselSlide = await checkIfCarouselSlideExists({ id });
     if (!carouselSlide) {
       return next(new APIError('Carousel Slide not found.', 404));
-    } else if (slideOrder) {
+    }
+    if (slideOrder) {
       const slideOrderExists = await checkIfSlideOrderExists(slideOrder);
       if (slideOrderExists) {
         return next(new APIError('Slide order already exists.', 400));
       }
-    } else if (title) {
+    }
+    if (title) {
       const titleExists = await checkIfSlideTitleExists(title);
       if (titleExists) {
         return next(new APIError('Title already exists.', 400));
       }
-    } else if (categoryName) {
+    }
+    if (categoryName) {
       const category = await checkIfCategoryExists({ name: categoryName });
       if (!category) {
         return next(new APIError('Category does not exist.', 400));
       }
-    } else if (brandName) {
+    }
+    if (brandName) {
       const brand = await checkIfBrandExists({ name: brandName });
       if (!brand) {
         return next(new APIError('Brand does not exist.', 400));
@@ -116,7 +123,7 @@ const deleteCarouselSlideById = errorHandler(
     }
 
     await carouselSlide.destroy();
-    res.status(202).json({ status: 'success' });
+    res.status(204 ).json({ status: 'no content' });
   },
 );
 
