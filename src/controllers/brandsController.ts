@@ -80,7 +80,7 @@ const updateBrandById = errorHandler(
     const { id } = req.params;
     const image = req.file as Express.Multer.File;
     const brand: Brand | null = await checkIfBrandExists({ id });
-    if (!isValidFileName(name)){
+    if (name && !isValidFileName(name)){
       if (image){
         const fileExtension = path.extname(image.originalname);
         const tempName = getTempName(fileExtension);
