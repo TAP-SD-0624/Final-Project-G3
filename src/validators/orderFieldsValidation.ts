@@ -56,7 +56,7 @@ const orderItemValidation = Joi.object({
 });
 
 const createOrderValidation = Joi.object({
-  items: Joi.array()
+  itemsList: Joi.array()
     .items(orderItemValidation)
     .min(1)
     .required()

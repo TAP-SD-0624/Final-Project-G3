@@ -4,14 +4,14 @@ import { productQueryInterface } from '../utils/interfaces/productQueryOptionsIn
 import Brand from '../models/Brand';
 import Category from '../models/Category';
 
-const oneProductService = async(
+const oneProductService = async (
   options?: FindOptions,
 ): Promise<Product | null> => {
   const product = await Product.findOne(options);
   return product;
 };
 
-const productsService = async(
+const productsService = async (
   options: FindOptions = {},
   query?: productQueryInterface,
 ): Promise<Product[]> => {
@@ -40,6 +40,30 @@ const productsService = async(
   return products;
 };
 
+const checkProductStock = async (
+  checkOptions: { product?: Product, id?: string },
+  quantity: number
+) => {
+  const { product, id } = checkOptions;
+  let stock = 0 ;
+  if (product) {
+    stock = product.stock;
+  }
+  if (id){
+    const product = await oneProductService({ 
+      where: {
+        id
+      },
+    });
+    stock = product?.stock as any;
+  }
+
+  if (quantity > stock) {
+    return false;
+  }
+  return true;
+};
+
 const productResponseFormatter = (
   product: Product,
   category: string,
@@ -61,4 +85,4 @@ const productResponseFormatter = (
   return responseObject;
 };
 
-export { oneProductService, productsService, productResponseFormatter };
+export { oneProductService, productsService, productResponseFormatter, checkProductStock };
