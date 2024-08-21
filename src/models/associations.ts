@@ -129,13 +129,13 @@ const associateModels = (): void => {
   // --------------- Address Associations --------------- :
 
   // An address belongs to one order and an order has one address
-  Address.hasOne(Order, {
-    foreignKey: 'addressId',
+  Order.hasOne(Address, { // has One creates the foreign key on the target model "Address"
+    foreignKey: 'orderId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   });
-  Order.belongsTo(Address, {
-    foreignKey: 'addressId',
+  Address.belongsTo(Order, {
+    foreignKey: 'orderId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   });
