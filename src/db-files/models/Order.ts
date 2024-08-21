@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database';
-import { OrderStatus } from '../enums/orderStatus';
+import sequelize from '../../database';
+import { OrderStatus } from '../../enums/orderStatus';
 
 class Order extends Model {
   id!: string;

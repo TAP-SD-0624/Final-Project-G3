@@ -1,8 +1,8 @@
 import { FindOptions, Includeable } from 'sequelize';
-import Product from '../models/Product';
+import Product from '../db-files/models/Product';
 import { productQueryInterface } from '../utils/interfaces/productQueryOptionsInterface';
-import Brand from '../models/Brand';
-import Category from '../models/Category';
+import Brand from '../db-files/models/Brand';
+import Category from '../db-files/models/Category';
 
 const oneProductService = async(
   options?: FindOptions,

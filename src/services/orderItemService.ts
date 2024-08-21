@@ -1,4 +1,4 @@
-import OrderItem from '../models/OrderItem';;
+import OrderItem from '../db-files/models/OrderItem';;
 
 const createOrderItemService = async(
   orderId: string,

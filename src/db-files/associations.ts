@@ -1,14 +1,14 @@
-import Address from './Address';
-import Brand from './Brand';
-import CarouselSlide from './CarouselSlide';
-import Category from './Category';
-import Order from './Order';
-import ProductImage from './ProductImage';
-import Product from './Product';
-import User from './User';
-import WishList from './Wishlist';
-import Review from './Review';
-import OrderItem from './OrderItem';
+import Address from './models/Address';
+import Brand from './models/Brand';
+import CarouselSlide from './models/CarouselSlide';
+import Category from './models/Category';
+import Order from './models/Order';
+import ProductImage from './models/ProductImage';
+import Product from './models/Product';
+import User from './models/User';
+import WishList from './models/Wishlist';
+import Review from './models/Review';
+import OrderItem from './models/OrderItem';
 
 const associateModels = (): void => {
   // --------------- User Associations --------------- :

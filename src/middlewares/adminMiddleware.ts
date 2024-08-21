@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import APIError from '../utils/APIError';
-import User from '../models/User';
+import User from '../db-files/models/User';
 import errorHandler from '../utils/errorHandler';
 
 const adminMiddleware = errorHandler(
