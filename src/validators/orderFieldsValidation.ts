@@ -61,9 +61,9 @@ const createOrderValidation = Joi.object({
     .min(1)
     .required()
     .messages({
-      'array.base': 'Items must be an array.',
+      'array.base': 'Items list must be an array.',
       'array.min': 'At least one item is required to create an order.',
-      'any.required': 'Items field is required.',
+      'any.required': 'Items list is required.',
     }),
   address: addressValidation
     .required()
@@ -83,10 +83,10 @@ const createOrderValidation = Joi.object({
     .max(50)
     .required()
     .messages({
-      'string.base': 'First name must be a string',
-      'string.min': 'First name must be at least 3 characters long',
-      'string.max': 'First name must be less than or equal to 50 characters long',
-      'any.required': 'First name is required',
+      'string.base': 'Order Owner name must be a string',
+      'string.min': 'Order Owner name must be at least 3 characters long',
+      'string.max': 'Order Owner name must be less than or equal to 50 characters long',
+      'any.required': 'Order Owner name is required',
     }),
   cardNumber: Joi.string()
     .required()

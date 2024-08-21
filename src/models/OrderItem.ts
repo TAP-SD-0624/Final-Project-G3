@@ -1,7 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database';
-import Order from './Order';
-import Product from './Product';
 
 class OrderItem extends Model {
   id!: string;

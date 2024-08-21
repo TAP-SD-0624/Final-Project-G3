@@ -1,8 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../database';
 import { OrderStatus } from '../enums/orderStatus';
-import validator from 'validator';
-import APIError from '../utils/APIError';
 
 class Order extends Model {
   id!: string;
@@ -28,10 +26,10 @@ Order.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    cardNumber:{
+    cardNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-    },    
+    },
     totalAmount: {
       type: DataTypes.DOUBLE,
       defaultValue: 0,
