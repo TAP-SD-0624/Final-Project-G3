@@ -4,7 +4,6 @@ import APIError from '../utils/APIError';
 import User from '../models/User';
 import {
   checkIfUserExists,
-  checkIfEmailExists,
   userResponseFormatter,
 } from '../services/userService';
 
@@ -13,12 +12,12 @@ import {
 // Get all users
 const getAllUsers = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-      const users = await User.findAll();
-      const formattedUsers = users.map(userResponseFormatter);
-      res.status(200).json({
-        status: 'success',
-        users: formattedUsers.length > 0 ? formattedUsers : 'No users found.',
-      });
+    const users = await User.findAll();
+    const formattedUsers = users.map(userResponseFormatter);
+    res.status(200).json({
+      status: 'success',
+      users: formattedUsers.length > 0 ? formattedUsers : 'No users found.',
+    });
   },
 );
 
@@ -41,26 +40,31 @@ const getUserById = errorHandler(
 const updateUserById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const { email } = req.body;
-
-    // only admin or the actual user 
     const user = await checkIfUserExists({ id });
 
     if (!user) {
       return next(new APIError('User not found.', 404));
     }
 
-    // don't change email 
-    if (email) {
-      if (await checkIfEmailExists(email)) {
-        return next(new APIError('Email already in use', 400));
-      }
+    // Get the authenticated user from the JWT token
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const authenticatedUser = (req as any).user;
+    const isAdmin = authenticatedUser.role === 'admin';
+    const isOwnProfile = authenticatedUser.id === user.id;
+
+    if (!isAdmin || !isOwnProfile) {
+      return next(new APIError('Unauthorized to update user profile.', 403));
     }
 
     await user.update(req.body);
     await user.save();
 
     res.status(200).json({ status: 'success', user: userResponseFormatter(user) });
+
+    // -- errors still under fix :
+    // admin cannot update others
+    // normal user can edit admins info
+    // normal user cannot edit their own info
   },
 );
 
@@ -74,10 +78,10 @@ const deleteUserById = errorHandler(
       return next(new APIError('User not found.', 404));
     }
 
-    // reviews & wishlists & orders => delete ..
+    // reviews & wishlists & orders => delete .. ------------------
+
     await user.destroy();
-    //status
-    res.status(202).json({ status: 'success' });
+    res.status(204).json({ status: 'no content' });
   },
 );
 
@@ -92,7 +96,6 @@ const changeUserRole = errorHandler(
       return next(new APIError('User not found.', 404));
     }
 
-    // Update the user's role
     user.role = role;
     await user.save();
 

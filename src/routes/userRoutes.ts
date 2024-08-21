@@ -34,7 +34,6 @@ userRouter.route('/:id')
   )
   .put(
     authMiddleware,
-    adminMiddleware,
     validateJoiRequest({ paramsSchema: userIdValidation }),
     validateJoiRequest({ bodySchema: updateUserValidation }),
     updateUserById,

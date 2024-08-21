@@ -30,14 +30,6 @@ const updateUserValidation = Joi.object({
       'string.max': 'Last Name should have a maximum length of {#limit}.',
     }),
 
-  email: Joi.string()
-    .email()
-    .optional()
-    .messages({
-      'string.base': 'Email should be a type of text.',
-      'string.email': 'Email must be a valid email address.',
-    }),
-
   dateOfBirth: Joi.date()
     .iso()
     .optional()
