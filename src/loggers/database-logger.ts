@@ -7,7 +7,8 @@ const logger: Logger = winston.createLogger({
   // so you specify the minimum level to be logged in you environment variables.
   level: process.env.LOG_LEVEL || 'info',
   format: combine(timestamp(), cli()), // time in UTC standard
-  transports: [new winston.transports.Console()],
+  transports: [
+    new winston.transports.Console()],
 });
 
 const fileLogger: Logger = winston.createLogger({
@@ -15,7 +16,11 @@ const fileLogger: Logger = winston.createLogger({
   // so you specify the minimum level to be logged in you environment variables.
   level: process.env.LOG_LEVEL || 'info',
   format: combine(timestamp(), json()),
-  transports: [new winston.transports.Console()],
+  transports: [
+    new (winston.transports.File)({
+      filename: './logs/db.log',
+    }),
+  ],
 });
 
 export { logger, fileLogger };

@@ -12,11 +12,13 @@ import {
 } from './controllers/suspicionController';
 import cookieParser from 'cookie-parser';
 import { setupSwagger } from './api-documentation/swagger';
+import morganMiddleware from './middlewares/morganMiddleware';
 
 const app: Express = express();
 
 // to log any http request to the server
 app.use(morgan('dev'));
+app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // For parsing cookies

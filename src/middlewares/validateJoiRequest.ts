@@ -9,7 +9,6 @@ const validateJoiRequest = (options: {
 }) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const { bodySchema, paramsSchema, querySchema } = options;
-
     // Validate request body if bodySchema is provided
     if (bodySchema && req.body) {
       const { error } = bodySchema.validate(req.body, { abortEarly: false });
@@ -36,7 +35,6 @@ const validateJoiRequest = (options: {
         return next(new APIError(errors, 400));
       }
     }
-
     next();
   };
 };
