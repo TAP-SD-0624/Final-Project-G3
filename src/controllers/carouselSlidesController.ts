@@ -5,7 +5,7 @@ import APIError from '../utils/APIError';
 import { checkIfCarouselSlideExists,checkIfSlideOrderExists,
   checkIfSlideTitleExists, caroselSlideResponseFormatter,
 } from '../services/carouselSlideService';
-import   checkIfBrandExists   from '../services/brandService';
+import   { checkIfBrandExists }   from '../services/brandService';
 import   checkIfCategoryExists   from '../services/categoryService';
 
 const createNewCarouselSlide = errorHandler(

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
-import checkIfBrandExists from '../services/brandService';
+import { checkIfBrandExists } from '../services/brandService';
 import APIError from '../utils/APIError';
 import Product from '../models/Product';
 import checkIfCategoryExists from '../services/categoryService';

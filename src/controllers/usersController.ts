@@ -51,8 +51,13 @@ const updateUserById = errorHandler(
     const authenticatedUser = (req as any).user;
     const isAdmin = authenticatedUser.role === 'admin';
     const isOwnProfile = authenticatedUser.id === user.id;
+    console.log(`${authenticatedUser.role  }//////${  authenticatedUser.id}`);
 
-    if (!isAdmin || !isOwnProfile) {
+    // if (!isAdmin || !isOwnProfile) {
+    //   return next(new APIError('Unauthorized to update user profile.', 403));
+    // }
+
+    if (!(authenticatedUser.role === 'admin') && authenticatedUser.id !== user.id){
       return next(new APIError('Unauthorized to update user profile.', 403));
     }
 
