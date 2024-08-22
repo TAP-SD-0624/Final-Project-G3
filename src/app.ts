@@ -4,6 +4,7 @@ import authRouter from './routes/authRoutes';
 import categoryRouter from './routes/categoryRoutes';
 import brandRouter from './routes/brandRoutes';
 import productsRouter from './routes/productRoutes';
+import reviewsRouter from './routes/reviewRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
 import {
@@ -41,6 +42,8 @@ app.use('/api/brands', brandRouter);
 app.use('/api/categories', categoryRouter);
 // products routes
 app.use('/api/products', productsRouter);
+// reviews routes
+app.use('/api/reviews', reviewsRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response
