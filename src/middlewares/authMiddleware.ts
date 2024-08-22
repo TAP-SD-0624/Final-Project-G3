@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { decodeToken } from '../utils/jwtToken';
-import User from '../models/User';
+import User from '../db-files/models/User';
 import APIError from '../utils/APIError';
 import errorHandler from '../utils/errorHandler';
 import type { JwtPayload } from 'jsonwebtoken';

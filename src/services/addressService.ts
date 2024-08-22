@@ -1,4 +1,4 @@
-import Address from '../models/Address';
+import Address from '../db-files/models/Address';
 
 const createAddressService = async(
   state: string,

@@ -1,4 +1,4 @@
-import Order from '../models/Order';
+import Order from '../db-files/models/Order';
 
 const createOrderService = async(
   userId: string,

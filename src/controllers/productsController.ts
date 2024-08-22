@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
 import { checkIfBrandExists } from '../services/brandService';
 import APIError from '../utils/APIError';
-import Product from '../models/Product';
+import Product from '../db-files/models/Product';
 import checkIfCategoryExists from '../services/categoryService';
-import Category from '../models/Category';
-import Brand from '../models/Brand';
+import Category from '../db-files/models/Category';
+import Brand from '../db-files/models/Brand';
 import {
   productsService,
   oneProductService,

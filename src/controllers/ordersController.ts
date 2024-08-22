@@ -1,4 +1,4 @@
-import OrderItem from '../models/OrderItem';
+import OrderItem from '../db-files/models/OrderItem';
 import { createAddressService } from '../services/addressService';
 import { createOrderItemService } from '../services/orderItemService';
 import { createOrderService } from '../services/orderService';
