@@ -5,9 +5,33 @@ const checkIfEmailExists = async(email: string): Promise<boolean> => {
   return existingUser !== null;
 };
 
-const checkIfUserExists = async(email: string): Promise<User | null> => {
-  const user = await User.findOne({ where: { email } });
+const checkIfUserExists = async(
+  options: { email?: string, id?: string },
+): Promise<User | null> => {
+  const { email, id } = options;
+  const query: { [key: string]: string } = {};
+
+  if (email) {
+    query.email = email;
+  }
+
+  if (id) {
+    query.id = id;
+  }
+
+  const user = await User.findOne({ where: query });
   return user;
 };
 
-export { checkIfEmailExists, checkIfUserExists };
+const userResponseFormatter = (user: User): object => {
+  return {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    dateOfBirth: user.dateOfBirth,
+    role: user.role,
+  };
+};
+
+export { checkIfEmailExists, checkIfUserExists , userResponseFormatter };

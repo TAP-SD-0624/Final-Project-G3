@@ -2,7 +2,9 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
 import categoryRouter from './routes/categoryRoutes';
+import carouselSlideRouter from './routes/crouselSlideRoutes';
 import brandRouter from './routes/brandRoutes';
+import userRouter from './routes/userRoutes';
 import productsRouter from './routes/productRoutes';
 import reviewsRouter from './routes/reviewRoutes';
 import errorController from './controllers/errorController';
@@ -36,12 +38,11 @@ setupSwagger(app);
 
 // authentication routes
 app.use('/api/auth', authRouter);
-// brands routes
 app.use('/api/brands', brandRouter);
-// categories routes
 app.use('/api/categories', categoryRouter);
-// products routes
 app.use('/api/products', productsRouter);
+app.use('/api/carouselSlides', carouselSlideRouter);
+app.use('/api/users', userRouter);
 // reviews routes
 app.use('/api/reviews', reviewsRouter);
 

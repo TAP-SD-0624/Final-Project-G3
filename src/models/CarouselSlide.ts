@@ -7,6 +7,8 @@ class CarouselSlide extends Model {
   imageUrl!: string;
   title!: string;
   description!: string;
+  categoryName!: string;
+  brandName!: string;
 }
 
 CarouselSlide.init(
@@ -31,6 +33,14 @@ CarouselSlide.init(
     description: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    categoryName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    brandName: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
