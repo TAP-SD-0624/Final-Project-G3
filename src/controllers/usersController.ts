@@ -49,17 +49,16 @@ const updateUserById = errorHandler(
     // Get the authenticated user from the JWT token
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
-    const isAdmin = authenticatedUser.role === 'admin';
-    const isOwnProfile = authenticatedUser.id === user.id;
-    console.log(`${authenticatedUser.role  }//////${  authenticatedUser.id}`);
+    
+    console.log(`${authenticatedUser.role  }  //////   ${  authenticatedUser.id}`);
 
-    // if (!isAdmin || !isOwnProfile) {
-    //   return next(new APIError('Unauthorized to update user profile.', 403));
-    // }
-
-    if (!(authenticatedUser.role === 'admin') && authenticatedUser.id !== user.id){
+    if (authenticatedUser.role !== 'admin' && authenticatedUser.id !== user.id) {
       return next(new APIError('Unauthorized to update user profile.', 403));
     }
+
+    // if (!(authenticatedUser.role === 'admin') || authenticatedUser.id !== user.id){
+    //   return next(new APIError('Unauthorized to update user profile.', 403));
+    // }
 
     await user.update(req.body);
     await user.save();
