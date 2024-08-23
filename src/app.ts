@@ -33,6 +33,7 @@ const allowedOrigins: string[] = [
 ];
 
 app.use(cors({
+  credentials: true,
   origin: (origin, callback) => {
     // Allow requests with no origin, like mobile apps or curl requests
     if (!origin) {
