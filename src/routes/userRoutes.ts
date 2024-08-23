@@ -5,6 +5,7 @@ import {
   updateUserById,
   deleteUserById,
   changeUserRole,
+  getUserReviews,
 } from '../controllers/usersController';
 import { methodNotAllowed } from '../controllers/suspicionController';
 import {
@@ -43,6 +44,13 @@ userRouter.route('/:id')
     adminMiddleware,
     validateJoiRequest({ paramsSchema: userIdValidation }),
     deleteUserById,
+  );
+
+userRouter.route('/:id/reviews')
+  .get(
+    authMiddleware,
+    validateJoiRequest({ paramsSchema: userIdValidation }),
+    getUserReviews,
   );
 
 userRouter.route('/:id/role')

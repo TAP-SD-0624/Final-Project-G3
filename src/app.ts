@@ -43,7 +43,6 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carouselSlides', carouselSlideRouter);
 app.use('/api/users', userRouter);
-// reviews routes
 app.use('/api/reviews', reviewsRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,

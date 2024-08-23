@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
 import User from '../models/User';
+import Review from '../models/Review'; 
+import Product from '../models/Product';  
 import {
   checkIfUserExists,
   userResponseFormatter,
@@ -118,17 +120,12 @@ export {
   changeUserRole,
 };
 
-import { Request, Response, NextFunction } from 'express';
-import Review from '../models/Review';
-import User from '../models/User';
-import Product from '../models/Product';
-import errorHandler from '../utils/errorHandler';
-import APIError from '../utils/APIError';
+// still has an issue with admin access users reviews ------------------
 
 const getUserReviews = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
-    const searchedUser = await User.findByPk(id);
+    const searchedUser = await checkIfUserExists({ id });
 
     if (!searchedUser) {
       return next(new APIError('userN not found.', 404));
