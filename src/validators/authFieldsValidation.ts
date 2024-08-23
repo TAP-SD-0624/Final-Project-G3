@@ -1,6 +1,5 @@
 
 import Joi from 'joi';
-
 // Define the schema for registration validation with length constraints
 const registerValidation = Joi.object({
   firstName: Joi.string()
