@@ -13,7 +13,9 @@ import {
   getProduct,
   deleteProduct,
   getAllProducts,
-  updateProduct } from '../controllers/productsController';
+  updateProduct,
+  getProductReviews,
+} from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
 
@@ -28,6 +30,11 @@ productsRouter.route('/')
     adminMiddleware,
     validateJoiRequest({ bodySchema: createProductValidation }),
     createProduct);
+
+productsRouter.get('/:id/reviews',
+  authMiddleware,
+  validateJoiRequest({ paramsSchema: productIdValidation }),
+  getProductReviews);
 
 productsRouter.route('/:id')
   .get(

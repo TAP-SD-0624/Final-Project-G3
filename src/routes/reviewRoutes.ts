@@ -4,12 +4,13 @@ import {
   getReviewById,
   deleteReviewById,
   updateReviewById,
+  getUserReviews,
 } from '../controllers/reviewsController';
 import { methodNotAllowed } from '../controllers/suspicionController';
 
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import { createReviewValidation,
-  reviewIdValidation,updateReviewValidation
+  reviewIdValidation,updateReviewValidation,
 } from '../validators/reviewFieldsValidation';
 import authMiddleware from '../middlewares/authMiddleware';
 
@@ -20,6 +21,13 @@ reviewRouter.route('/')
     authMiddleware,
     validateJoiRequest({ bodySchema: createReviewValidation }),
     createNewReview,
+  );
+
+reviewRouter.route('/:id/userReviews')
+  .get(
+    authMiddleware,
+    validateJoiRequest({ paramsSchema: reviewIdValidation }),
+    getUserReviews,
   );
 
 reviewRouter.route('/:id')

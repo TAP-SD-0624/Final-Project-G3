@@ -3,6 +3,8 @@ import errorHandler from '../utils/errorHandler';
 import { checkIfBrandExists } from '../services/brandService';
 import APIError from '../utils/APIError';
 import Product from '../models/Product';
+import User from '../models/User';
+import Review from '../models/Review';
 import checkIfCategoryExists from '../services/categoryService';
 import Category from '../models/Category';
 import Brand from '../models/Brand';
@@ -124,10 +126,40 @@ const updateProduct = errorHandler(
   },
 );
 
+const getProductReviews = errorHandler(
+  async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { id } = req.params;
+
+    const product = await oneProductService({
+      where: { id },
+    });
+
+    if (!product) {
+      return next(new APIError('Product not found', 404));
+    }
+
+    const reviews = await Review.findAll({
+      where: { productId: product.id },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName'],
+        },
+      ],
+    });
+
+    res.status(200).json({
+      status: 'success',
+      reviews: reviews.length > 0 ? reviews : 'Product has no reviews yet.',
+    });
+  },
+);
+
 export {
   getAllProducts,
   getProduct,
   createProduct,
   deleteProduct,
   updateProduct,
+  getProductReviews,
 };
