@@ -24,24 +24,27 @@ app.use(cookieParser()); // For parsing cookies
 
 // setup CORS allowed origins
 
-// const allowedOrigins: string[] = [
-//   'http://127.0.0.1:4000',
-//   'https://backend-final-g3-qngl.onrender.com',
-// ];
+const allowedOrigins: string[] = [
+  'http://127.0.0.1:4000',
+  'http://127.0.0.1:5173',
+  'http://localhost:4000',
+  'http://localhost:5173',
+  'https://backend-final-g3-qngl.onrender.com',
+];
 
-app.use(cors(
-  // origin: (origin, callback) => {
-  //   // Allow requests with no origin, like mobile apps or curl requests
-  //   if (!origin) {
-  //     return callback(null, true);
-  //   }
-  //   if (allowedOrigins.indexOf(origin) !== -1) {
-  //     callback(null, true);
-  //   } else {
-  //     callback(new Error('Not allowed by CORS'));
-  //   }
-  // },
-));
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin, like mobile apps or curl requests
+    if (!origin) {
+      return callback(null, true);
+    }
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
 
 // limit the number of requests sent to the server to under 500 requests per minute.
 app.use(
