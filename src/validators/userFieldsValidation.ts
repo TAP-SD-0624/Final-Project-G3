@@ -36,6 +36,18 @@ const updateUserValidation = Joi.object({
     .messages({
       'date.base': 'Date of Birth should be a valid date.',
     }),
+
+  mobileNumber: Joi.string()
+    .pattern(/^[0-9]+$/)
+    .min(10)
+    .max(15)
+    .optional()
+    .messages({
+      'string.base': 'Mobile Number should be a type of text.',
+      'string.pattern.base': 'Mobile Number should only contain numbers.',
+      'string.min': 'Mobile Number should have at least {#limit} digits.',
+      'string.max': 'Mobile Number should have a maximum length of {#limit} digits.',
+    }),
 }).min(1).messages({
   'object.min': 'At least one field is required for update.',
 });
@@ -51,4 +63,35 @@ const updateUserRoleValidation = Joi.object({
     }),
 });
 
-export { userIdValidation, updateUserValidation , updateUserRoleValidation };
+const updateUserPasswordValidation = Joi.object({
+  currentPassword: Joi.string()
+    .required()
+    .messages({
+      'string.base': 'Current password should be a type of text.',
+      'any.required': 'Current password is required.',
+    }),
+  newPassword: Joi.string()
+    .min(8)
+    .required()
+    .pattern(/[A-Z]/, 'uppercase letter')
+    .pattern(/[a-z]/, 'lowercase letter')
+    .pattern(/\d/, 'number')
+    .pattern(/[\W_]/, 'special character')
+    .messages({
+      'string.min': 'New password must be at least 8 characters long.',
+      'string.pattern.name': 'New password must contain at least one {#name}.',
+      'any.required': 'New password is required.',
+    }),
+  confirmPassword: Joi.any()
+    .valid(Joi.ref('newPassword'))
+    .required()
+    .messages({
+      'any.only': 'Confirm password does not match the new password.',
+      'any.required': 'Confirm password is required.',
+    }),
+});
+
+export { userIdValidation,
+  updateUserValidation,
+  updateUserRoleValidation,
+  updateUserPasswordValidation };

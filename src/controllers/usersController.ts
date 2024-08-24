@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
 import User from '../models/User';
+import bcrypt from 'bcryptjs';
 import {
   checkIfUserExists,
   userResponseFormatter,
@@ -55,7 +56,7 @@ const updateUserById = errorHandler(
       user.id,
       authenticatedUser.id,
       authenticatedUser.role )){
-      return next(new APIError('Unauthorized to update user profile.', 403));
+      return next(new APIError('Unauthorized to update user info.', 403));
     }
 
     await user.update(req.body);
@@ -100,10 +101,40 @@ const changeUserRole = errorHandler(
   },
 );
 
+const updateUserPassword = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+    const authenticatedUser = (req as any).user;
+    const user = await checkIfUserExists({ id });
+
+    if (!user){
+      return next(new APIError('User not found.', 400));
+    }
+    if (user.id !== authenticatedUser.id){
+      return next(new APIError('Unauthorized to update user info.', 403));
+    }
+    if (!await bcrypt.compare(currentPassword, user.password)) {
+      return next(new APIError('Current password is incorrect.', 400));
+    }
+    if (await bcrypt.compare(newPassword, user.password)) {
+      return next(new APIError('New password cannot be the same as the current password.', 400));
+    }
+
+    // Hash the new password and update the user
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  },
+);
+
 export {
   getAllUsers,
   getUserById,
   updateUserById,
   deleteUserById,
   changeUserRole,
+  updateUserPassword,
 };

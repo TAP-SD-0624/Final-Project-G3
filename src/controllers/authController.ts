@@ -8,7 +8,7 @@ import User from '../models/User';
 
 const signup = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const { firstName, lastName, email, dateOfBirth, password } =
+    const { firstName, lastName, email, dateOfBirth , mobileNumber , password } =
       req.body;
     if (await checkIfEmailExists(email)) {
       return next(new APIError('Email already in use', 400));
@@ -20,6 +20,7 @@ const signup = errorHandler(
       lastName,
       email,
       dateOfBirth,
+      mobileNumber,
       password: hashedPassword,
     });
 
