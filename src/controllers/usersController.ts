@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
 import User from '../models/User';
-import Review from '../models/Review'; 
-import Product from '../models/Product';  
+import Review from '../models/Review';
+import Product from '../models/Product';
 import {
   checkIfUserExists,
   userResponseFormatter,
@@ -100,16 +100,6 @@ const changeUserRole = errorHandler(
   },
 );
 
-export {
-  getAllUsers,
-  getUserById,
-  updateUserById,
-  deleteUserById,
-  changeUserRole,
-};
-
-// still has an issue with admin access users reviews ------------------
-
 const getUserReviews = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
@@ -144,4 +134,11 @@ const getUserReviews = errorHandler(
   },
 );
 
-export { getUserReviews };
+export {
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById,
+  changeUserRole,
+  getUserReviews,
+};

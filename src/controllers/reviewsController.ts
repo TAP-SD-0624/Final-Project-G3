@@ -109,11 +109,16 @@ const updateReviewById = errorHandler(
     if (!review) {
       return next(new APIError('Review not found', 404));
     }
-    //   const { user } = (req as any);
 
-    // if ( await checkIfOwnerUserOrAdmin(review.User.id ,user.id ,user.role )){
-    //     return next(new APIError('Forbidden: Access Denied ', 403));
-    //   }
+    // const authenticatedUser = (req as any).user;
+
+    // if ( await checkIfOwnerUserOrAdmin(
+    //   review.userId,
+    //   authenticatedUser.id,
+    //   authenticatedUser.role )){
+    //   return next(new APIError('Unauthorized to update user profile.', 403));
+    // }
+
     await review.update(req.body);
 
     await review.save();
@@ -138,11 +143,16 @@ const deleteReviewById = errorHandler(
     if (!review){
       return next(new APIError('Review not found', 404));
     }
-    //   const { user } = (req as any);
 
-    // if ( await checkIfOwnerUserOrAdmin(review.User.id ,user.id ,user.role )){
-    //     return next(new APIError('Forbidden: Access Denied ', 403));
-    //   }
+    // const authenticatedUser = (req as any).user;
+
+    // if ( await checkIfOwnerUserOrAdmin(
+    //   review.userId,
+    //   authenticatedUser.id,
+    //   authenticatedUser.role )){
+    //   return next(new APIError('Unauthorized to update user profile.', 403));
+    // }
+
     await review.destroy();
     res.status(200).json({ status: 'no content' });
   },
