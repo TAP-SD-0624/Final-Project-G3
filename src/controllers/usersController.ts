@@ -105,6 +105,7 @@ const updateUserPassword = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { currentPassword, newPassword } = req.body;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
     const user = await checkIfUserExists({ id });
 
