@@ -30,6 +30,7 @@ const userResponseFormatter = (user: User): object => {
     lastName: user.lastName,
     email: user.email,
     dateOfBirth: user.dateOfBirth,
+    mobileNumber: user.mobileNumber,
     role: user.role,
   };
 };
