@@ -51,27 +51,17 @@ const updateUserById = errorHandler(
     // Get the authenticated user from the JWT token
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
-    const isAdmin = authenticatedUser.role === 'admin';
-    const isOwnProfile = authenticatedUser.id === user.id;
-    console.log(`${authenticatedUser.role  }//////${  authenticatedUser.id}`);
 
-    // if (!isAdmin || !isOwnProfile) {
-    //   return next(new APIError('Unauthorized to update user profile.', 403));
-    // }
-
-    if (!(authenticatedUser.role === 'admin') && authenticatedUser.id !== user.id){
-      return next(new APIError('Unauthorized to update user profile.', 403));
+    if (authenticatedUser.role !== 'admin'){
+      if (authenticatedUser.id !== user.id){
+        return next(new APIError('Unauthorized to update user profile.', 403));
+      }
     }
 
     await user.update(req.body);
     await user.save();
 
     res.status(200).json({ status: 'success', user: userResponseFormatter(user) });
-
-    // -- errors still under fix :
-    // admin cannot update others
-    // normal user can edit admins info
-    // normal user cannot edit their own info
   },
 );
 
@@ -84,8 +74,6 @@ const deleteUserById = errorHandler(
     if (!user) {
       return next(new APIError('User not found.', 404));
     }
-
-    // reviews & wishlists & orders => delete .. ------------------
 
     await user.destroy();
     res.status(204).json({ status: 'no content' });
