@@ -5,13 +5,14 @@ import {
   updateUserById,
   deleteUserById,
   changeUserRole,
-  getUserReviews,
+  updateUserPassword,
 } from '../controllers/usersController';
 import { methodNotAllowed } from '../controllers/suspicionController';
 import {
   userIdValidation,
   updateUserValidation,
   updateUserRoleValidation,
+  updateUserPasswordValidation,
 } from '../validators/userFieldsValidation';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import authMiddleware from '../middlewares/authMiddleware';
@@ -60,6 +61,13 @@ userRouter.route('/:id/role')
     validateJoiRequest({ paramsSchema: userIdValidation }), // Validate user ID
     validateJoiRequest({ bodySchema: updateUserRoleValidation }), // Validate role
     changeUserRole,
+  );
+
+userRouter.route('/:id/password')
+  .put(
+    authMiddleware,
+    validateJoiRequest({ bodySchema: updateUserPasswordValidation }),
+    updateUserPassword,
   );
 
 userRouter.route('*').all(methodNotAllowed);

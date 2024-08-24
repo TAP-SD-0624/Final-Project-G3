@@ -1,4 +1,3 @@
-
 import UserRole from '../enums/userRoles';
 
 const checkIfOwnerUserOrAdmin = async(

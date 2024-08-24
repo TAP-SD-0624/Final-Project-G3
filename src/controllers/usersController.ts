@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
 import User from '../models/User';
-import Review from '../models/Review';
-import Product from '../models/Product';
+import bcrypt from 'bcryptjs';
 import {
   checkIfUserExists,
   userResponseFormatter,
 } from '../services/userService';
+import { checkIfOwnerUserOrAdmin } from '../services/authService';
 
 // create user only by sign up
 
@@ -52,10 +52,11 @@ const updateUserById = errorHandler(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
 
-    if (authenticatedUser.role !== 'admin'){
-      if (authenticatedUser.id !== user.id){
-        return next(new APIError('Unauthorized to update user profile.', 403));
-      }
+    if ( await checkIfOwnerUserOrAdmin(
+      user.id,
+      authenticatedUser.id,
+      authenticatedUser.role )){
+      return next(new APIError('Unauthorized to update user info.', 403));
     }
 
     await user.update(req.body);
@@ -100,37 +101,33 @@ const changeUserRole = errorHandler(
   },
 );
 
-const getUserReviews = errorHandler(
-  async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+const updateUserPassword = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const searchedUser = await checkIfUserExists({ id });
+    const { currentPassword, newPassword } = req.body;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const authenticatedUser = (req as any).user;
+    const user = await checkIfUserExists({ id });
 
-    if (!searchedUser) {
-      return next(new APIError('userN not found.', 404));
+    if (!user){
+      return next(new APIError('User not found.', 400));
+    }
+    if (user.id !== authenticatedUser.id){
+      return next(new APIError('Unauthorized to update user info.', 403));
+    }
+    if (!await bcrypt.compare(currentPassword, user.password)) {
+      return next(new APIError('Current password is incorrect.', 400));
+    }
+    if (await bcrypt.compare(newPassword, user.password)) {
+      return next(new APIError('New password cannot be the same as the current password.', 400));
     }
 
-    const { user } = (req as any);
-    console.log( `${id  }  ------  ${  user.id}`);
-    console.log( `${searchedUser.role  }  ------  ${  user.role}`);
+    // Hash the new password and update the user
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
 
-    if (  id !== user.id || user.role !== 'admin'){
-      return next(new APIError('no access', 404));
-    }
-
-    const reviews = await Review.findAll({
-      where: { userId: user.id },
-      include: [
-        {
-          model: Product,
-          attributes: ['name' , 'rating'],
-        },
-      ],
-    });
-
-    res.status(200).json({
-      status: 'success',
-      reviews: reviews.length > 0 ? reviews : 'User has no reviews yet.',
-    });
+    res.status(200).json({ message: 'Password updated successfully' });
   },
 );
 
@@ -140,5 +137,5 @@ export {
   updateUserById,
   deleteUserById,
   changeUserRole,
-  getUserReviews,
+  updateUserPassword,
 };
