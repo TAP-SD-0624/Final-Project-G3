@@ -1441,3 +1441,55 @@
 {"level":"info","message":"[Sequelize]: Executing (default): SELECT `id`, `firstName`, `lastName`, `email`, `dateOfBirth`, `mobileNumber`, `password`, `role`, `createdAt` FROM `users` AS `User` WHERE `User`.`id` = 'b2d23bac-6d83-4938-8825-36726422a783';","timestamp":"2024-08-24T18:52:07.649Z"}
 {"level":"info","message":"[Sequelize]: Executing (default): SELECT `id`, `firstName`, `lastName`, `email`, `dateOfBirth`, `mobileNumber`, `password`, `role`, `createdAt` FROM `users` AS `User` WHERE `User`.`id` = 'b2d23bac-6d83-4938-8825-36726422a783';","timestamp":"2024-08-24T18:52:07.681Z"}
 {"level":"info","message":"[Sequelize]: Executing (default): UPDATE `users` SET `password`=? WHERE `id` = ?","timestamp":"2024-08-24T18:52:07.874Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'users' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.497Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `users`","timestamp":"2024-08-24T19:17:52.521Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'categories' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.531Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `categories`","timestamp":"2024-08-24T19:17:52.534Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'brands' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.537Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `brands`","timestamp":"2024-08-24T19:17:52.540Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'carouselSlides' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.543Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `carouselSlides`","timestamp":"2024-08-24T19:17:52.545Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'products' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.548Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `products`","timestamp":"2024-08-24T19:17:52.550Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'reviews' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.553Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `reviews`","timestamp":"2024-08-24T19:17:52.556Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'addresses' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.560Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `addresses`","timestamp":"2024-08-24T19:17:52.564Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'orders' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.567Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `orders`","timestamp":"2024-08-24T19:17:52.569Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'productImages' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.571Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `productImages`","timestamp":"2024-08-24T19:17:52.573Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'wishLists' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.575Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `wishLists`","timestamp":"2024-08-24T19:17:52.576Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'orderItems' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.577Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `orderItems`","timestamp":"2024-08-24T19:17:52.578Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'wishListItems' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:17:52.579Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `wishListItems`","timestamp":"2024-08-24T19:17:52.581Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT `id`, `firstName`, `lastName`, `email`, `dateOfBirth`, `mobileNumber`, `password`, `role`, `createdAt` FROM `users` AS `User` WHERE `User`.`id` = 'b2d23bac-6d83-4938-8825-36726422a783';","timestamp":"2024-08-24T19:17:53.482Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT `id`, `firstName`, `lastName`, `email`, `dateOfBirth`, `mobileNumber`, `password`, `role`, `createdAt` FROM `users` AS `User` WHERE `User`.`id` = 'b375007e-d197-49c1-9b09-d13b306a7a21';","timestamp":"2024-08-24T19:17:53.489Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT `id`, `firstName`, `lastName`, `email`, `dateOfBirth`, `mobileNumber`, `password`, `role`, `createdAt` FROM `users` AS `User` WHERE `User`.`id` = 'b2d23bac-6d83-4938-8825-36726422a783';","timestamp":"2024-08-24T19:18:02.619Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT `id`, `firstName`, `lastName`, `email`, `dateOfBirth`, `mobileNumber`, `password`, `role`, `createdAt` FROM `users` AS `User` WHERE `User`.`id` = 'b375007e-d197-49c1-9b09-d13b306a7a21';","timestamp":"2024-08-24T19:18:02.621Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'users' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.006Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `users`","timestamp":"2024-08-24T19:18:55.011Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'categories' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.015Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `categories`","timestamp":"2024-08-24T19:18:55.017Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'brands' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.020Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `brands`","timestamp":"2024-08-24T19:18:55.021Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'carouselSlides' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.023Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `carouselSlides`","timestamp":"2024-08-24T19:18:55.024Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'products' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.026Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `products`","timestamp":"2024-08-24T19:18:55.027Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'reviews' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.029Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `reviews`","timestamp":"2024-08-24T19:18:55.030Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'addresses' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.032Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `addresses`","timestamp":"2024-08-24T19:18:55.033Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'orders' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.034Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `orders`","timestamp":"2024-08-24T19:18:55.035Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'productImages' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.036Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `productImages`","timestamp":"2024-08-24T19:18:55.038Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'wishLists' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.039Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `wishLists`","timestamp":"2024-08-24T19:18:55.040Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'orderItems' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.041Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `orderItems`","timestamp":"2024-08-24T19:18:55.042Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME = 'wishListItems' AND TABLE_SCHEMA = 'ecommerce_system'","timestamp":"2024-08-24T19:18:55.044Z"}
+{"level":"info","message":"[Sequelize]: Executing (default): SHOW INDEX FROM `wishListItems`","timestamp":"2024-08-24T19:18:55.045Z"}

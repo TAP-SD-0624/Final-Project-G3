@@ -4,6 +4,7 @@ import {
   getUserById,
   updateUserById,
   deleteUserById,
+  getUserReviews,
   changeUserRole,
   updateUserPassword,
 } from '../controllers/usersController';

@@ -58,3 +58,5 @@
 {"level":"http","message":"PUT /api/users/b2d23bac-6d83-4938-8825-36726422a783/password 400 60 - 100.072 ms","timestamp":"2024-08-24T18:51:46.861Z"}
 {"level":"http","message":"PUT /api/users/b2d23bac-6d83-4938-8825-36726422a783/password 400 86 - 125.631 ms","timestamp":"2024-08-24T18:51:53.421Z"}
 {"level":"http","message":"PUT /api/users/b2d23bac-6d83-4938-8825-36726422a783/password 200 43 - 239.901 ms","timestamp":"2024-08-24T18:52:07.882Z"}
+{"level":"http","message":"GET /api/users/b375007e-d197-49c1-9b09-d13b306a7a21/reviews 500 483 - 23.102 ms","timestamp":"2024-08-24T19:17:53.494Z"}
+{"level":"http","message":"GET /api/users/b375007e-d197-49c1-9b09-d13b306a7a21/reviews 500 483 - 4.784 ms","timestamp":"2024-08-24T19:18:02.622Z"}
