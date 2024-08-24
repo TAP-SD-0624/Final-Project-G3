@@ -10,6 +10,7 @@ class User extends Model {
   dateOfBirth!: Date;
   password!: string;
   role!: UserRole;
+  balance!: number;
 }
 
 User.init(
@@ -48,6 +49,11 @@ User.init(
     role: {
       type: DataTypes.ENUM(...Object.values(UserRole)),
       defaultValue: 'user',
+      allowNull: false,
+    },
+    balance: {
+      type: DataTypes.FLOAT(10, 2),
+      defaultValue: 20000,
       allowNull: false,
     },
   },
