@@ -832,51 +832,11 @@ components:
           items:
             $ref: '#/components/schemas/CarouselSlideResponse'
 
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
     securitySchemes:
       bearerAuth:
         type: http
         scheme: bearer
         bearerFormat: JWT
-
-    OrderItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier for the product.
-        quantity:
-          type: integer
-          example: 5
-      required:
-        - id
-        - quantity
-
-    OrderAddress:
-      type: object
-      properties:
-        state:
-          type: string
-          example: "Cairo"
-        city:
-          type: string
-          example: "New Cairo"
-        street:
-          type: string
-          example: "Abbas Al Akkad"
-        pin:
-          type: string
-          example: "12345"
-      required:
-        - state
-        - city
-        - street
-        - pin
 
     CreateOrder:
       type: object
@@ -905,3 +865,37 @@ components:
         - phoneNumber
         - orderOwner
         - cardNumber
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the product.
+        quantity:
+          type: integer
+          example: 5
+      required:
+        - id
+        - quantity
+    OrderAddress:
+      type: object
+      properties:
+        state:
+          type: string
+          example: "Cairo"
+        city:
+          type: string
+          example: "New Cairo"
+        street:
+          type: string
+          example: "Abbas Al Akkad"
+        pin:
+          type: string
+          example: "12345"
+      required:
+        - state
+        - city
+        - street
+        - pin
+
