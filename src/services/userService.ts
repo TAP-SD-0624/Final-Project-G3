@@ -1,4 +1,4 @@
-import User from '../models/User';
+import User from '../db-files/models/User';
 import APIError from '../utils/APIError';
 
 const checkIfEmailExists = async(email: string): Promise<boolean> => {

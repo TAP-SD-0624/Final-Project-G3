@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import UserRole from '../enums/userRoles';
-import sequelize from '../database';
+import UserRole from '../../enums/userRoles';
+import sequelize from '../../database';
 
 class User extends Model {
   id!: string;

@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database';
+import sequelize from '../../database';
 
 class Review extends Model {
   id!: string;

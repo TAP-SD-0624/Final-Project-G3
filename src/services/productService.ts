@@ -1,17 +1,17 @@
 import { FindOptions, Includeable } from 'sequelize';
-import Product from '../models/Product';
+import Product from '../db-files/models/Product';
 import { productQueryInterface } from '../utils/interfaces/productQueryOptionsInterface';
-import Brand from '../models/Brand';
-import Category from '../models/Category';
+import Brand from '../db-files/models/Brand';
+import Category from '../db-files/models/Category';
 
-const oneProductService = async (
+const oneProductService = async(
   options?: FindOptions,
 ): Promise<Product | null> => {
   const product = await Product.findOne(options);
   return product;
 };
 
-const productsService = async (
+const productsService = async(
   options: FindOptions = {},
   query?: productQueryInterface,
 ): Promise<Product[]> => {
@@ -40,21 +40,22 @@ const productsService = async (
   return products;
 };
 
-const checkProductStock = async (
+const checkProductStock = async(
   checkOptions: { product?: Product, id?: string },
-  quantity: number
+  quantity: number,
 ) => {
   const { product, id } = checkOptions;
-  let stock = 0 ;
+  let stock = 0;
   if (product) {
-    stock = product.stock;
+    ({ stock } = product);
   }
   if (id){
-    const product = await oneProductService({ 
+    const product = await oneProductService({
       where: {
-        id
+        id,
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     stock = product?.stock as any;
   }
 
