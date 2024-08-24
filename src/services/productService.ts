@@ -1,4 +1,4 @@
-import { FindOptions, Includeable } from 'sequelize';
+import { FindOptions, Includeable, Transaction } from 'sequelize';
 import Product from '../db-files/models/Product';
 import { productQueryInterface } from '../utils/interfaces/productQueryOptionsInterface';
 import Brand from '../db-files/models/Brand';
@@ -65,6 +65,13 @@ const checkProductStock = async(
   return true;
 };
 
+const updateProductService = async(
+  product: Product,
+  options: { [key: string]: string | number },
+  transaction: Transaction) => {
+  return await product.update(options, { transaction });
+};
+
 const productResponseFormatter = (
   product: Product,
   category: string,
@@ -86,4 +93,9 @@ const productResponseFormatter = (
   return responseObject;
 };
 
-export { oneProductService, productsService, productResponseFormatter, checkProductStock };
+export {
+  oneProductService,
+  productsService,
+  productResponseFormatter,
+  checkProductStock,
+  updateProductService };
