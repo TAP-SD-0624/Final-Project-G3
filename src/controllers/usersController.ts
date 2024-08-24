@@ -52,7 +52,7 @@ const updateUserById = errorHandler(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
 
-    if ( await checkIfOwnerUserOrAdmin(
+    if (! await checkIfOwnerUserOrAdmin(
       user.id,
       authenticatedUser.id,
       authenticatedUser.role )){
