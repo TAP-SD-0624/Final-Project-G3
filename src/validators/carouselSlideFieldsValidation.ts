@@ -21,7 +21,7 @@ const createCarouselSlideValidation = Joi.object({
     }),
 
   title: Joi.string()
-    .max(100)
+    .max(50)
     .required()
     .messages({
       'string.base': 'Title should be a type of text.',
@@ -30,7 +30,7 @@ const createCarouselSlideValidation = Joi.object({
     }),
 
   description: Joi.string()
-    .max(255)
+    .max(100)
     .required()
     .messages({
       'string.base': 'Description should be a type of text.',
@@ -39,8 +39,8 @@ const createCarouselSlideValidation = Joi.object({
     }),
 
   categoryName: Joi.string()
-    .max(100)
-    .required()
+    .max(50)
+    .optional()
     .messages({
       'string.base': 'Category Name should be a type of text.',
       'string.max': 'Category Name should have a maximum length of {#limit}.',
@@ -48,8 +48,8 @@ const createCarouselSlideValidation = Joi.object({
     }),
 
   brandName: Joi.string()
-    .max(100)
-    .required()
+    .max(50)
+    .optional()
     .messages({
       'string.base': 'Brand Name should be a type of text.',
       'string.max': 'Brand Name should have a maximum length of {#limit}.',
