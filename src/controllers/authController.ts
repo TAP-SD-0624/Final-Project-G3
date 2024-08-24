@@ -34,7 +34,7 @@ const login = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
-    const user = await checkIfUserExists(email);
+    const user = await checkIfUserExists({ email });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return next(new APIError('Invalid email or password', 401));
     }

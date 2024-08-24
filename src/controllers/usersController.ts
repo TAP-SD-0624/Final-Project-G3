@@ -50,23 +50,11 @@ const updateUserById = errorHandler(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
 
-    console.log(`${authenticatedUser.role  }  
-      //////   ${  authenticatedUser.id} 
-      //////   ${  authenticatedUser.firstName}`);
-
-    // if (authenticatedUser.role !== 'admin' && authenticatedUser.id !== user.id) {
-    //   return next(new APIError('Unauthorized to update user profile.', 403));
-    // }
-
     if (authenticatedUser.role !== 'admin'){
       if (authenticatedUser.id !== user.id){
         return next(new APIError('Unauthorized to update user profile.', 403));
       }
     }
-
-    // if (!(authenticatedUser.role === 'admin') || authenticatedUser.id !== user.id){
-    //   return next(new APIError('Unauthorized to update user profile.', 403));
-    // }
 
     await user.update(req.body);
     await user.save();
