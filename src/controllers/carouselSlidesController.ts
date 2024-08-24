@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import CarouselSlide from '../models/CarouselSlide';
+import CarouselSlide from '../db-files/models/CarouselSlide';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
 import { checkIfCarouselSlideExists,checkIfSlideOrderExists,
   checkIfSlideTitleExists, caroselSlideResponseFormatter,
 } from '../services/carouselSlideService';
-import   checkIfBrandExists   from '../services/brandService';
-import   checkIfCategoryExists   from '../services/categoryService';
+import { checkIfBrandExists } from '../services/brandService';
+import checkIfCategoryExists from '../services/categoryService';
 
 const createNewCarouselSlide = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
