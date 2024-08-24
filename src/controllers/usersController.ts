@@ -6,6 +6,7 @@ import {
   checkIfUserExists,
   userResponseFormatter,
 } from '../services/userService';
+import { checkIfOwnerUserOrAdmin } from '../services/authService';
 
 // create user only by sign up
 
@@ -50,10 +51,11 @@ const updateUserById = errorHandler(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
 
-    if (authenticatedUser.role !== 'admin'){
-      if (authenticatedUser.id !== user.id){
-        return next(new APIError('Unauthorized to update user profile.', 403));
-      }
+    if ( await checkIfOwnerUserOrAdmin(
+      user.id,
+      authenticatedUser.id,
+      authenticatedUser.role )){
+      return next(new APIError('Unauthorized to update user profile.', 403));
     }
 
     await user.update(req.body);
