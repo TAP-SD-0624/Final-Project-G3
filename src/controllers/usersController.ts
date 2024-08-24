@@ -106,19 +106,20 @@ const changeUserRole = errorHandler(
 const getUserReviews = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
-    const searchedUser = await checkIfUserExists({ id });
+    const user = await checkIfUserExists({ id });
 
-    if (!searchedUser) {
+    if (!user) {
       return next(new APIError('userN not found.', 404));
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { user } = (req as any).user;
-    console.log( `${id  }  ------  ${  user.id}`);
-    console.log( `${searchedUser.role  }  ------  ${  user.role}`);
+    const authenticatedUser = (req as any).user;
 
-    if (  id !== user.id || user.role !== 'admin'){
-      return next(new APIError('no access', 404));
+    if (! await checkIfOwnerUserOrAdmin(
+      user.id,
+      authenticatedUser.id,
+      authenticatedUser.role )){
+      return next(new APIError('Unauthorized to get access for user reviews.', 403));
     }
 
     const reviews = await Review.findAll({

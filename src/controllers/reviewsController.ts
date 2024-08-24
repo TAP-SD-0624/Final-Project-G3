@@ -100,24 +100,25 @@ const getReviewById = errorHandler(
 const updateReviewById = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
-
     const review = await getReviewService({
-      where: {
-        id,
+      where: { id },
+      attributes: {
+        include: ['userId'],
       },
-    });
-    if (!review) {
+    }) as Review & { userId: string };
+
+    if (!review){
       return next(new APIError('Review not found', 404));
     }
 
-    // const authenticatedUser = (req as any).user;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const authenticatedUser = (req as any).user;
 
-    // if ( await checkIfOwnerUserOrAdmin(
-    //   review.userId,
-    //   authenticatedUser.id,
-    //   authenticatedUser.role )){
-    //   return next(new APIError('Unauthorized to update user profile.', 403));
-    // }
+    if (! await checkIfOwnerUserOrAdmin(
+      review.userId,
+      authenticatedUser.id )){
+      return next(new APIError('Unauthorized to update user profile.', 403));
+    }
 
     await review.update(req.body);
 
@@ -131,27 +132,27 @@ const updateReviewById = errorHandler(
 const deleteReviewById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+
     const review = await getReviewService({
       where: { id },
-      include: [
-        {
-          model: User,
-          attributes: ['id'],
-        },
-      ],
-    });
+      attributes: {
+        include: ['userId'],
+      },
+    }) as Review & { userId: string };
+
     if (!review){
       return next(new APIError('Review not found', 404));
     }
 
-    // const authenticatedUser = (req as any).user;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const authenticatedUser = (req as any).user;
 
-    // if ( await checkIfOwnerUserOrAdmin(
-    //   review.userId,
-    //   authenticatedUser.id,
-    //   authenticatedUser.role )){
-    //   return next(new APIError('Unauthorized to update user profile.', 403));
-    // }
+    if (! await checkIfOwnerUserOrAdmin(
+      review.userId,
+      authenticatedUser.id,
+      authenticatedUser.role )){
+      return next(new APIError('Unauthorized to update user profile.', 403));
+    }
 
     await review.destroy();
     res.status(200).json({ status: 'no content' });
