@@ -42,7 +42,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginUser'
+                $ref: '#/components/schemas/Authentication'
         '401':
           description: Unauthorized
         '500':
@@ -268,6 +268,202 @@ paths:
         '500':
           description: Internal server error
 
+  /api/products:
+    post:
+      tags: [Product]
+      summary: Create a new product
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+      responses:
+        '201':
+          description: Product created successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+    get:
+      tags: [Product]
+      summary: Get all products
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductListResponse'
+        '500':
+          description: Internal server error
+
+  /api/products/{id}:
+    get:
+      tags: [Product]
+      summary: Get a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '404':
+          description: Product not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags: [Product]
+      summary: Update a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+      responses:
+        '200':
+          description: Product updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Product not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags: [Product]
+      summary: Delete a product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+        '500':
+          description: Internal server error
+
+  /api/carouselSlides:
+    post:
+      tags: [CarouselSlide]
+      summary: Create a new carousel slide
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCarouselSlide'
+      responses:
+        '201':
+          description: Carousel slide created successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+    get:
+      tags: [CarouselSlide]
+      summary: Get all carousel slides
+      responses:
+        '200':
+          description: List of carousel slides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarouselSlideListResponse'
+        '500':
+          description: Internal server error
+
+  /api/carouselSlides/{id}:
+    get:
+      tags: [CarouselSlide]
+      summary: Get a carousel slide by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Carousel slide details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarouselSlideResponse'
+        '404':
+          description: Carousel slide not found
+        '500':
+          description: Internal server error
+
+    put:
+      tags: [CarouselSlide]
+      summary: Update a carousel slide by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCarouselSlide'
+      responses:
+        '200':
+          description: Carousel slide updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Carousel slide not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags: [CarouselSlide]
+      summary: Delete a carousel slide by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Carousel slide deleted successfully
+        '404':
+          description: Carousel slide not found
+        '500':
+          description: Internal server error
+
   /api/orders/:
     post:
       tags: [Order]
@@ -417,7 +613,6 @@ components:
           maxLength: 50
           example: Apple
       required:
-        - id
         - name
 
     BrandResponse:
@@ -439,6 +634,209 @@ components:
           items:
             $ref: '#/components/schemas/BrandResponse'
 
+    CreateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: iPhone 14
+        description:
+          type: string
+          maxLength: 150
+          example: Latest model of iPhone
+        price:
+          type: number
+          format: float
+          example: 999.99
+        discountRate:
+          type: number
+          format: float
+          example: 0.1
+        categoryName:
+          type: string
+        brandName:
+          type: string
+        stock:
+          type: integer
+          example: 50
+      required:
+        - name
+        - description
+        - price
+        - discountRate 
+        - categoryName
+        - brandName
+        - stock
+
+    UpdateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: iPhone 14
+        description:
+          type: string
+          maxLength: 150
+          example: Updated description of iPhone
+        price:
+          type: number
+          format: float
+          example: 899.99
+        discountRate:
+          type: number
+          format: float
+          example: 0.1
+        categoryName:
+          type: string
+        brandName:
+          type: string
+      stock:
+          type: integer
+          example: 100
+      anyOf:
+        - required: [name]
+        - required: [description]
+        - required: [price]
+        - required: [discountRate]
+        - required: [categoryName]
+        - required: [brandName]
+        - required: [stock]
+
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+          format: float
+        discountRate:
+          type: number
+          format: float
+        stock:
+          type: integer
+        categoryName:
+          type: string
+        brandName:
+          type: string
+
+    ProductListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResponse'
+
+    CreateCarouselSlide:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          format: uri
+          example: https://example.com/image.jpg
+        title:
+          type: string
+          maxLength: 100
+          example: Summer Sale
+        description:
+          type: string
+          maxLength: 250
+          example: Don't miss out on our summer sale!
+        slideOrder:
+          type: integer
+          example: 3
+        categoryName:
+          type: string
+          example: Phone
+        brandName:
+          type: string
+          example: Apple
+      required:
+        - imageUrl
+        - title
+        - description
+        - slideOrder
+        - categoryName
+        - brandName
+
+    UpdateCarouselSlide:
+      type: object
+      properties:
+        imageUrl:
+          type: string
+          format: uri
+          example: https://example.com/new-image.jpg
+        title:
+          type: string
+          maxLength: 100
+          example: Winter Sale
+        description:
+          type: string
+          maxLength: 250
+          example: Check out our new winter sale!
+        slideOrder:
+          type: integer
+          example: 1
+        categoryName:
+          type: string
+          example: Phone
+        brandName:
+          type: Apple
+      anyOf:
+        - required: [imageUrl]
+        - required: [title]
+        - required: [description]
+        - required: [slideOrder]
+        - required: [categoryName]
+        - required: [brandName]
+
+    CarouselSlideResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        imageUrl:
+          type: string
+          format: uri
+        title:
+          type: string
+        description:
+          type: string
+        slideOrder:
+          type: integer
+        categoryName:
+          type: string
+        brandName:
+          type: string
+
+    CarouselSlideListResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        slides:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselSlideResponse'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
     securitySchemes:
       bearerAuth:
         type: http

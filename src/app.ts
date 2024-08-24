@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
 import categoryRouter from './routes/categoryRoutes';
+import carouselSlideRouter from './routes/crouselSlideRoutes';
 import brandRouter from './routes/brandRoutes';
 import productsRouter from './routes/productRoutes';
 import orderRouter from './routes/orderRoutes';
@@ -12,15 +13,39 @@ import {
   tooManyRequests,
 } from './controllers/suspicionController';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import { setupSwagger } from './api-documentation/swagger';
+import morganMiddleware from './middlewares/morganMiddleware';
 
 const app: Express = express();
 
 // to log any http request to the server
 app.use(morgan('dev'));
+app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // For parsing cookies
+
+// setup CORS allowed origins
+
+const allowedOrigins: string[] = [
+  'http://127.0.0.1:4000',
+  'https://backend-final-g3-qngl.onrender.com',
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin, like mobile apps or curl requests
+    if (!origin) {
+      return callback(null, true);
+    }
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
 
 // limit the number of requests sent to the server to under 500 requests per minute.
 app.use(
@@ -36,12 +61,10 @@ setupSwagger(app);
 
 // authentication routes
 app.use('/api/auth', authRouter);
-// brands routes
 app.use('/api/brands', brandRouter);
-// categories routes
 app.use('/api/categories', categoryRouter);
-// products routes
 app.use('/api/products', productsRouter);
+app.use('/api/carouselSlides', carouselSlideRouter);
 // orders routes
 app.use('/api/orders', orderRouter);
 

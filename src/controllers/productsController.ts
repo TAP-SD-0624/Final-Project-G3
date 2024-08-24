@@ -13,7 +13,8 @@ import {
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const { name, brief, description, price, brandName, categoryName, discountRate } = req.body;
+    const { name, brief, description, price, brandName,
+      categoryName, discountRate , stock } = req.body;
     const category = await checkIfCategoryExists({ name: categoryName });
     const brand = await checkIfBrandExists({ name: brandName });
 
@@ -29,6 +30,7 @@ const createProduct = errorHandler(
       description,
       price,
       discountRate,
+      stock,
       brandId: brand.id,
       categoryId: category.id,
     });
@@ -104,11 +106,11 @@ const deleteProduct = errorHandler(
 const updateProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const { categoryId, brandId } = req.body;
-    if (! await checkIfBrandExists({ id: brandId })){
+    const { categoryName, brandName } = req.body;
+    if (! await checkIfBrandExists({ name: brandName })){
       return next(new APIError('Brand not found', 404));
     }
-    if (! await checkIfCategoryExists({ id: categoryId })){
+    if (! await checkIfCategoryExists({ name: categoryName })){
       return next(new APIError('Category not found', 404));
     }
     const product = await oneProductService({ where: { id } });
