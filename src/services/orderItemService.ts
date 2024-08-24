@@ -1,18 +1,22 @@
+import { Transaction } from 'sequelize';
 import OrderItem from '../db-files/models/OrderItem';;
 
 const createOrderItemService = async(
   orderId: string,
   productId: string,
   quantity: number,
-  unitPrice: number): Promise<OrderItem | null> => {
-  const totalPrice = (quantity * unitPrice).toFixed(2);
+  unitPrice: number,
+  options: { transaction?: Transaction }): Promise<OrderItem | null> => {
+  const totalPrice = (quantity * unitPrice);
   const orderItem = await OrderItem.create({
     productId,
     orderId,
     quantity,
     unitPrice,
-    totalPrice: parseInt(totalPrice),
-  });
+    totalPrice,
+  },
+  options,
+  );
   return orderItem;
 };
 
