@@ -1,4 +1,4 @@
-import Category from '../models/Category';
+import Category from '../db-files/models/Category';
 
 const checkIfCategoryExists = async(
   options: { name?: string, id?: string },

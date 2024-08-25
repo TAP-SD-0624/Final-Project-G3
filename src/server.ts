@@ -7,7 +7,7 @@ dotenv.config({ path: './config/.env' });
 
 import app from './app';
 import sequelize from './database';
-import associateModels from './models/associations';
+import associateModels from './db-files/associations';
 import { logger, fileLogger } from './loggers/app-logger';
 
 const PORT: number | undefined = Number(process.env.PORT) || 80;

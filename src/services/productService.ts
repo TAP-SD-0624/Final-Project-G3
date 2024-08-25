@@ -1,8 +1,8 @@
-import { FindOptions, Includeable } from 'sequelize';
-import Product from '../models/Product';
+import { FindOptions, Includeable, Transaction } from 'sequelize';
+import Product from '../db-files/models/Product';
 import { productQueryInterface } from '../utils/interfaces/productQueryOptionsInterface';
-import Brand from '../models/Brand';
-import Category from '../models/Category';
+import Brand from '../db-files/models/Brand';
+import Category from '../db-files/models/Category';
 
 const oneProductService = async(
   options?: FindOptions,
@@ -40,6 +40,38 @@ const productsService = async(
   return products;
 };
 
+const checkProductStock = async(
+  checkOptions: { product?: Product, id?: string },
+  quantity: number,
+) => {
+  const { product, id } = checkOptions;
+  let stock = 0;
+  if (product) {
+    ({ stock } = product);
+  }
+  if (id){
+    const product = await oneProductService({
+      where: {
+        id,
+      },
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    stock = product?.stock as any;
+  }
+
+  if (quantity > stock) {
+    return false;
+  }
+  return true;
+};
+
+const updateProductService = async(
+  product: Product,
+  options: { [key: string]: string | number },
+  transaction: Transaction) => {
+  return await product.update(options, { transaction });
+};
+
 const productResponseFormatter = (
   product: Product,
   category: string,
@@ -61,4 +93,9 @@ const productResponseFormatter = (
   return responseObject;
 };
 
-export { oneProductService, productsService, productResponseFormatter };
+export {
+  oneProductService,
+  productsService,
+  productResponseFormatter,
+  checkProductStock,
+  updateProductService };

@@ -1,4 +1,4 @@
-import CarouselSlide from '../models/CarouselSlide';
+import CarouselSlide from '../db-files/models/CarouselSlide';
 
 const checkIfCarouselSlideExists = async(options: { id?: string }) => {
   const { id } = options;
