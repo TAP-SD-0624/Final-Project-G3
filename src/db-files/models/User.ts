@@ -7,7 +7,6 @@ class User extends Model {
   firstName!: string;
   lastName!: string;
   email!: string;
-  dateOfBirth?: Date;
   mobileNumber?: string;
   password!: string;
   role!: UserRole;
@@ -38,11 +37,6 @@ User.init(
           msg: 'Invalid email format',
         },
       },
-    },
-    dateOfBirth: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
-      defaultValue: new Date(),
     },
     mobileNumber: {
       type: DataTypes.STRING,
