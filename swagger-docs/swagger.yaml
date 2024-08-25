@@ -594,10 +594,10 @@ components:
           type: string
           format: email
           example: john.doe@example.com
-        dateOfBirth:
+        mobileNumber:
           type: string
-          format: date
-          example: 1990-01-01
+          format: international-phone
+          example: "+970123456789"
         password:
           type: string
           minLength: 8
@@ -609,7 +609,7 @@ components:
         - firstName
         - lastName
         - email
-        - dateOfBirth
+        - mobileNumber
         - password
         - confirmPassword
 
