@@ -2,39 +2,34 @@ import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
 import Brand from '../db-files/models/Brand';
 import APIError from '../utils/APIError';
-import {
-  checkIfBrandExists,
-  createImageFileName,
-  renameFile,
-  removeFile,
-  getTempName,
-  updateImagePath,
-} from '../services/brandService';
+import { checkIfBrandExists } from '../services/brandService';
 import isValidFileName from '../validators/fileNameValidator';
-import path from 'path';
+import { uploadToFireBase, deleteFromFirebase } from '../utils/firebaseOperations';
 
 const createNewBrand = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { name } = req.body;
-    const image = req.file as Express.Multer.File;
-    const fileExtension = path.extname(image.originalname);
-    const newBrandImagePath = createImageFileName(name, image);
-    const tempName = getTempName(fileExtension);
     if (!isValidFileName(name)){
-      removeFile(tempName);
       return next(new APIError('Invalid brand name', 400));
     }
     if (await checkIfBrandExists({ name }) !== null) {
-      removeFile(tempName);
       return next(new APIError('Brand already exist', 400));
     }
-    await Brand.create({
+    const brand = await Brand.create({
       name,
-      imagePath: newBrandImagePath,
+      imagePath: './temp', // just a temp value before we get the value from firebase
     });
-    renameFile(tempName, newBrandImagePath);
+    const downloadURL = await uploadToFireBase(req, 'brands');
+    if (!downloadURL){
+      brand.destroy();
+      await brand.save();
+      return next(new APIError('Brand image uploading falied', 500));
+    }
+    brand.imagePath = downloadURL;
+    await brand.save();
     res.status(201).json({
       message: 'Brand added successfully',
+      brand,
     });
   },
 
@@ -79,38 +74,34 @@ const updateBrandById = errorHandler(
     const { name } = req.body;
     const { id } = req.params;
     const image = req.file as Express.Multer.File;
-    const brand: Brand | null = await checkIfBrandExists({ id });
-    if (name && !isValidFileName(name)){
-      if (image){
-        const fileExtension = path.extname(image.originalname);
-        const tempName = getTempName(fileExtension);
-        removeFile(tempName);
-      }
-      return next(new APIError('Invalid brand name', 400));
+    if (!name && !image){
+      return next(new APIError(
+        'You should update at least one thing, either the name or the image', 400,
+      ));
     }
-    if (brand === null) {
-      if (image){
-        const fileExtension = path.extname(image.originalname);
-        const tempName = getTempName(fileExtension);
-        removeFile(tempName);
-      }
+    const brand: Brand | null = await checkIfBrandExists({ id });
+    if (!brand) {
       return next(new APIError('Brand doesn\'t exist', 400));
     }
     if (name) {
+      if (!isValidFileName(name)){
+        return next(new APIError('Invalid brand name', 400));
+      }
+      if (await checkIfBrandExists({ name })){
+        return next(new APIError('A brand with this name already exists', 400));
+      }
       brand.name = name;
-      const newPath = updateImagePath(brand.imagePath,name);
-      renameFile(brand.imagePath, newPath);
-      brand.imagePath = newPath;
       await brand.save();
     }
     if (image) {
-      const fileExtension = path.extname(image.originalname);
-      const tempName = getTempName(fileExtension);
-      const newBrandImagePath = createImageFileName(brand.name, image);
-
-      removeFile(brand.imagePath);
-      renameFile(tempName, newBrandImagePath);
-      brand.imagePath = newBrandImagePath;
+      await deleteFromFirebase(brand.imagePath);
+      const downloadURL = await uploadToFireBase(req, 'brands');
+      if (!downloadURL){
+        brand.destroy();
+        await brand.save();
+        return next(new APIError('Brand image uploading falied', 500));
+      }
+      brand.imagePath = downloadURL;
       await brand.save();
     }
     res.status(200).json({
@@ -127,7 +118,7 @@ const deleteBrandById = errorHandler(
     if (brand === null) {
       return next(new APIError('Brand doesn\'t exist', 400));
     }
-    removeFile(brand.imagePath);
+    deleteFromFirebase(brand.imagePath);
     await Brand.destroy({
       where: { id: brandId },
     });

@@ -13,7 +13,7 @@ import {
   createBrandValidation, brandIdValidation, updateBrandValidation,
 } from '../validators/brandFileldsValidation';
 import { methodNotAllowed } from '../controllers/suspicionController';
-import upload from '../middlewares/multerMiddleware';
+import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
 const brandRouter = Router();
 
@@ -23,7 +23,7 @@ brandRouter.route('/')
     getAllBrands,
   )
   .post(
-    upload.single('image'),
+    uploadToMemory,
     authMiddleware,
     adminMiddleware,
     validateJoiRequest({ bodySchema: createBrandValidation }),
@@ -37,7 +37,7 @@ brandRouter.route('/:id')
     getBrandById,
   )
   .put(
-    upload.single('image'),
+    uploadToMemory,
     authMiddleware,
     adminMiddleware,
     validateJoiRequest({ paramsSchema: brandIdValidation }),
