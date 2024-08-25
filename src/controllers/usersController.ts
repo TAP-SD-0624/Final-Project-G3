@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
+import User from '../db-files/models/User';
 import User from '../models/User';
 import Review from '../models/Review';
 import Product from '../models/Product';

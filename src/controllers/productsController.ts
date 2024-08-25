@@ -2,12 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
 import { checkIfBrandExists } from '../services/brandService';
 import APIError from '../utils/APIError';
+import Product from '../db-files/models/Product';
 import Product from '../models/Product';
 import User from '../models/User';
 import Review from '../models/Review';
 import checkIfCategoryExists from '../services/categoryService';
-import Category from '../models/Category';
-import Brand from '../models/Brand';
+import Category from '../db-files/models/Category';
+import Brand from '../db-files/models/Brand';
 import {
   productsService,
   oneProductService,
@@ -109,17 +110,19 @@ const updateProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { categoryName, brandName } = req.body;
-    if (! await checkIfBrandExists({ name: brandName })){
+    const brand = await checkIfBrandExists({ name: brandName });
+    if (!brand){
       return next(new APIError('Brand not found', 404));
     }
-    if (! await checkIfCategoryExists({ name: categoryName })){
+    const category = await checkIfCategoryExists({ name: categoryName });
+    if (!category){
       return next(new APIError('Category not found', 404));
     }
     const product = await oneProductService({ where: { id } });
     if (!product){
       return next(new APIError('Product not found', 404));
     }
-    product.update(req.body);
+    product.update({ ...req.body, brandId: brand.id, categoryId: category.id });
     await product.save();
     res.status(200).json({
       status: 'success',

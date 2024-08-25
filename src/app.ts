@@ -1,11 +1,11 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
-import morgan from 'morgan';
 import authRouter from './routes/authRoutes';
 import categoryRouter from './routes/categoryRoutes';
 import carouselSlideRouter from './routes/crouselSlideRoutes';
 import brandRouter from './routes/brandRoutes';
 import userRouter from './routes/userRoutes';
 import productsRouter from './routes/productRoutes';
+import orderRouter from './routes/orderRoutes';
 import reviewsRouter from './routes/reviewRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
@@ -20,8 +20,7 @@ import morganMiddleware from './middlewares/morganMiddleware';
 
 const app: Express = express();
 
-// to log any http request to the server
-app.use(morgan('dev'));
+// to log any http request to the console and http.log file
 app.use(morganMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,10 +30,14 @@ app.use(cookieParser()); // For parsing cookies
 
 const allowedOrigins: string[] = [
   'http://127.0.0.1:4000',
+  'http://127.0.0.1:5173',
+  'http://localhost:4000',
+  'http://localhost:5173',
   'https://backend-final-g3-qngl.onrender.com',
 ];
 
 app.use(cors({
+  credentials: true,
   origin: (origin, callback) => {
     // Allow requests with no origin, like mobile apps or curl requests
     if (!origin) {
@@ -60,13 +63,13 @@ app.use(
 // Setup Swagger
 setupSwagger(app);
 
-// authentication routes
 app.use('/api/auth', authRouter);
 app.use('/api/brands', brandRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carouselSlides', carouselSlideRouter);
 app.use('/api/users', userRouter);
+app.use('/api/orders', orderRouter);
 app.use('/api/reviews', reviewsRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,

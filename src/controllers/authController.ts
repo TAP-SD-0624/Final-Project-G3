@@ -4,11 +4,11 @@ import APIError from '../utils/APIError';
 import { generateToken } from '../utils/jwtToken';
 import bcrypt from 'bcryptjs';
 import { checkIfEmailExists, checkIfUserExists } from '../services/userService';
-import User from '../models/User';
+import User from '../db-files/models/User';
 
 const signup = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const { firstName, lastName, email, password } =
+    const { firstName, lastName, email,  mobileNumber, password } =
       req.body;
     if (await checkIfEmailExists(email)) {
       return next(new APIError('Email already in use', 400));
@@ -19,6 +19,7 @@ const signup = errorHandler(
       firstName,
       lastName,
       email,
+      mobileNumber,
       password: hashedPassword,
     });
 

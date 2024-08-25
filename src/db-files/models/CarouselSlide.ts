@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../database';
+import sequelize from '../../database';
 
 class CarouselSlide extends Model {
   id!: string;

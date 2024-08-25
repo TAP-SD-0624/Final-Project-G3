@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database';
-import recalculateProductRatingHook from '../hooks/addReviewHook';
+import sequelize from '../../database';
 
 class Review extends Model {
   id!: string;
@@ -32,11 +31,6 @@ Review.init(
     tableName: 'reviews',
     updatedAt: false,
     timestamps: true,
-    hooks: {
-      afterCreate: async (review: Review) => {
-        await recalculateProductRatingHook(review);
-      },
-    },
   },
 );
 
