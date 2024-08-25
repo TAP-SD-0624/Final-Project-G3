@@ -23,13 +23,11 @@ const brandIdValidation = Joi.object({
 });
 const updateBrandValidation = Joi.object({
   name: Joi.string()
-    .required()
     .min(3)
     .max(50)
     .messages({
-      'any.required': 'brand name is required',
       'string.min': 'Brand name must be at least 3 characters long',
-      'string.max': 'Brand name must be less than or equal to 20 characters long',
+      'string.max': 'Brand name must be less than or equal to 50 characters long',
     }),
 });
 export { createBrandValidation, brandIdValidation, updateBrandValidation };
