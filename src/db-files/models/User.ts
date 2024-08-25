@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import UserRole from '../enums/userRoles';
-import sequelize from '../database';
+import UserRole from '../../enums/userRoles';
+import sequelize from '../../database';
 
 class User extends Model {
   id!: string;
@@ -11,6 +11,7 @@ class User extends Model {
   mobileNumber?: string;
   password!: string;
   role!: UserRole;
+  balance!: number;
 }
 
 User.init(
@@ -63,6 +64,11 @@ User.init(
     role: {
       type: DataTypes.ENUM(...Object.values(UserRole)),
       defaultValue: 'user',
+      allowNull: false,
+    },
+    balance: {
+      type: DataTypes.FLOAT(10, 2),
+      defaultValue: 20000,
       allowNull: false,
     },
   },

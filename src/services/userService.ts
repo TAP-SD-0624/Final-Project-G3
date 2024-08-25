@@ -1,4 +1,4 @@
-import User from '../models/User';
+import User from '../db-files/models/User';
 
 const checkIfEmailExists = async(email: string): Promise<boolean> => {
   const existingUser = await User.findOne({ where: { email } });

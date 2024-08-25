@@ -6,6 +6,8 @@ info:
 servers:
   - url: 'http://localhost:4000'
     description: Development server
+  - url: 'https://backend-final-g3-qngl.onrender.com/'
+    description: Production server
 
 paths:
   /api/auth/signup:
@@ -549,6 +551,26 @@ paths:
         '500':
           description: Internal server error
 
+  /api/orders/:
+    post:
+      tags: [Order]
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+      responses:
+        '201':
+          description: Order created successfully
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+
+
 components:
   schemas:
     RegisterUser:
@@ -933,8 +955,70 @@ components:
           items:
             $ref: '#/components/schemas/CarouselSlideResponse'
 
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    securitySchemes:
+      bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+
+    CreateOrder:
+      type: object
+      properties:
+        itemsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        address:
+          $ref: '#/components/schemas/OrderAddress'
+        phoneNumber:
+          type: string
+          format: international-phone
+          example: "+970123456789"
+        orderOwner:
+          type: string
+          example: "John Doe"
+        cardNumber:
+          type: string
+          format: credit-card
+          example: "4111111111111111"
+
+      required:
+        - items
+        - address
+        - phoneNumber
+        - orderOwner
+        - cardNumber
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the product.
+        quantity:
+          type: integer
+          example: 5
+      required:
+        - id
+        - quantity
+    OrderAddress:
+      type: object
+      properties:
+        state:
+          type: string
+          example: "Cairo"
+        city:
+          type: string
+          example: "New Cairo"
+        street:
+          type: string
+          example: "Abbas Al Akkad"
+        pin:
+          type: string
+          example: "12345"
+      required:
+        - state
+        - city
+        - street
+        - pin
+
