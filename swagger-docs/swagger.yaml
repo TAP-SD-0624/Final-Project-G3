@@ -568,6 +568,23 @@ paths:
           description: Bad request
         '500':
           description: Internal server error
+    get:
+      tags: [Order]
+      summary: Get all orders of a user
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOrders'
+        '400':
+          description: Bad request | No orders found
+        '401':
+          description: User not found | No token provided
+        '500':
+          description: Internal server error | User doesn't exist
+ 
 
 
 
@@ -1021,4 +1038,20 @@ components:
         - city
         - street
         - pin
-
+    UserOrders:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the order.
+          example: "136e4839-5fce-4120-bda7-135796f95caf"
+        createdAt:
+          type: string
+          example: "2024-08-25T19:36:08.000Z"
+        totalAmount:
+          type: string
+          example: "2999.97"
+        orderStatus:
+          type: string
+          example: "Processing"
