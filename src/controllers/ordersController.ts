@@ -6,7 +6,7 @@ import { createOrderService } from '../services/orderService';
 import {
   checkProductStock,
   oneProductService,
-  updateProductService
+  updateProductService,
 } from '../services/productService';
 import APIError from '../utils/APIError';
 import errorHandler from '../utils/errorHandler';
@@ -14,9 +14,8 @@ import { Request, Response, NextFunction } from 'express';
 import User from '../db-files/models/User';
 import Order from '../db-files/models/Order';
 
-
 const createOrder = errorHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async(req: Request, res: Response, next: NextFunction) => {
     const transaction: Transaction = await sequelize.transaction();
     const { address, itemsList, orderOwner, phoneNumber, cardNumber } = req.body;
     const { street, city, pin, state } = address;
@@ -100,7 +99,8 @@ const createOrder = errorHandler(
   },
 );
 const getAllOrders = errorHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async(req: Request, res: Response, next: NextFunction) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userId = (req as any).user.id;
 
     const user = await User.findOne({ where: { id: userId } });
@@ -117,15 +117,13 @@ const getAllOrders = errorHandler(
       res.status(200).send({
         message: 'No orders found',
       });
-    }
-
-    else {
+    } else {
       res.status(200).json({
         status: 'success',
         orders,
       });
     }
-  }
+  },
 );
 
 export { createOrder, getAllOrders };
