@@ -107,17 +107,19 @@ const updateProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { categoryName, brandName } = req.body;
-    if (! await checkIfBrandExists({ name: brandName })){
+    const brand = await checkIfBrandExists({ name: brandName });
+    if (!brand){
       return next(new APIError('Brand not found', 404));
     }
-    if (! await checkIfCategoryExists({ name: categoryName })){
+    const category = await checkIfCategoryExists({ name: categoryName });
+    if (!category){
       return next(new APIError('Category not found', 404));
     }
     const product = await oneProductService({ where: { id } });
     if (!product){
       return next(new APIError('Product not found', 404));
     }
-    product.update(req.body);
+    product.update({ ...req.body, brandId: brand.id, categoryId: category.id });
     await product.save();
     res.status(200).json({
       status: 'success',

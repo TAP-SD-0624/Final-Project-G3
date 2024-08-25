@@ -124,17 +124,17 @@ const updateProductValidation = Joi.object({
       'number.integer': 'Stock must be an integer.',
       'number.min': 'Stock cannot be less than 0.',
     }),
-  brandId: Joi.string()
-    .uuid({ version: 'uuidv4' })
+  categoryName: Joi.string()
+    .max(50)
     .messages({
-      'string.guid': 'ID must be a valid UUID.',
-      'string.base': 'Brand ID must be a string',
+      'string.base': 'Category name must be a string',
+      'string.max': 'Category Name must be less than 50 characters long',
     }),
-  categoryId: Joi.string()
-    .uuid({ version: 'uuidv4' })
+  brandName: Joi.string()
+    .max(50)
     .messages({
-      'string.guid': 'Category ID must be a valid UUID.',
-      'string.base': 'Category ID must be a string',
+      'string.base': 'Brand name must be a string',
+      'string.max': 'Brand Name must be less than 50 characters long',
     }),
   discountRate: Joi.number()
     .precision(2)

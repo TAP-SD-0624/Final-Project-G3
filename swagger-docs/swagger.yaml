@@ -776,6 +776,10 @@ components:
           minLength: 3
           maxLength: 50
           example: iPhone 14
+        brief:
+          type: string
+          maxLength: 50
+          example: just a string
         description:
           type: string
           maxLength: 150
@@ -812,6 +816,10 @@ components:
           minLength: 3
           maxLength: 50
           example: iPhone 14
+        brief:
+          type: string
+          maxLength: 50
+          example: just a string
         description:
           type: string
           maxLength: 150
@@ -828,7 +836,7 @@ components:
           type: string
         brandName:
           type: string
-      stock:
+        stock:
           type: integer
           example: 100
       anyOf:
@@ -858,10 +866,10 @@ components:
           format: float
         stock:
           type: integer
-        categoryName:
-          type: string
-        brandName:
-          type: string
+        Category:
+          $ref: '#/components/schemas/CategoryResponse'
+        Brand:
+          $ref: '#/components/schemas/BrandResponse'
 
     ProductListResponse:
       type: object
