@@ -261,14 +261,18 @@ paths:
         - bearerAuth: []
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/CreateNewBrand'
       responses:
         '201':
           description: Brand created successfully
         '400':
-          description: Bad request
+          description: Bad request. Possible reasons: Invalid input, File too large.
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
         '500':
           description: Internal server error
 
@@ -320,7 +324,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/UpdateBrand'
       responses:
@@ -720,10 +724,28 @@ components:
           minLength: 3
           maxLength: 50
           example: Apple
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded (2MB max.)
       required:
         - name
+        - image
 
     UpdateBrand:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: Apple
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded
+
+    BrandResponse:
       type: object
       properties:
         id:
@@ -732,20 +754,11 @@ components:
           example: 123e4567-e89b-12d3-a456-426614174000
         name:
           type: string
-          minLength: 3
-          maxLength: 50
-          example: Apple
-      required:
-        - name
-
-    BrandResponse:
-      type: object
-      properties:
-        id:
+          example: Gucci
+        imagePath:
           type: string
-          format: uuid
-        name:
-          type: string
+          format: uri
+          example: https://firebasestorage.googleapis.com/v0/b/tap-e-commerce-cdn.appspot.com/o/files%2Fbrands%2F1724592107894-ClZmdMG8_400x400.jpg?alt=media&token=d47788bb-fcbe-4473-afa6-0b9e5c262e20
 
     BrandListResponse:
       type: object
