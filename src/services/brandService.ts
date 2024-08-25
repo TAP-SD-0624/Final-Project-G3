@@ -1,4 +1,4 @@
-import Brand from '../models/Brand';
+import Brand from '../db-files/models/Brand';
 import fs from 'fs';
 import path from 'path';
 const checkIfBrandExists = async(

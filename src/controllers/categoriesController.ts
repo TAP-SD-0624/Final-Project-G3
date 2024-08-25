@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import Category from '../models/Category';
+import Category from '../db-files/models/Category';
 import errorHandler from '../utils/errorHandler';
 import checkIfCategoryExists from '../services/categoryService';
 import APIError from '../utils/APIError';
@@ -57,9 +57,7 @@ const deleteCategoryById = errorHandler(
     }
 
     await category.destroy();
-    res.status(202).json({
-      status: 'success',
-    });
+    res.status(204).json();
   },
 );
 

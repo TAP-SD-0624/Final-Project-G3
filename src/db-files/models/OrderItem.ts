@@ -1,12 +1,11 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database';
-import Order from './Order';
-import Product from './Product';
+import sequelize from '../../database';
 
 class OrderItem extends Model {
   id!: string;
   quantity!: number;
-  price!: number;
+  unitPrice!: number;
+  totalPrice!: number;
 }
 
 OrderItem.init(
@@ -20,24 +19,28 @@ OrderItem.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    price: {
+    unitPrice: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    orderId: {
-      type: DataTypes.UUID,
-      references: {
-        model: Order,
-        key: 'id',
-      },
+    totalPrice: {
+      type: DataTypes.DOUBLE,
+      allowNull: false,
     },
-    productId: {
-      type: DataTypes.UUID,
-      references: {
-        model: Product,
-        key: 'id',
-      },
-    },
+    // orderId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: Order,
+    //     key: 'id',
+    //   },
+    // },
+    // productId: {
+    //   type: DataTypes.UUID,
+    //   references: {
+    //     model: Product,
+    //     key: 'id',
+    //   },
+    // },
   },
   {
     sequelize,

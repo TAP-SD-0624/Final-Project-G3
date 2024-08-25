@@ -1,15 +1,16 @@
 import { DataTypes, Model } from 'sequelize';
-import UserRole from '../enums/userRoles';
-import sequelize from '../database';
+import UserRole from '../../enums/userRoles';
+import sequelize from '../../database';
 
 class User extends Model {
   id!: string;
   firstName!: string;
   lastName!: string;
   email!: string;
-  dateOfBirth!: Date;
+  mobileNumber?: string;
   password!: string;
   role!: UserRole;
+  balance!: number;
 }
 
 User.init(
@@ -37,9 +38,18 @@ User.init(
         },
       },
     },
-    dateOfBirth: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
+    mobileNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isNumeric: {
+          msg: 'Mobile number should only contain numbers',
+        },
+        len: {
+          args: [10, 15],
+          msg: 'Mobile number should be between 10 and 15 digits long',
+        },
+      },
     },
     password: {
       type: DataTypes.STRING,
@@ -48,6 +58,11 @@ User.init(
     role: {
       type: DataTypes.ENUM(...Object.values(UserRole)),
       defaultValue: 'user',
+      allowNull: false,
+    },
+    balance: {
+      type: DataTypes.FLOAT(10, 2),
+      defaultValue: 20000,
       allowNull: false,
     },
   },

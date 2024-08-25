@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
-import checkIfBrandExists from '../services/brandService';
+import { checkIfBrandExists } from '../services/brandService';
 import APIError from '../utils/APIError';
-import Product from '../models/Product';
+import Product from '../db-files/models/Product';
 import checkIfCategoryExists from '../services/categoryService';
-import Category from '../models/Category';
-import Brand from '../models/Brand';
+import Category from '../db-files/models/Category';
+import Brand from '../db-files/models/Brand';
 import {
   productsService,
   oneProductService,
@@ -13,7 +13,8 @@ import {
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const { name, brief, description, price, brandName, categoryName, discountRate } = req.body;
+    const { name, brief, description, price, brandName,
+      categoryName, discountRate , stock } = req.body;
     const category = await checkIfCategoryExists({ name: categoryName });
     const brand = await checkIfBrandExists({ name: brandName });
 
@@ -29,6 +30,7 @@ const createProduct = errorHandler(
       description,
       price,
       discountRate,
+      stock,
       brandId: brand.id,
       categoryId: category.id,
     });
@@ -104,18 +106,20 @@ const deleteProduct = errorHandler(
 const updateProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const { categoryId, brandId } = req.body;
-    if (! await checkIfBrandExists({ id: brandId })){
+    const { categoryName, brandName } = req.body;
+    const brand = await checkIfBrandExists({ name: brandName });
+    if (!brand){
       return next(new APIError('Brand not found', 404));
     }
-    if (! await checkIfCategoryExists({ id: categoryId })){
+    const category = await checkIfCategoryExists({ name: categoryName });
+    if (!category){
       return next(new APIError('Category not found', 404));
     }
     const product = await oneProductService({ where: { id } });
     if (!product){
       return next(new APIError('Product not found', 404));
     }
-    product.update(req.body);
+    product.update({ ...req.body, brandId: brand.id, categoryId: category.id });
     await product.save();
     res.status(200).json({
       status: 'success',
