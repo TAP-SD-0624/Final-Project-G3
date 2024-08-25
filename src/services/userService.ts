@@ -29,7 +29,6 @@ const userResponseFormatter = (user: User): object => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    dateOfBirth: user.dateOfBirth,
     mobileNumber: user.mobileNumber,
     role: user.role,
   };

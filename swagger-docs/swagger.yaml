@@ -39,10 +39,6 @@ paths:
       responses:
         '200':
           description: User logged in successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Authentication'
         '401':
           description: Unauthorized
         '500':
@@ -201,6 +197,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CategoryResponse'
+        '400':
+          description: Bad request
         '404':
           description: Category not found
         '500':
@@ -594,10 +592,10 @@ components:
           type: string
           format: email
           example: john.doe@example.com
-        dateOfBirth:
+        mobileNumber:
           type: string
-          format: date
-          example: 1990-01-01
+          format: international-phone
+          example: "+970123456789"
         password:
           type: string
           minLength: 8
@@ -609,7 +607,7 @@ components:
         - firstName
         - lastName
         - email
-        - dateOfBirth
+        - mobileNumber
         - password
         - confirmPassword
 
@@ -778,6 +776,10 @@ components:
           minLength: 3
           maxLength: 50
           example: iPhone 14
+        brief:
+          type: string
+          maxLength: 50
+          example: just a string
         description:
           type: string
           maxLength: 150
@@ -814,6 +816,10 @@ components:
           minLength: 3
           maxLength: 50
           example: iPhone 14
+        brief:
+          type: string
+          maxLength: 50
+          example: just a string
         description:
           type: string
           maxLength: 150
@@ -830,7 +836,7 @@ components:
           type: string
         brandName:
           type: string
-      stock:
+        stock:
           type: integer
           example: 100
       anyOf:
@@ -860,10 +866,10 @@ components:
           format: float
         stock:
           type: integer
-        categoryName:
-          type: string
-        brandName:
-          type: string
+        Category:
+          $ref: '#/components/schemas/CategoryResponse'
+        Brand:
+          $ref: '#/components/schemas/BrandResponse'
 
     ProductListResponse:
       type: object

@@ -5,7 +5,7 @@ const { json, cli, timestamp, combine } = format;
 const logger: Logger = winston.createLogger({
   // for production, you might not need for example 'silly' level to be used,
   // so you specify the minimum level to be logged in you environment variables.
-  level: process.env.LOG_LEVEL || 'info',
+  level: process.env.LOG_LEVEL || 'http',
   format: combine(timestamp(), cli()), // time in UTC standard
   transports: [
     new winston.transports.Console()],
