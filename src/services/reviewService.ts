@@ -1,4 +1,4 @@
-import Review from '../models/Review';
+import Review from '../db-files/models/Review';
 import { FindOptions } from 'sequelize';
 
 // Existing function to check if a review exists by productId and userId

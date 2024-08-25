@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import Review from '../models/Review';
-import Brand from '../models/Brand';
-import Category from '../models/Category';
-import User from '../models/User';
-import Product from '../models/Product';
+import Review from '../db-files/models/Review';
+import Brand from '../db-files/models/Brand';
+import Category from '../db-files/models/Category';
+import User from '../db-files/models/User';
+import Product from '../db-files/models/Product';
 import errorHandler from '../utils/errorHandler';
 import { checkIfUserReviewOnProductExists , getReviewService } from '../services/reviewService';
 import { oneProductService } from '../services/productService';
