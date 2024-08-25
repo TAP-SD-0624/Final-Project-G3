@@ -57,9 +57,7 @@ const deleteCategoryById = errorHandler(
     }
 
     await category.destroy();
-    res.status(202).json({
-      status: 'success',
-    });
+    res.status(204).json();
   },
 );
 
