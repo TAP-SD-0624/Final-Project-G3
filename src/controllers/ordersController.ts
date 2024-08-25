@@ -6,21 +6,24 @@ import { createOrderService } from '../services/orderService';
 import {
   checkProductStock,
   oneProductService,
-  updateProductService } from '../services/productService';
+  updateProductService
+} from '../services/productService';
 import APIError from '../utils/APIError';
 import errorHandler from '../utils/errorHandler';
 import { Request, Response, NextFunction } from 'express';
 import User from '../db-files/models/User';
+import Order from '../db-files/models/Order';
+
 
 const createOrder = errorHandler(
-  async(req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const transaction: Transaction = await sequelize.transaction();
     const { address, itemsList, orderOwner, phoneNumber, cardNumber } = req.body;
     const { street, city, pin, state } = address;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userId = (req as any).user.id;
     const user = await User.findOne({ where: { id: userId } });
-    if (!user){
+    if (!user) {
       return next(new APIError('Forced to make this if-condition :)', 500));
     }
     // create the order as a part of the transaction
@@ -48,12 +51,12 @@ const createOrder = errorHandler(
         },
       });
       // check if product doesn't exist
-      if (! product){
+      if (!product) {
         await transaction.rollback();
         return next(new APIError('Product not found.', 404));
       }
       // check if stock available isn't enough
-      if (! await checkProductStock({ product }, item.quantity)){
+      if (! await checkProductStock({ product }, item.quantity)) {
         await transaction.rollback();
         return next(new APIError(`Not enough stock for product: ${product.name}.`, 400));
       }
@@ -65,14 +68,14 @@ const createOrder = errorHandler(
         },
         transaction,
       );
-      const orderItem =  await createOrderItemService(
+      const orderItem = await createOrderItemService(
         orderInstance.id,
         item.id,
         item.quantity,
         product.price,
         { transaction },
       );
-      if (!orderItem){
+      if (!orderItem) {
         await transaction.rollback();
         return next(new APIError('Something went wrong.', 500));
       }
@@ -80,7 +83,7 @@ const createOrder = errorHandler(
     }
     const finalPriceRounded: number = parseInt(finalPrice.toFixed(2));
     // check if the user's balance is enough to buy what they want
-    if (finalPriceRounded > user.balance){
+    if (finalPriceRounded > user.balance) {
       await transaction.rollback();
       return next(new APIError('Insufficient balance to complete the purchase.', 402));
     }
@@ -96,5 +99,33 @@ const createOrder = errorHandler(
     });
   },
 );
+const getAllOrders = errorHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = (req as any).user.id;
 
-export { createOrder };
+    const user = await User.findOne({ where: { id: userId } });
+    if (!user) {
+      return next(new APIError('User doesn\'t exist', 500));
+    }
+
+    const orders = await Order.findAll({
+      where: { userId },
+      attributes: ['id', 'createdAt', 'totalAmount', 'orderStatus'],
+    });
+
+    if (orders.length === 0) {
+      res.status(200).send({
+        message: 'No orders found',
+      });
+    }
+
+    else {
+      res.status(200).json({
+        status: 'success',
+        orders,
+      });
+    }
+  }
+);
+
+export { createOrder, getAllOrders };
