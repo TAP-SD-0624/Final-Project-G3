@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
-import User from '../models/User';
+import User from '../db-files/models/User';
 import bcrypt from 'bcryptjs';
 import {
   checkIfUserExists,
