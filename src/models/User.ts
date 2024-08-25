@@ -7,7 +7,8 @@ class User extends Model {
   firstName!: string;
   lastName!: string;
   email!: string;
-  dateOfBirth!: Date;
+  dateOfBirth?: Date;
+  mobileNumber?: string;
   password!: string;
   role!: UserRole;
 }
@@ -39,7 +40,21 @@ User.init(
     },
     dateOfBirth: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: new Date(),
+    },
+    mobileNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isNumeric: {
+          msg: 'Mobile number should only contain numbers',
+        },
+        len: {
+          args: [10, 15],
+          msg: 'Mobile number should be between 10 and 15 digits long',
+        },
+      },
     },
     password: {
       type: DataTypes.STRING,

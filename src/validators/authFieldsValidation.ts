@@ -26,10 +26,6 @@ const registerValidation = Joi.object({
     'string.email': 'Invalid email format',
     'any.required': 'Email is required',
   }),
-  dateOfBirth: Joi.string().isoDate().required().messages({
-    'string.isoDate': 'Date of birth must be a valid date in ISO 8601 format',
-    'any.required': 'Date of birth is required',
-  }),
   password: Joi.string()
     .min(8)
     .required()
