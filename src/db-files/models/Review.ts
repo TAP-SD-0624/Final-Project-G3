@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../database';
-import { recalculateProductRatingHook } from '../../hooks/addReviewHook'
+import { recalculateProductRatingHook } from '../../hooks/addReviewHook';
 
 class Review extends Model {
   id!: string;
@@ -33,13 +33,13 @@ Review.init(
     updatedAt: false,
     timestamps: true,
     hooks: {
-      afterCreate: async (review: Review) => {
+      afterCreate: async(review: Review) => {
         await recalculateProductRatingHook(review.id);
       },
-      afterUpdate: async (review: Review) => {
+      afterUpdate: async(review: Review) => {
         await recalculateProductRatingHook(review.id);
       },
-      afterDestroy: async (review: Review) => {
+      afterDestroy: async(review: Review) => {
         await recalculateProductRatingHook(review.id);
       },
     },
