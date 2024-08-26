@@ -53,6 +53,16 @@ const registerValidation = Joi.object({
       'any.only': 'Passwords do not match',
       'any.required': 'Password confirmation is required',
     }),
+  balance: Joi.number()
+    .min(0)
+    .precision(2)
+    .default(20000)
+    .messages({
+      'number.base': 'Balance must be a number',
+      'number.min': 'Balance cannot be negative',
+      'number.precision': 'Balance can have up to 2 decimal places',
+      'any.default': 'Balance has a default value of 20000',
+    }),
 });
 
 const loginValidation = Joi.object({

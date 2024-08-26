@@ -655,10 +655,6 @@ components:
           type: string
           format: email
           example: 'john_doe_updated@example.com'
-        dateOfBirth:
-          type: string
-          format: date
-          example: '1990-01-01'
     UserListResponse:
       type: array
       items:

@@ -4,6 +4,9 @@ import Brand from '../db-files/models/Brand';
 import Category from '../db-files/models/Category';
 import User from '../db-files/models/User';
 import Product from '../db-files/models/Product';
+import Order from '../db-files/models/Order';
+import OrderItem from '../db-files/models/OrderItem';
+import { OrderStatus } from '../enums/orderStatus';
 import errorHandler from '../utils/errorHandler';
 import { checkIfUserReviewOnProductExists , getReviewService } from '../services/reviewService';
 import { oneProductService } from '../services/productService';
@@ -41,7 +44,6 @@ const createNewReview = errorHandler(
       return next(new APIError('Product not found', 404));
     }
 
-    // Check if review already exists for the user
     const existingReview =
     await checkIfUserReviewOnProductExists({ productId: product.id, userId: user.id });
     if (existingReview) {
