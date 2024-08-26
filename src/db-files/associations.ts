@@ -167,4 +167,18 @@ const associateModels = (): void => {
   });
 };
 
+// --------------- Orders & OrderItems Associations --------------- :
+
+// An order has many order items
+Order.hasMany(OrderItem, {
+  foreignKey: 'orderId',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+OrderItem.belongsTo(Order, {
+  foreignKey: 'orderId',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+
 export default associateModels;

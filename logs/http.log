@@ -132,3 +132,13 @@
 {"level":"http","message":"POST /api/auth/login 200 424 - 66.691 ms","timestamp":"2024-08-26T00:24:33.405Z"}
 {"level":"http","message":"POST /api/reviews 400 74 - 13.665 ms","timestamp":"2024-08-26T00:24:40.047Z"}
 {"level":"http","message":"GET /api/products/461a78a1-de56-4953-ae8b-047c662c873c 200 394 - 6.473 ms","timestamp":"2024-08-26T00:24:45.498Z"}
+{"level":"http","message":"POST /api/reviews 500 909 - 52.639 ms","timestamp":"2024-08-26T00:45:47.538Z"}
+{"level":"http","message":"POST /api/reviews 500 909 - 23.430 ms","timestamp":"2024-08-26T00:46:05.313Z"}
+{"level":"http","message":"POST /api/reviews 500 1145 - 46.905 ms","timestamp":"2024-08-26T00:57:37.766Z"}
+{"level":"http","message":"POST /api/reviews 500 722 - 71.786 ms","timestamp":"2024-08-26T00:58:48.297Z"}
+{"level":"http","message":"POST /api/reviews 500 723 - 79.377 ms","timestamp":"2024-08-26T01:02:38.997Z"}
+{"level":"http","message":"POST /api/reviews 500 719 - 17.627 ms","timestamp":"2024-08-26T01:03:05.544Z"}
+{"level":"http","message":"POST /api/reviews 500 720 - 20.084 ms","timestamp":"2024-08-26T01:05:02.320Z"}
+{"level":"http","message":"POST /api/reviews 500 719 - 18.005 ms","timestamp":"2024-08-26T01:05:25.101Z"}
+{"level":"http","message":"POST /api/reviews 403 136 - 18.297 ms","timestamp":"2024-08-26T01:06:10.968Z"}
+{"level":"http","message":"POST /api/reviews 403 129 - 41.826 ms","timestamp":"2024-08-26T01:08:34.643Z"}

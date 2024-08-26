@@ -44,6 +44,27 @@ const createNewReview = errorHandler(
       return next(new APIError('Product not found', 404));
     }
 
+    const orderItems = await OrderItem.findAll({
+      include: [
+        {
+          model: Order,
+          required: true,
+          where: {
+            userId: user.id,
+            orderStatus: OrderStatus.Completed,
+          },
+        },
+      ],
+      where: {
+        productId,
+      },
+    });
+
+    if (orderItems.length === 0) {
+      return next(new APIError(`You cannot review a product that you have
+      not ordered or that is not from a completed order.`, 403));
+    }
+
     const existingReview =
     await checkIfUserReviewOnProductExists({ productId: product.id, userId: user.id });
     if (existingReview) {
