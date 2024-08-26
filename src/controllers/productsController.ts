@@ -6,6 +6,8 @@ import Product from '../db-files/models/Product';
 import checkIfCategoryExists from '../services/categoryService';
 import Category from '../db-files/models/Category';
 import Brand from '../db-files/models/Brand';
+import { Op } from 'sequelize';
+import { addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import {
   productsService,
   oneProductService,
@@ -128,10 +130,31 @@ const updateProduct = errorHandler(
   },
 );
 
+const getNewArrivals = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const currentDate = new Date();
+    const threeMonthsAgo = addMonths(currentDate, -3);
+    const startDate = startOfMonth(threeMonthsAgo);
+    const endDate = endOfMonth(threeMonthsAgo);
+
+    const options = {
+      where: {
+        createdAt: {
+          [Op.between]: [startDate, endDate],
+        },
+      },
+      order: [['createdAt', 'DESC']],
+    };
+    const newArrivals = await productsService(options);
+    res.json(newArrivals);
+  },
+);
+
 export {
   getAllProducts,
   getProduct,
   createProduct,
   deleteProduct,
   updateProduct,
+  getNewArrivals,
 };
