@@ -6,6 +6,18 @@ const countProductImages = async(id: string): Promise<number> => {
   return imagesCount;
 };
 
+const productImageService = async(
+  id: string,
+  productId: string,
+): Promise<ProductImage | null> => {
+  const productImage = await ProductImage.findOne({ where: {
+    id,
+    productId,
+  },
+  });
+  return productImage;
+};
+
 const deleteProductImagesService = async(id: string): Promise<void> => {
   const productImages = await ProductImage.findAll({ where: { productId: id } });
   const deleteImagesPromiseArr: Promise<void>[] = [];
@@ -25,4 +37,7 @@ const createProductImageService = async(
   return productImage;
 };
 
-export { countProductImages, createProductImageService, deleteProductImagesService };
+export { countProductImages,
+  createProductImageService,
+  deleteProductImagesService,
+  productImageService };

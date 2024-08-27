@@ -13,8 +13,9 @@ import {
 import {
   countProductImages,
   createProductImageService,
-  deleteProductImagesService } from '../services/productImageService';
-import { uploadToFireBase } from '../utils/firebaseOperations';
+  deleteProductImagesService,
+  productImageService } from '../services/productImageService';
+import { deleteFromFirebase, uploadToFireBase } from '../utils/firebaseOperations';
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -165,6 +166,23 @@ const addImageToProduct = errorHandler(
   },
 );
 
+const deleteProductImage = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id, productImageId } = req.params;
+    const product = await oneProductService({ where: { id } });
+    if (!product){
+      return next(new APIError('Product not found', 404));
+    }
+    const productImage = await productImageService(productImageId, id);
+    if (!productImage){
+      return next(new APIError('Product image with that ID does not exist', 404));
+    }
+    await deleteFromFirebase(productImage.path);
+    await productImage.destroy();
+    res.sendStatus(204);
+  },
+);
+
 export {
   getAllProducts,
   getProduct,
@@ -172,4 +190,5 @@ export {
   deleteProduct,
   updateProduct,
   addImageToProduct,
+  deleteProductImage,
 };

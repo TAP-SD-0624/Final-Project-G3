@@ -7,14 +7,16 @@ import {
   createProductValidation,
   getProductsQueryValidation,
   productIdValidation,
-  updateProductValidation } from '../validators/productFieldsValidation';
+  updateProductValidation,
+  deleteProductImageValidation } from '../validators/productFieldsValidation';
 import {
   createProduct,
   getProduct,
   deleteProduct,
   getAllProducts,
   updateProduct,
-  addImageToProduct } from '../controllers/productsController';
+  addImageToProduct,
+  deleteProductImage } from '../controllers/productsController';
 import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
 const productsRouter: Router = express.Router();
@@ -58,6 +60,14 @@ productsRouter.route('/:id/images')
     adminMiddleware,
     validateJoiRequest({ paramsSchema: productIdValidation }),
     addImageToProduct,
+  );
+
+productsRouter.route('/:id/images/:productImageId')
+  .delete(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: deleteProductImageValidation }),
+    deleteProductImage,
   );
 
 productsRouter.route('*').all(methodNotAllowed);
