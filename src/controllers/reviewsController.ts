@@ -140,7 +140,7 @@ const updateReviewById = errorHandler(
     if (! await checkIfOwnerUserOrAdmin(
       review.userId,
       authenticatedUser.id )){
-      return next(new APIError('Unauthorized to update user profile.', 403));
+      return next(new APIError('Unauthorized to update review.', 403));
     }
 
     await review.update(req.body);
@@ -174,7 +174,7 @@ const deleteReviewById = errorHandler(
       review.userId,
       authenticatedUser.id,
       authenticatedUser.role )){
-      return next(new APIError('Unauthorized to update user profile.', 403));
+      return next(new APIError('Unauthorized to delete review.', 403));
     }
 
     await review.destroy();
