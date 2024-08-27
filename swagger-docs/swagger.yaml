@@ -379,6 +379,17 @@ paths:
     get:
       tags: [Product]
       summary: Get all products
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: filter results by category
+        - in: query
+          name: brand
+          schema:
+            type: string
+          description: filter results by brand
       responses:
         '200':
           description: List of products
@@ -873,16 +884,25 @@ components:
           format: uuid
         name:
           type: string
+        brief:
+          type: string
         description:
           type: string
         price:
           type: number
           format: float
+          example: 299.99
+        rating:
+          type: number
+          format: float
+          example: 3.5
         discountRate:
           type: number
           format: float
+          example: 0.5
         stock:
           type: integer
+          example: 10
         Category:
           $ref: '#/components/schemas/CategoryResponse'
         Brand:
