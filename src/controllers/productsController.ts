@@ -16,6 +16,7 @@ import {
   deleteProductImagesService,
   productImageService } from '../services/productImageService';
 import { deleteFromFirebase, uploadToFireBase } from '../utils/firebaseOperations';
+import ProductImage from '../db-files/models/ProductImage';
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -66,6 +67,10 @@ const getProduct = errorHandler(
         {
           model: Brand,
           attributes: ['name', 'id'],
+        },
+        {
+          model: ProductImage,
+          attributes: ['path'],
         },
       ],
     });
