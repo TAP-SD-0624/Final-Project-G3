@@ -13,7 +13,14 @@ import {
   getProduct,
   deleteProduct,
   getAllProducts,
-  updateProduct } from '../controllers/productsController';
+  updateProduct,
+  getNewArrivals,
+  getHandpickedCollections,
+  getLimitedEditionProducts,
+  getDiscountedProducts,
+  getPopularProducts,
+  getRelatedProducts,
+  getSearchedProducts } from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
 
@@ -28,6 +35,48 @@ productsRouter.route('/')
     adminMiddleware,
     validateJoiRequest({ bodySchema: createProductValidation }),
     createProduct);
+
+productsRouter.route('/newArrivals')
+  .get(
+    authMiddleware,
+    getNewArrivals,
+  );
+
+productsRouter.route('/handpickedCollections')
+  .get(
+    authMiddleware,
+    getHandpickedCollections,
+  );
+
+productsRouter.route('/limitedEdition')
+  .get(
+    authMiddleware,
+    getLimitedEditionProducts,
+  );
+
+productsRouter.route('/discountedProducts')
+  .get(
+    authMiddleware,
+    getDiscountedProducts,
+  );
+
+productsRouter.route('/popularProducts')
+  .get(
+    authMiddleware,
+    getPopularProducts,
+  );
+
+productsRouter.route('/relatedProducts/:productName')
+  .get(
+    authMiddleware,
+    getRelatedProducts,
+  );
+
+productsRouter.route('/search')
+  .get(
+    authMiddleware,
+    getSearchedProducts,
+  );
 
 productsRouter.route('/:id')
   .get(
