@@ -145,7 +145,7 @@ const getNewArrivals = errorHandler(
 
     res.status(200).json({
       status: 'success',
-      numberOfRecords: newArrivals.length,
+      totalProducts: newArrivals.length,
       products: newArrivals.length > 0 ? newArrivals : 'No new arrivals found.',
     });
   },
@@ -162,7 +162,7 @@ const getHandpickedCollections = errorHandler(
 
     res.status(200).json({
       status: 'success',
-      numberOfRecords: handpickedCollections.length,
+      totalProducts: handpickedCollections.length,
       products: handpickedCollections.length > 0 ?
         handpickedCollections : 'No handpicked collections found.',
     });
@@ -180,7 +180,7 @@ const getLimitedEditionProducts = errorHandler(
 
     res.status(200).json({
       status: 'success',
-      numberOfRecords: limitedEditionProducts.length,
+      totalProducts: limitedEditionProducts.length,
       products: limitedEditionProducts.length > 0 ?
         limitedEditionProducts : 'No limited edition products found.',
     });
@@ -197,7 +197,7 @@ const getDiscountedProducts = errorHandler(
 
     res.status(200).json({
       status: 'success',
-      numberOfRecords: discountedProducts.length,
+      totalProducts: discountedProducts.length,
       products: discountedProducts.length > 0 ?
         discountedProducts : 'No products with 15% off or more found.',
     });
@@ -214,7 +214,7 @@ const getPopularProducts = errorHandler(
 
     res.status(200).json({
       status: 'success',
-      numberOfRecords: popularProducts.length,
+      totalProducts: popularProducts.length,
       products: popularProducts.length > 0 ? popularProducts : 'No popular products found.',
     });
   },
@@ -243,7 +243,7 @@ const getSearchedProducts = errorHandler(
 
     res.status(200).json({
       status: 'success',
-      numberOfProducts: products.length,
+      totalProducts: products.length,
       products: products.length > 0 ? products : 'No products found matching your search.',
     });
   },
@@ -268,7 +268,7 @@ const getRelatedProducts = errorHandler(
 
     res.status(200).json({
       status: 'success',
-      numberOfRecords: relatedProducts.length,
+      totalProducts: relatedProducts.length,
       products: relatedProducts.length > 0 ? relatedProducts : 'No related products found.',
     });
   },
