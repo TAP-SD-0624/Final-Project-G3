@@ -10,6 +10,8 @@ import {
   productsService,
   oneProductService,
   productResponseFormatter } from '../services/productService';
+import { countProductImages, createProductImageService } from '../services/productImageService';
+import { uploadToFireBase } from '../utils/firebaseOperations';
 
 const createProduct = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -128,10 +130,42 @@ const updateProduct = errorHandler(
   },
 );
 
+const addImageToProduct = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    if (!req.file){
+      return next(new APIError('No image provided', 400));
+    }
+    const product = await oneProductService({ where: { id } });
+    if (!product){
+      return next(new APIError('Product not found', 404));
+    }
+    const imagesCount = await countProductImages(id);
+    if (imagesCount >= 5){
+      return next(new APIError('A product should not have more than 5 images', 400));
+    }
+    const productImage = await createProductImageService(id);
+    if (!productImage){
+      return next(new APIError('Something wrong happened creating a new image record', 500));
+    }
+    const downloadURL = await uploadToFireBase(req, 'products');
+    if (!downloadURL){
+      return next(new APIError('Product image uploading failed', 500));
+    }
+    productImage.path = downloadURL;
+    await productImage.save();
+    res.status(201).json({
+      status: 'success',
+      productImage,
+    });
+  },
+);
+
 export {
   getAllProducts,
   getProduct,
   createProduct,
   deleteProduct,
   updateProduct,
+  addImageToProduct,
 };

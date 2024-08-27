@@ -13,7 +13,9 @@ import {
   getProduct,
   deleteProduct,
   getAllProducts,
-  updateProduct } from '../controllers/productsController';
+  updateProduct,
+  addImageToProduct } from '../controllers/productsController';
+import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
 const productsRouter: Router = express.Router();
 
@@ -47,6 +49,15 @@ productsRouter.route('/:id')
     adminMiddleware,
     validateJoiRequest({ paramsSchema: productIdValidation }),
     deleteProduct,
+  );
+
+productsRouter.route('/:id/images')
+  .post(
+    uploadToMemory,
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: productIdValidation }),
+    addImageToProduct,
   );
 
 productsRouter.route('*').all(methodNotAllowed);
