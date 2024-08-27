@@ -1,11 +1,13 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../database';
 import { recalculateProductRatingHook } from '../../hooks/addReviewHook';
+import Product from './Product';
 
 class Review extends Model {
   id!: string;
   rating!: number;
   comment!: string;
+  productId!: string;
 }
 
 Review.init(
@@ -25,6 +27,13 @@ Review.init(
     comment: {
       type: DataTypes.STRING(500),
     },
+    productId: {
+      type: DataTypes.STRING,
+      references: {
+        model: Product,
+        key: 'id',
+      },
+    },
   },
   {
     sequelize,
@@ -34,13 +43,13 @@ Review.init(
     timestamps: true,
     hooks: {
       afterCreate: async(review: Review) => {
-        await recalculateProductRatingHook(review.id);
+        await recalculateProductRatingHook(review.productId);
       },
       afterUpdate: async(review: Review) => {
-        await recalculateProductRatingHook(review.id);
+        await recalculateProductRatingHook(review.productId);
       },
       afterDestroy: async(review: Review) => {
-        await recalculateProductRatingHook(review.id);
+        await recalculateProductRatingHook(review.productId);
       },
     },
   },
