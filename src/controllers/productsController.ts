@@ -10,7 +10,10 @@ import {
   productsService,
   oneProductService,
   productResponseFormatter } from '../services/productService';
-import { countProductImages, createProductImageService } from '../services/productImageService';
+import {
+  countProductImages,
+  createProductImageService,
+  deleteProductImagesService } from '../services/productImageService';
 import { uploadToFireBase } from '../utils/firebaseOperations';
 
 const createProduct = errorHandler(
@@ -100,6 +103,7 @@ const deleteProduct = errorHandler(
     if (!product){
       return next(new APIError('Product not found', 404));
     }
+    await deleteProductImagesService(id); // to delete product's images from Firebase
     await product.destroy();
     res.sendStatus(204);
   },

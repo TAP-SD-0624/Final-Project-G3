@@ -1,8 +1,18 @@
 import ProductImage from '../db-files/models/ProductImage';
+import { deleteFromFirebase } from '../utils/firebaseOperations';
 
 const countProductImages = async(id: string): Promise<number> => {
   const imagesCount = await ProductImage.count({ where: { productId: id } });
   return imagesCount;
+};
+
+const deleteProductImagesService = async(id: string): Promise<void> => {
+  const productImages = await ProductImage.findAll({ where: { productId: id } });
+  const deleteImagesPromiseArr: Promise<void>[] = [];
+  for (let i = 0; i < productImages.length; i++){
+    deleteImagesPromiseArr.push(deleteFromFirebase(productImages[i].path));
+  }
+  await Promise.all(deleteImagesPromiseArr);
 };
 
 const createProductImageService = async(
@@ -15,4 +25,4 @@ const createProductImageService = async(
   return productImage;
 };
 
-export { countProductImages, createProductImageService };
+export { countProductImages, createProductImageService, deleteProductImagesService };
