@@ -178,7 +178,7 @@ const deleteReviewById = errorHandler(
     }
 
     await review.destroy();
-    res.status(200).json({ status: 'no content' });
+    res.sendStatus(204);
   },
 );
 
