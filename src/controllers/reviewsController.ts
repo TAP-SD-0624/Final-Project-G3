@@ -137,6 +137,7 @@ const updateReviewById = errorHandler(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
 
+    // here only the auth user can edit their review , admin has no access on that .
     if (! await checkIfOwnerUserOrAdmin(
       review.userId,
       authenticatedUser.id )){
