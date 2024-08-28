@@ -223,15 +223,15 @@ const getPopularProducts = errorHandler(
 const getSearchedProducts = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { query } = req;
-    const searchTerm = query.term as string;
+    const searchByName = query.name as string;
 
-    if (!searchTerm) {
-      return next(new APIError('Search term is required.', 400));
+    if (!searchByName) {
+      return next(new APIError('Search name is required.', 400));
     }
 
     const filterOptions = {
       name: {
-        [Op.like]: `%${searchTerm}%`,
+        [Op.like]: `%${searchByName}%`,
       },
     };
 
