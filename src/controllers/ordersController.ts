@@ -80,7 +80,7 @@ const createOrder = errorHandler(
       );
       if (!orderItem) {
         await transaction.rollback();
-        return next(new APIError('Something went wrong.', 500));
+        return next(new APIError(`Fail to create order item with this data: ${item}`, 500));
       }
       const priceAfterDiscount = calculateDiscount(orderItem.totalPrice, product.discountRate);
       totalDiscount += orderItem.totalPrice - priceAfterDiscount;
@@ -170,7 +170,7 @@ const getOrderData = errorHandler(
 
     );
     if (!order) {
-      return next(new APIError('Order doesn\'t exist', 500));
+      return next(new APIError('Order doesn\'t exist', 404));
     }
     res.status(200).json({
       status: 'success',
