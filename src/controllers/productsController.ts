@@ -169,20 +169,17 @@ const getHandpickedCollections = errorHandler(
   },
 );
 
-// Fetch Limited Edition Products
 const getLimitedEditionProducts = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const filterOptions = {
-      stock: { [Op.lt]: 20 },
-    };
-
-    const limitedEditionProducts = await productsService({}, undefined, filterOptions);
+    const allProducts = await productsService({}, undefined);
+    const limitedEditionProducts = allProducts.filter((product) => product.isLimitedEdition);
 
     res.status(200).json({
       status: 'success',
       totalProducts: limitedEditionProducts.length,
-      products: limitedEditionProducts.length > 0 ?
-        limitedEditionProducts : 'No limited edition products found.',
+      products: limitedEditionProducts.length > 0
+        ? limitedEditionProducts
+        : 'No limited edition products found.',
     });
   },
 );
@@ -199,7 +196,7 @@ const getDiscountedProducts = errorHandler(
       status: 'success',
       totalProducts: discountedProducts.length,
       products: discountedProducts.length > 0 ?
-        discountedProducts : 'No products with 15% off or more found.',
+        discountedProducts : 'No products found with 15% discount or more',
     });
   },
 );

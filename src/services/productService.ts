@@ -14,7 +14,6 @@ const oneProductService = async(
 interface FilterOptions {
   rating?: { [Op.gt]?: number; [Op.gte]?: number };
   price?: { [Op.lt]?: number };
-  stock?: { [Op.lt]?: number };
   discountRate?: { [Op.gte]?: number };
   createdAt?: { [Op.between]?: Date[] };
   name?: { [Op.iLike]?: string };
