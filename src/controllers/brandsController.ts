@@ -17,7 +17,7 @@ const createNewBrand = errorHandler(
     }
     const brand = await Brand.create({
       name,
-      imagePath: './temp', // just a temp value before we get the value from firebase
+      imagePath: `./temp${Date.now()}`, // just a temp value before we get the value from firebase
     });
     const downloadURL = await uploadToFireBase(req, 'brands');
     if (!downloadURL){
