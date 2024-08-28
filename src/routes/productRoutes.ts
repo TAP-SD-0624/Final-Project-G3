@@ -16,9 +16,7 @@ import {
   getAllProducts,
   updateProduct,
   addImageToProduct,
-  deleteProductImage } from '../controllers/productsController';
-import uploadToMemory from '../middlewares/memoryUploadMiddleware';
-  updateProduct,
+  deleteProductImage,
   getNewArrivals,
   getHandpickedCollections,
   getLimitedEditionProducts,
@@ -26,6 +24,7 @@ import uploadToMemory from '../middlewares/memoryUploadMiddleware';
   getPopularProducts,
   getRelatedProducts,
   getSearchedProducts } from '../controllers/productsController';
+import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
 const productsRouter: Router = express.Router();
 
