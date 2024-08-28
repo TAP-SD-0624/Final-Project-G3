@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize';
 import Order from '../db-files/models/Order';
 
-const createOrderService = async (
+const createOrderService = async(
   userId: string,
   orderOwner: string,
   phoneNumber: string,
@@ -13,13 +13,13 @@ const createOrderService = async (
     phoneNumber,
     cardNumber,
   },
-    options,
+  options,
   );
   return order;
 };
 
 const calculateDiscount = (brice: number, discount: number): number => {
   return brice - (discount * brice);
-}
+};
 
 export { createOrderService, calculateDiscount };

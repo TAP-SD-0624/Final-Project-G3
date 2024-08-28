@@ -170,7 +170,7 @@ const associateModels = (): void => {
     onUpdate: 'CASCADE',
   });
 };
-// order items and product 
+// order items and product
 // Add these new associations
 OrderItem.belongsTo(Order, {
   foreignKey: 'orderId',

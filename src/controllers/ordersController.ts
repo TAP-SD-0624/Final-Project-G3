@@ -18,7 +18,7 @@ import Address from '../db-files/models/Address';
 import Product from '../db-files/models/Product';
 
 const createOrder = errorHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async(req: Request, res: Response, next: NextFunction) => {
     const transaction: Transaction = await sequelize.transaction();
     const { address, itemsList, orderOwner, phoneNumber, cardNumber } = req.body;
     const { street, city, pin, state } = address;
@@ -106,7 +106,7 @@ const createOrder = errorHandler(
   },
 );
 const getAllOrders = errorHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async(req: Request, res: Response, next: NextFunction) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userId = (req as any).user.id;
 
@@ -133,8 +133,7 @@ const getAllOrders = errorHandler(
   },
 );
 const getOrderData = errorHandler(
-  async (req: Request, res: Response, next: NextFunction) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async(req: Request, res: Response, next: NextFunction) => {
     const orderId = req.params.id;
 
     const order = await Order.findOne(
@@ -146,7 +145,7 @@ const getOrderData = errorHandler(
           [sequelize.literal('0'), 'deliveryFees'],
           ['totalAmount', 'grandtotal'],
           'phoneNumber',
-          [sequelize.literal(`'Credit Card'`), 'paymentDetails'],
+          [sequelize.literal('\'Credit Card\''), 'paymentDetails'],
         ],
         include: [
           {
@@ -164,41 +163,19 @@ const getOrderData = errorHandler(
                 as: 'Product',
                 attributes: ['id', 'name', 'brief'],
               },
-            ]
+            ],
           },
-        ]
-      }
+        ],
+      },
 
     );
     if (!order) {
       return next(new APIError('Order doesn\'t exist', 500));
     }
-    const orderItems = await OrderItem.findAll(
-      {
-        where: { orderId: orderId },
-        attributes: ['productId', 'unitPrice', 'quantity', 'totalPrice'],
-        include: [
-          {
-            model: Product,
-            as: 'Product',
-            attributes: ['name', 'brief'],
-          },]
-      }
-    );
-    if (!orderItems) {
-      return next(new APIError('No order items for this order!!', 500));
-    }
-    const address = await Address.findOne({
-      where: { orderId: orderId }
-    });
-    if (!address) {
-      return next(new APIError('No address for this order!!', 500));
-    }
     res.status(200).json({
       status: 'success',
-      order: order,
+      order,
     });
-
   },
 );
 
