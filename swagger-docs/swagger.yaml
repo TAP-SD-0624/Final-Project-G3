@@ -153,7 +153,7 @@ paths:
         - bearerAuth: []
       requestBody:
         content:
-          application/json:
+          multipart/form-data::
             schema:
               $ref: '#/components/schemas/CreateNewCategory'
       responses:
@@ -216,7 +216,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/UpdateCategory'
       responses:
@@ -701,9 +701,14 @@ components:
           type: string
           maxLength: 150
           example: All kinds of electronic items
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded (2MB max.)
       required:
         - name
         - description
+        - image
 
     UpdateCategory:
       type: object
@@ -717,9 +722,14 @@ components:
           type: string
           maxLength: 150
           example: Updated description of the category
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded (2MB max.)
       anyOf:
         - required: [name]
         - required: [description]
+        - required: [image]
 
     CategoryResponse:
       type: object
@@ -731,6 +741,10 @@ components:
           type: string
         description:
           type: string
+        imagePath:
+          type: string
+          format: uri
+          example: https://firebasestorage.googleapis.com/v0/b/tap-e-commerce-cdn.appspot.com/o/files%2Fbrands%2F1724592107894-ClZmdMG8_400x400.jpg?alt=media&token=d47788bb-fcbe-4473-afa6-0b9e5c262e20
 
     CategoryListResponse:
       type: object
