@@ -23,7 +23,7 @@ const createNewBrand = errorHandler(
     if (!downloadURL){
       brand.destroy();
       await brand.save();
-      return next(new APIError('Brand image uploading falied', 500));
+      return next(new APIError('Brand image uploading failed', 500));
     }
     brand.imagePath = downloadURL;
     await brand.save();

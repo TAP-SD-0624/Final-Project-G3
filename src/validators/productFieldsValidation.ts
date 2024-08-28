@@ -75,15 +75,23 @@ const createProductValidation: ObjectSchema = Joi.object({
     }),
 });
 
-const productIdValidation = Joi.object({
-  id: Joi.string()
+const uuidV4validation = (fieldName: string): Joi.StringSchema =>
+  Joi.string()
     .uuid({ version: 'uuidv4' })
     .required()
     .messages({
-      'string.guid': 'Product ID must be a valid UUID.',
-      'any.required': 'Product ID is required',
-      'string.base': 'Product ID must be a string',
-    }),
+      'string.guid': `${fieldName} ID must be a valid UUID.`,
+      'any.required': `${fieldName} ID is required`,
+      'string.base': `${fieldName} ID must be a string`,
+    });
+
+const productIdValidation: ObjectSchema = Joi.object({
+  id: uuidV4validation('Product'),
+});
+
+const deleteProductImageValidation = Joi.object({
+  id: uuidV4validation('Product'),
+  productImageId: uuidV4validation('Product Image'),
 });
 
 const updateProductValidation = Joi.object({
@@ -168,7 +176,8 @@ const getProductsQueryValidation = Joi.object({
 
 export {
   createProductValidation,
-  productIdValidation,
   updateProductValidation,
   getProductsQueryValidation,
+  deleteProductImageValidation,
+  productIdValidation,
 };

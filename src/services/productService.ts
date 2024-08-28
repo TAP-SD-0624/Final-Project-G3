@@ -3,6 +3,7 @@ import Product from '../db-files/models/Product';
 import { productQueryInterface } from '../utils/interfaces/productQueryOptionsInterface';
 import Brand from '../db-files/models/Brand';
 import Category from '../db-files/models/Category';
+import ProductImage from '../db-files/models/ProductImage';
 
 const oneProductService = async(
   options?: FindOptions,
@@ -33,6 +34,10 @@ const productsService = async(
     model: Category,
     attributes: ['name', 'id'],
   };
+  const productImagesInclude: Includeable = {
+    model: ProductImage,
+    attributes: ['path'],
+  };
 
   if (query?.category) {
     categoryInclude.where = {
@@ -44,6 +49,7 @@ const productsService = async(
       name: query.brand,
     };
   }
+  include.push(categoryInclude, brandInclude, productImagesInclude);
 
   include.push(categoryInclude, brandInclude);
   options.include = include;

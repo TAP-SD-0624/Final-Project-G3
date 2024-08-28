@@ -379,6 +379,17 @@ paths:
     get:
       tags: [Product]
       summary: Get all products
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: filter results by category
+        - in: query
+          name: brand
+          schema:
+            type: string
+          description: filter results by brand
       responses:
         '200':
           description: List of products
@@ -1001,20 +1012,33 @@ components:
           format: uuid
         name:
           type: string
+        brief:
+          type: string
         description:
           type: string
         price:
           type: number
           format: float
+          example: 299.99
+        rating:
+          type: number
+          format: float
+          example: 3.5
         discountRate:
           type: number
           format: float
+          example: 0.5
         stock:
           type: integer
+          example: 10
         Category:
           $ref: '#/components/schemas/CategoryResponse'
         Brand:
           $ref: '#/components/schemas/BrandResponse'
+        ProductImages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
 
     ProductListResponse:
       type: object
@@ -1025,7 +1049,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductResponse'
-
+    ProductImage:
+      type: object
+      properties:
+        path:
+          type: string
+          format: uri
+          example: https://firebasestorage.googleapis.com/v0/b/tap-e-commerce-cdn.appspot.com/o/files%2Fproducts%2F1724770066227-ClZmdMG8_400x400.jpg?alt=media&token=b6a4b8c0-a551-4023-9374-4e676ecad2b5
+    
     CreateCarouselSlide:
       type: object
       properties:

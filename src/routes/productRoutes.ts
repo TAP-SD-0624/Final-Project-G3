@@ -7,12 +7,17 @@ import {
   createProductValidation,
   getProductsQueryValidation,
   productIdValidation,
-  updateProductValidation } from '../validators/productFieldsValidation';
+  updateProductValidation,
+  deleteProductImageValidation } from '../validators/productFieldsValidation';
 import {
   createProduct,
   getProduct,
   deleteProduct,
   getAllProducts,
+  updateProduct,
+  addImageToProduct,
+  deleteProductImage } from '../controllers/productsController';
+import uploadToMemory from '../middlewares/memoryUploadMiddleware';
   updateProduct,
   getNewArrivals,
   getHandpickedCollections,
@@ -96,6 +101,23 @@ productsRouter.route('/:id')
     adminMiddleware,
     validateJoiRequest({ paramsSchema: productIdValidation }),
     deleteProduct,
+  );
+
+productsRouter.route('/:id/images')
+  .post(
+    uploadToMemory,
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: productIdValidation }),
+    addImageToProduct,
+  );
+
+productsRouter.route('/:id/images/:productImageId')
+  .delete(
+    authMiddleware,
+    adminMiddleware,
+    validateJoiRequest({ paramsSchema: deleteProductImageValidation }),
+    deleteProductImage,
   );
 
 productsRouter.route('*').all(methodNotAllowed);
