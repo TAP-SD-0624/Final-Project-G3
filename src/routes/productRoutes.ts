@@ -15,12 +15,10 @@ import {
   deleteProduct,
   getAllProducts,
   updateProduct,
+  getProductReviews,
   addImageToProduct,
   deleteProductImage } from '../controllers/productsController';
 import uploadToMemory from '../middlewares/memoryUploadMiddleware';
-  updateProduct,
-  getProductReviews,
-} from '../controllers/productsController';
 
 const productsRouter: Router = express.Router();
 
