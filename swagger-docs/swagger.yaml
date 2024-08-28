@@ -907,6 +907,10 @@ components:
           $ref: '#/components/schemas/CategoryResponse'
         Brand:
           $ref: '#/components/schemas/BrandResponse'
+        ProductImages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductImage'
 
     ProductListResponse:
       type: object
@@ -917,7 +921,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductResponse'
-
+    ProductImage:
+      type: object
+      properties:
+        path:
+          type: string
+          format: uri
+          example: https://firebasestorage.googleapis.com/v0/b/tap-e-commerce-cdn.appspot.com/o/files%2Fproducts%2F1724770066227-ClZmdMG8_400x400.jpg?alt=media&token=b6a4b8c0-a551-4023-9374-4e676ecad2b5
+    
     CreateCarouselSlide:
       type: object
       properties:

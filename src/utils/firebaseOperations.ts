@@ -5,7 +5,7 @@ import {
   uploadBytesResumable,
   deleteObject,
 } from 'firebase/storage';
-import { initializeApp } from 'firebase/app';
+import { initializeApp, setLogLevel } from 'firebase/app';
 import APIError from './APIError';
 import { fileLogger } from '../loggers/app-logger';
 import { Request } from 'express';
@@ -29,6 +29,8 @@ const firebaseConfig = {
 
 const uploadToFireBase = async(req: Request, folder?: string):Promise <string | null> => {
   initializeApp(firebaseConfig);
+  // to disable Firebase health check logging
+  setLogLevel('silent');
   if (!req.file){
     throw new APIError('An image should be uploaded using \
       multer before using this utility', 400);
@@ -47,17 +49,17 @@ const uploadToFireBase = async(req: Request, folder?: string):Promise <string | 
 
 const deleteFromFirebase = async(fileUrl: string): Promise<void> => {
   initializeApp(firebaseConfig);
-
+  // to disable Firebase health check logging
+  setLogLevel('silent');
   const storage = getStorage();
 
   // Extract the file path from the URL
   const decodedUrl = decodeURIComponent(fileUrl);
-  console.log(decodedUrl);
   const baseUrl = `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}/o/`;
   const filePath = decodedUrl.split(baseUrl)[1]?.split('?')[0];
 
   if (!filePath) {
-    throw new Error('Invalid file URL');
+    throw new APIError('Failed decoding filePath', 500);
   }
 
   // Create a reference to the file to delete
