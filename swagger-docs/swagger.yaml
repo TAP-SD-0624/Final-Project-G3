@@ -597,6 +597,27 @@ paths:
           description: User not found | No token provided
         '500':
           description: Internal server error | User doesn't exist
+    
+  /api/orders/{id}:
+    get:
+      tags: [Order]
+      summary: Get an order by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '500':
+          description: Order doesn't exist
  
 
 
@@ -1094,3 +1115,73 @@ components:
         orderStatus:
           type: string
           example: "Processing"
+
+    OrderResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        order:
+          type: object
+          properties:
+            subtotal:
+              type: number
+              example: 1000
+            totalDiscount:
+              type: number
+              example: 100
+            deliveryFees:
+              type: number
+              example: 0
+            grandtotal:
+              type: number
+              example: 900
+            phoneNumber:
+              type: string
+              example: "+970123456789"
+            paymentDetails:
+              type: string
+              example: "Credit Card"
+            Address:
+              type: object
+              properties:
+                state:
+                  type: string
+                  example: "Cairo"
+                city:
+                  type: string
+                  example: "New Cairo"
+                street:
+                  type: string
+                  example: "Abbas Al Akkad"
+                pin:
+                  type: integer
+                  example: 12345
+            OrderItems:
+              type: array
+              items:
+                type: object
+                properties:
+                  quantity:
+                    type: integer
+                    example: 3
+                  unitPrice:
+                    type: number
+                    example: 200
+                  totalPrice:
+                    type: number
+                    example: 600
+                  Product:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        example: "57e5db2c-11ad-4524-ab6d-2ac18ac82799"
+                      name:
+                        type: string
+                        example: "iPhone 14"
+                      brief:
+                        type: string
+                        example: "test"
