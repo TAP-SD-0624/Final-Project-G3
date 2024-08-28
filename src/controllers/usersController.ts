@@ -134,6 +134,7 @@ const getUserReviews = errorHandler(
 
     res.status(200).json({
       status: 'success',
+      totalReviews: reviews.length,
       reviews: reviews.length > 0 ? reviews : 'User has no reviews yet.',
     });
   },

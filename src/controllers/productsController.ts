@@ -214,6 +214,7 @@ const getProductReviews = errorHandler(
 
     res.status(200).json({
       status: 'success',
+      totalReviews: reviews.length,
       reviews: reviews.length > 0 ? reviews : 'Product has no reviews yet.',
     });
   },
