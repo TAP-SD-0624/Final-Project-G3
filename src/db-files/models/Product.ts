@@ -57,7 +57,7 @@ Product.init(
     isLimitedEdition: {
       type: DataTypes.VIRTUAL,
       get() {
-        return this.stock < 10;
+        return this.stock < 20;
       },
     },
   },
