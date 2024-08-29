@@ -4,3 +4,4 @@ node_modules
 dist
 coverage
 logs
+/src/db-files/mock-data/*/assets
