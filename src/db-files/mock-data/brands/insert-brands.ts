@@ -26,8 +26,8 @@ async function uploadBrandImage() {
   const auth = await axios.post(
     'https://backend-final-g3-qngl.onrender.com/api/auth/login',
     {
-      email: "sarazebdeh@gmail.com",
-      password: "Sara@test1234"
+      email: "youremail@example.com",
+      password: "StrongPassword@1234"
     },
   );
   console.log(`Authentication status: ${auth.status}`);
