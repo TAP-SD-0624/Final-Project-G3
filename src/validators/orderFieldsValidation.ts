@@ -99,5 +99,14 @@ const createOrderValidation = Joi.object({
       'string.pattern.base': 'Invalid credit card number. Only Visa and Mastercard are accepted.',
     }),
 });
-
-export { createOrderValidation };
+const orderIdValidation = Joi.object({
+  id: Joi.string()
+    .uuid({ version: 'uuidv4' })
+    .required()
+    .messages({
+      'string.guid': 'order ID must be a valid UUID.',
+      'any.required': 'order ID is required',
+      'string.base': 'order ID must be a string',
+    }),
+});
+export { createOrderValidation, orderIdValidation };

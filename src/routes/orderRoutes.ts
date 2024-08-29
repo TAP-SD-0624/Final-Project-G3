@@ -1,7 +1,10 @@
 import express, { Router } from 'express';
 import authMiddleware from '../middlewares/authMiddleware';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
-import { createOrderValidation } from '../validators/orderFieldsValidation';
+import {
+  createOrderValidation,
+  orderIdValidation,
+} from '../validators/orderFieldsValidation';
 import { createOrder, getAllOrders, getOrderData } from '../controllers/ordersController';
 import { methodNotAllowed } from '../controllers/suspicionController';
 
@@ -19,6 +22,7 @@ orderRouter.route('/')
 orderRouter.route('/:id')
   .get(
     authMiddleware,
+    validateJoiRequest({ paramsSchema: orderIdValidation }),
     getOrderData,
   );
 
