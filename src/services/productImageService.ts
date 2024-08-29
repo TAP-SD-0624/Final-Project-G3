@@ -31,7 +31,7 @@ const createProductImageService = async(
   productId: string,
 ): Promise<ProductImage | null> => {
   const productImage:ProductImage | null = await ProductImage.create({
-    path: './temp', // just a temp path until we retrieve the firebase one.
+    path: `./${Date.now()}temp`, // just a temp path until we retrieve the firebase one.
     productId,
   });
   return productImage;
