@@ -4,6 +4,7 @@ import sequelize from '../database';
 import Address from '../db-files/models/Address';
 import OrderItem from '../db-files/models/OrderItem';
 import Product from '../db-files/models/Product';
+import ProductImage from '../db-files/models/ProductImage';
 
 const createOrderService = async(
   userId: string,
@@ -53,6 +54,12 @@ const getOrderInstanceService = async(orderId: string): Promise<Order | null> =>
               model: Product,
               as: 'Product',
               attributes: ['id', 'name', 'brief'],
+              include: [
+                {
+                  model: ProductImage,
+                  attributes: ['path'],
+                },
+              ],
             },
           ],
         },
