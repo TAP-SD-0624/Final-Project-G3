@@ -2,7 +2,11 @@ import { Transaction } from 'sequelize';
 import sequelize from '../database';
 import { createAddressService } from '../services/addressService';
 import { createOrderItemService } from '../services/orderItemService';
-import { createOrderService, calculateDiscount } from '../services/orderService';
+import {
+  createOrderService,
+  calculateDiscount,
+  getOrderInstanceService,
+} from '../services/orderService';
 import {
   checkProductStock,
   oneProductService,
@@ -13,9 +17,6 @@ import errorHandler from '../utils/errorHandler';
 import { Request, Response, NextFunction } from 'express';
 import User from '../db-files/models/User';
 import Order from '../db-files/models/Order';
-import OrderItem from '../db-files/models/OrderItem';
-import Address from '../db-files/models/Address';
-import Product from '../db-files/models/Product';
 
 const createOrder = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
@@ -136,39 +137,7 @@ const getOrderData = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const orderId = req.params.id;
 
-    const order = await Order.findOne(
-      {
-        where: { id: orderId },
-        attributes: [
-          [sequelize.literal('totalAmount + totalDiscount'), 'subtotal'],
-          'totalDiscount',
-          [sequelize.literal('0'), 'deliveryFees'],
-          ['totalAmount', 'grandtotal'],
-          'phoneNumber',
-          [sequelize.literal('\'Credit Card\''), 'paymentDetails'],
-        ],
-        include: [
-          {
-            model: Address,
-            as: 'Address',
-            attributes: ['state', 'city', 'street', 'pin'],
-          },
-          {
-            model: OrderItem,
-            as: 'OrderItems',
-            attributes: ['quantity', 'unitPrice', 'totalPrice'],
-            include: [
-              {
-                model: Product,
-                as: 'Product',
-                attributes: ['id', 'name', 'brief'],
-              },
-            ],
-          },
-        ],
-      },
-
-    );
+    const order = await getOrderInstanceService(orderId);
     if (!order) {
       return next(new APIError('Order doesn\'t exist', 404));
     }
