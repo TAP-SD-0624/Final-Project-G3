@@ -30,13 +30,6 @@ const updateUserValidation = Joi.object({
       'string.max': 'Last Name should have a maximum length of {#limit}.',
     }),
 
-  dateOfBirth: Joi.date()
-    .iso()
-    .optional()
-    .messages({
-      'date.base': 'Date of Birth should be a valid date.',
-    }),
-
   mobileNumber: Joi.string()
     .pattern(/^[0-9]+$/)
     .min(10)
@@ -44,7 +37,8 @@ const updateUserValidation = Joi.object({
     .optional()
     .messages({
       'string.base': 'Mobile Number should be a type of text.',
-      'string.pattern.base': 'Mobile Number should only contain numbers.',
+      'string.pattern.base': 'Phone number must start with a "+" sign and be followed by \
+      10 to 15 digits. Ensure the number is in the correct international format.',
       'string.min': 'Mobile Number should have at least {#limit} digits.',
       'string.max': 'Mobile Number should have a maximum length of {#limit} digits.',
     }),

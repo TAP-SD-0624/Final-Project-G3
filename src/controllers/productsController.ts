@@ -4,6 +4,8 @@ import errorHandler from '../utils/errorHandler';
 import { checkIfBrandExists } from '../services/brandService';
 import APIError from '../utils/APIError';
 import Product from '../db-files/models/Product';
+import User from '../db-files/models/User';
+import Review from '../db-files/models/Review';
 import checkIfCategoryExists from '../services/categoryService';
 import Category from '../db-files/models/Category';
 import Brand from '../db-files/models/Brand';
@@ -331,6 +333,36 @@ const getRelatedProducts = errorHandler(
   },
 );
 
+const getProductReviews = errorHandler(
+  async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { id } = req.params;
+
+    const product = await oneProductService({
+      where: { id },
+    });
+
+    if (!product) {
+      return next(new APIError('Product not found', 404));
+    }
+
+    const reviews = await Review.findAll({
+      where: { productId: product.id },
+      include: [
+        {
+          model: User,
+          attributes: ['firstName'],
+        },
+      ],
+    });
+
+    res.status(200).json({
+      status: 'success',
+      totalReviews: reviews.length,
+      reviews: reviews.length > 0 ? reviews : 'Product has no reviews yet.',
+    });
+  },
+);
+
 export {
   getAllProducts,
   getProduct,
@@ -346,4 +378,5 @@ export {
   getPopularProducts,
   getRelatedProducts,
   getSearchedProducts,
+  getProductReviews,
 };

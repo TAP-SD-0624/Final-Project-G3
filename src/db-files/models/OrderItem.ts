@@ -27,20 +27,6 @@ OrderItem.init(
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    // orderId: {
-    //   type: DataTypes.UUID,
-    //   references: {
-    //     model: Order,
-    //     key: 'id',
-    //   },
-    // },
-    // productId: {
-    //   type: DataTypes.UUID,
-    //   references: {
-    //     model: Product,
-    //     key: 'id',
-    //   },
-    // },
   },
   {
     sequelize,

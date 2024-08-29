@@ -15,6 +15,7 @@ import {
   deleteProduct,
   getAllProducts,
   updateProduct,
+  getProductReviews,
   addImageToProduct,
   deleteProductImage,
   getNewArrivals,
@@ -39,6 +40,11 @@ productsRouter.route('/')
     adminMiddleware,
     validateJoiRequest({ bodySchema: createProductValidation }),
     createProduct);
+
+productsRouter.get('/:id/reviews',
+  authMiddleware,
+  validateJoiRequest({ paramsSchema: productIdValidation }),
+  getProductReviews);
 
 productsRouter.route('/newArrivals')
   .get(
