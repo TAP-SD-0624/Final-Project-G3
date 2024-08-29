@@ -1270,10 +1270,13 @@ components:
           format: uuid
         name:
           type: string
+          example:  Product name'
         brief:
           type: string
+          example:  Product brief'
         description:
           type: string
+          example: 'Product description'
         price:
           type: number
           format: float
@@ -1326,6 +1329,10 @@ components:
           type: string
           maxLength: 100
           example: Summer Sale
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded (2MB max.)
         description:
           type: string
           maxLength: 250
@@ -1342,6 +1349,7 @@ components:
       required:
         - imageUrl
         - title
+        - image
         - description
         - slideOrder
         - categoryName
@@ -1358,6 +1366,10 @@ components:
           type: string
           maxLength: 100
           example: Winter Sale
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded
         description:
           type: string
           maxLength: 250
@@ -1371,32 +1383,39 @@ components:
         brandName:
           type: Apple
       anyOf:
-        - required: [imageUrl]
+        - required: [imagePath]
         - required: [title]
         - required: [description]
         - required: [slideOrder]
         - required: [categoryName]
         - required: [brandName]
 
-    CarouselSlideResponse:
+    CarouselSlideResepons:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        imageUrl:
+          example: 123e4567-e89b-12d3-a456-426614174000
+        imagePath:
           type: string
           format: uri
+          example: https://firebasestorage.googleapis.com/v0/b/tap-e-commerce-cdn.appspot.com/o/files%2Fbrands%2F1724592107894-ClZmdMG8_400x400.jpg?alt=media&token=d47788bb-fcbe-4473-afa6-0b9e5c262e20
         title:
           type: string
+          example: 'CarouselSlide title'
         description:
           type: string
+          example: 'CarouselSlide description'
         slideOrder:
           type: integer
+          example: 1
         categoryName:
           type: string
+          example: 'bags'
         brandName:
           type: string
+          example: 'Apple'
 
     CarouselSlideListResponse:
       type: object
