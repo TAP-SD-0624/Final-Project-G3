@@ -1,5 +1,9 @@
 import { Transaction } from 'sequelize';
 import Order from '../db-files/models/Order';
+import sequelize from '../database';
+import Address from '../db-files/models/Address';
+import OrderItem from '../db-files/models/OrderItem';
+import Product from '../db-files/models/Product';
 
 const createOrderService = async(
   userId: string,
@@ -22,4 +26,44 @@ const calculateDiscount = (brice: number, discount: number): number => {
   return brice - (discount * brice);
 };
 
-export { createOrderService, calculateDiscount };
+const getOrderInstanceService = async(orderId: string): Promise<Order | null> => {
+  const order = await Order.findOne(
+    {
+      where: { id: orderId },
+      attributes: [
+        [sequelize.literal('totalAmount + totalDiscount'), 'subtotal'],
+        'totalDiscount',
+        'deliveryFees',
+        ['totalAmount', 'grandtotal'],
+        'phoneNumber',
+        'paymentDetails',
+      ],
+      include: [
+        {
+          model: Address,
+          as: 'Address',
+          attributes: ['state', 'city', 'street', 'pin'],
+        },
+        {
+          model: OrderItem,
+          as: 'OrderItems',
+          attributes: ['quantity', 'unitPrice', 'totalPrice'],
+          include: [
+            {
+              model: Product,
+              as: 'Product',
+              attributes: ['id', 'name', 'brief'],
+            },
+          ],
+        },
+      ],
+    },
+
+  );
+  return order;
+};
+export {
+  createOrderService,
+  calculateDiscount,
+  getOrderInstanceService,
+};
