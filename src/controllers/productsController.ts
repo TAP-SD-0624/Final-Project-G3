@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { NextFunction, Request, Response } from 'express';
 import errorHandler from '../utils/errorHandler';
 import { checkIfBrandExists } from '../services/brandService';
@@ -190,6 +191,148 @@ const deleteProductImage = errorHandler(
   },
 );
 
+const getNewArrivals = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const now = new Date();
+    const threeMonthsAgo = new Date();
+    threeMonthsAgo.setMonth(now.getMonth() - 3);
+
+    const filterOptions = {
+      createdAt: {
+        [Op.between]: [threeMonthsAgo, now],
+      },
+    };
+
+    const newArrivals = await productsService({}, undefined, filterOptions);
+
+    res.status(200).json({
+      status: 'success',
+      totalProducts: newArrivals.length,
+      products: newArrivals.length > 0 ? newArrivals : 'No new arrivals found.',
+    });
+  },
+);
+// Fetch Handpicked Collections
+const getHandpickedCollections = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const filterOptions = {
+      rating: { [Op.gt]: 4.5 },
+      price: { [Op.lt]: 100 },
+    };
+
+    const handpickedCollections = await productsService({}, undefined, filterOptions);
+
+    res.status(200).json({
+      status: 'success',
+      totalProducts: handpickedCollections.length,
+      products: handpickedCollections.length > 0 ?
+        handpickedCollections : 'No handpicked collections found.',
+    });
+  },
+);
+
+const getLimitedEditionProducts = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const allProducts = await productsService({}, undefined);
+    const limitedEditionProducts = allProducts.filter((product) => product.isLimitedEdition);
+
+    res.status(200).json({
+      status: 'success',
+      totalProducts: limitedEditionProducts.length,
+      products: limitedEditionProducts.length > 0
+        ? limitedEditionProducts
+        : 'No limited edition products found.',
+    });
+  },
+);
+
+const getDiscountedProducts = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const filterOptions = {
+      discountRate: { [Op.gte]: 0.15 },
+    };
+
+    const discountedProducts = await productsService({}, undefined, filterOptions);
+
+    res.status(200).json({
+      status: 'success',
+      totalProducts: discountedProducts.length,
+      products: discountedProducts.length > 0 ?
+        discountedProducts : 'No products found with 15% discount or more',
+    });
+  },
+);
+
+const getPopularProducts = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const filterOptions = {
+      rating: { [Op.gte]: 4.5 },
+    };
+
+    const popularProducts = await productsService({}, undefined, filterOptions);
+
+    res.status(200).json({
+      status: 'success',
+      totalProducts: popularProducts.length,
+      products: popularProducts.length > 0 ? popularProducts : 'No popular products found.',
+    });
+  },
+);
+
+const getSearchedProducts = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { query } = req;
+    const searchByName = query.name as string;
+
+    if (!searchByName) {
+      return next(new APIError('Search name is required.', 400));
+    }
+
+    const filterOptions = {
+      name: {
+        [Op.like]: `%${searchByName}%`,
+      },
+    };
+
+    const products = await productsService(
+      {
+        where: filterOptions,
+      },
+    );
+
+    res.status(200).json({
+      status: 'success',
+      totalProducts: products.length,
+      products: products.length > 0 ? products : 'No products found matching your search.',
+    });
+  },
+);
+
+// still under disscussion  ---------------------------------------------------
+const getRelatedProducts = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const { productName } = req.params;
+
+    if (!productName) {
+      return next(new APIError('Product name is required.', 404));
+    }
+
+    const filterOptions = {
+      name: {
+        [Op.iLike]: `%${productName}%`,
+      },
+    };
+
+    const relatedProducts = await productsService({}, undefined, filterOptions);
+
+    res.status(200).json({
+      status: 'success',
+      totalProducts: relatedProducts.length,
+      products: relatedProducts.length > 0 ? relatedProducts : 'No related products found.',
+    });
+  },
+);
+
 const getProductReviews = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
@@ -228,5 +371,12 @@ export {
   updateProduct,
   addImageToProduct,
   deleteProductImage,
+  getNewArrivals,
+  getHandpickedCollections,
+  getLimitedEditionProducts,
+  getDiscountedProducts,
+  getPopularProducts,
+  getRelatedProducts,
+  getSearchedProducts,
   getProductReviews,
 };

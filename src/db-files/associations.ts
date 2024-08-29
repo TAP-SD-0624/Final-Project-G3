@@ -101,7 +101,11 @@ const associateModels = (): void => {
     onDelete: 'RESTRICT', // The logic of it to be implemented in the controllers
     onUpdate: 'CASCADE',
   });
-
+  Order.hasMany(OrderItem, {
+    foreignKey: 'orderId',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  });
   // A product has many reviews but a review belongs to one product
   Product.hasMany(Review, {
     foreignKey: 'productId',
@@ -166,16 +170,24 @@ const associateModels = (): void => {
     onUpdate: 'CASCADE',
   });
 };
+// order items and product
+// Add these new associations
+OrderItem.belongsTo(Order, {
+  foreignKey: 'orderId',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+
+OrderItem.belongsTo(Product, {
+  foreignKey: 'productId',
+  onDelete: 'RESTRICT',
+  onUpdate: 'CASCADE',
+});
 
 // --------------- Orders & OrderItems Associations --------------- :
 
 // An order has many order items
 Order.hasMany(OrderItem, {
-  foreignKey: 'orderId',
-  onDelete: 'CASCADE',
-  onUpdate: 'CASCADE',
-});
-OrderItem.belongsTo(Order, {
   foreignKey: 'orderId',
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',

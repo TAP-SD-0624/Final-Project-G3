@@ -2,7 +2,11 @@ import { Transaction } from 'sequelize';
 import sequelize from '../database';
 import { createAddressService } from '../services/addressService';
 import { createOrderItemService } from '../services/orderItemService';
-import { createOrderService } from '../services/orderService';
+import {
+  createOrderService,
+  calculateDiscount,
+  getOrderInstanceService,
+} from '../services/orderService';
 import {
   checkProductStock,
   oneProductService,
@@ -40,6 +44,7 @@ const createOrder = errorHandler(
       orderInstance.id,
       { transaction });
     let finalPrice = 0;
+    let totalDiscount = 0;
     // this loop iterates through the itemsList to check if the requested products exist
     //and to check the stock availability for each one of them
     for (let i = 0; i < itemsList.length; i++) {
@@ -76,9 +81,11 @@ const createOrder = errorHandler(
       );
       if (!orderItem) {
         await transaction.rollback();
-        return next(new APIError('Something went wrong.', 500));
+        return next(new APIError(`Fail to create order item with this data: ${item}`, 500));
       }
-      finalPrice += orderItem.totalPrice;
+      const priceAfterDiscount = calculateDiscount(orderItem.totalPrice, product.discountRate);
+      totalDiscount += orderItem.totalPrice - priceAfterDiscount;
+      finalPrice += priceAfterDiscount;
     }
     const finalPriceRounded: number = parseInt(finalPrice.toFixed(2));
     // check if the user's balance is enough to buy what they want
@@ -89,6 +96,7 @@ const createOrder = errorHandler(
     user.balance -= finalPrice;
     await user.save({ transaction });
     orderInstance.totalAmount = finalPrice;
+    orderInstance.totalDiscount = totalDiscount;
     await orderInstance.save({ transaction });
     // if everything went well, commit the transaction
     await transaction.commit();
@@ -110,7 +118,7 @@ const getAllOrders = errorHandler(
 
     const orders = await Order.findAll({
       where: { userId },
-      attributes: ['id', 'createdAt', 'totalAmount', 'orderStatus'],
+      attributes: ['id', 'createdAt', 'totalDiscount', 'totalAmount', 'orderStatus'],
     });
 
     if (orders.length === 0) {
@@ -125,5 +133,19 @@ const getAllOrders = errorHandler(
     }
   },
 );
+const getOrderData = errorHandler(
+  async(req: Request, res: Response, next: NextFunction) => {
+    const orderId = req.params.id;
 
-export { createOrder, getAllOrders };
+    const order = await getOrderInstanceService(orderId);
+    if (!order) {
+      return next(new APIError('Order doesn\'t exist', 404));
+    }
+    res.status(200).json({
+      status: 'success',
+      order,
+    });
+  },
+);
+
+export { createOrder, getAllOrders, getOrderData };

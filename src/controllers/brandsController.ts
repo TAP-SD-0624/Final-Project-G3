@@ -9,6 +9,9 @@ import { uploadToFireBase, deleteFromFirebase } from '../utils/firebaseOperation
 const createNewBrand = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { name } = req.body;
+    if (!req.file){
+      return next(new APIError('No image provided', 400));
+    }
     if (!isValidFileName(name)){
       return next(new APIError('Invalid brand name', 400));
     }
@@ -17,7 +20,7 @@ const createNewBrand = errorHandler(
     }
     const brand = await Brand.create({
       name,
-      imagePath: './temp', // just a temp value before we get the value from firebase
+      imagePath: `./temp${Date.now()}`, // just a temp value before we get the value from firebase
     });
     const downloadURL = await uploadToFireBase(req, 'brands');
     if (!downloadURL){
@@ -118,7 +121,7 @@ const deleteBrandById = errorHandler(
     if (brand === null) {
       return next(new APIError('Brand doesn\'t exist', 400));
     }
-    deleteFromFirebase(brand.imagePath);
+    await deleteFromFirebase(brand.imagePath);
     await Brand.destroy({
       where: { id: brandId },
     });
