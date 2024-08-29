@@ -9,6 +9,8 @@ class Order extends Model {
   cardNumber!: string;
   totalAmount!: number;
   totalDiscount!: number;
+  deliveryFees!: number;
+  paymentDetails!: string;
   orderStatus!: OrderStatus;
 }
 
@@ -39,6 +41,16 @@ Order.init(
     totalDiscount: {
       type: DataTypes.DOUBLE,
       defaultValue: 0,
+      allowNull: false,
+    },
+    deliveryFees: {
+      type: DataTypes.DOUBLE,
+      defaultValue: 0,
+      allowNull: false,
+    },
+    paymentDetails: {
+      type: DataTypes.STRING,
+      defaultValue: 'Credit Card',
       allowNull: false,
     },
     orderStatus: {
