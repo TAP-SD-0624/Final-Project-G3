@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import errorHandler from '../utils/errorHandler';
 import APIError from '../utils/APIError';
 import User from '../db-files/models/User';
+import Review from '../db-files/models/Review';
+import Product from '../db-files/models/Product';
 import bcrypt from 'bcryptjs';
 import {
   checkIfUserExists,
@@ -101,6 +103,43 @@ const changeUserRole = errorHandler(
   },
 );
 
+const getUserReviews = errorHandler(
+  async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { id } = req.params;
+    const user = await checkIfUserExists({ id });
+
+    if (!user) {
+      return next(new APIError('userN not found.', 404));
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const authenticatedUser = (req as any).user;
+
+    if (! await checkIfOwnerUserOrAdmin(
+      user.id,
+      authenticatedUser.id,
+      authenticatedUser.role )){
+      return next(new APIError('Unauthorized to get access for user reviews.', 403));
+    }
+
+    const reviews = await Review.findAll({
+      where: { userId: user.id },
+      include: [
+        {
+          model: Product,
+          attributes: ['name' , 'rating'],
+        },
+      ],
+    });
+
+    res.status(200).json({
+      status: 'success',
+      totalReviews: reviews.length,
+      reviews: reviews.length > 0 ? reviews : 'User has no reviews yet.',
+    });
+  },
+);
+
 const updateUserPassword = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
@@ -137,5 +176,6 @@ export {
   updateUserById,
   deleteUserById,
   changeUserRole,
+  getUserReviews,
   updateUserPassword,
 };

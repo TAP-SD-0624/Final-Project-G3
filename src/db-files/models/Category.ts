@@ -5,6 +5,7 @@ class Category extends Model {
   id!: string;
   name!: string;
   description!: string;
+  imagePath!: string;
 }
 
 Category.init(
@@ -22,6 +23,11 @@ Category.init(
     description: {
       type: DataTypes.TEXT('medium'),
       allowNull: false,
+    },
+    imagePath: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
   },
   {

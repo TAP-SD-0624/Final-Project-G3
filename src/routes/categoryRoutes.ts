@@ -15,6 +15,7 @@ import validateJoiRequest from '../middlewares/validateJoiRequest';
 import authMiddleware  from '../middlewares/authMiddleware';
 
 import adminMiddleware from '../middlewares/adminMiddleware';
+import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
 const categoryRouter = Router();
 
@@ -24,6 +25,7 @@ categoryRouter.route('/')
     getAllCategories,
   )
   .post(
+    uploadToMemory,
     authMiddleware,
     adminMiddleware,
     validateJoiRequest({ bodySchema: createCategoryValidation }),
@@ -37,6 +39,7 @@ categoryRouter.route('/:id')
     getCategoryById,
   )
   .put(
+    uploadToMemory,
     authMiddleware,
     adminMiddleware,
     validateJoiRequest({ paramsSchema: categoryIdValidation }),

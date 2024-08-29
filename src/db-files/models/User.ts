@@ -42,12 +42,16 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isNumeric: {
-          msg: 'Mobile number should only contain numbers',
+        isValidPhoneNumber(value : string) {
+          if (!/^\+\d{10,15}$/.test(value)) {
+            throw new Error(
+              `Phone number must start with a "+" sign and be followed by 10 to 15 digits.
+               Ensure the number is in the correct international format.`);
+          }
         },
         len: {
-          args: [10, 15],
-          msg: 'Mobile number should be between 10 and 15 digits long',
+          args: [12, 16], // 1 + 11 digits = 12, 1 + 15 digits = 16
+          msg: 'Mobile number should be between 12 and 16 characters long (including "+").',
         },
       },
     },

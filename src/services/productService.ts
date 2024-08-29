@@ -1,8 +1,9 @@
-import { FindOptions, Includeable, Transaction } from 'sequelize';
+import { FindOptions, Includeable, Transaction , Op } from 'sequelize';
 import Product from '../db-files/models/Product';
 import { productQueryInterface } from '../utils/interfaces/productQueryOptionsInterface';
 import Brand from '../db-files/models/Brand';
 import Category from '../db-files/models/Category';
+import ProductImage from '../db-files/models/ProductImage';
 
 const oneProductService = async(
   options?: FindOptions,
@@ -11,9 +12,18 @@ const oneProductService = async(
   return product;
 };
 
+interface FilterOptions {
+  rating?: { [Op.gt]?: number; [Op.gte]?: number };
+  price?: { [Op.lt]?: number };
+  discountRate?: { [Op.gte]?: number };
+  createdAt?: { [Op.between]?: Date[] };
+  name?: { [Op.iLike]?: string };
+}
+
 const productsService = async(
   options: FindOptions = {},
   query?: productQueryInterface,
+  filterOptions?: FilterOptions,
 ): Promise<Product[]> => {
   const include: Includeable[] = [];
   const brandInclude: Includeable = {
@@ -24,6 +34,11 @@ const productsService = async(
     model: Category,
     attributes: ['name', 'id'],
   };
+  const productImagesInclude: Includeable = {
+    model: ProductImage,
+    attributes: ['path'],
+  };
+
   if (query?.category) {
     categoryInclude.where = {
       name: query.category,
@@ -34,8 +49,17 @@ const productsService = async(
       name: query.brand,
     };
   }
+  include.push(categoryInclude, brandInclude, productImagesInclude);
+
   include.push(categoryInclude, brandInclude);
   options.include = include;
+
+  if (filterOptions) {
+    options.where = {
+      ...filterOptions,
+    };
+  }
+
   const products = await Product.findAll(options);
   return products;
 };

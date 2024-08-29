@@ -4,6 +4,7 @@ import {
   getUserById,
   updateUserById,
   deleteUserById,
+  getUserReviews,
   changeUserRole,
   updateUserPassword,
 } from '../controllers/usersController';
@@ -47,12 +48,19 @@ userRouter.route('/:id')
     deleteUserById,
   );
 
+userRouter.route('/:id/reviews')
+  .get(
+    authMiddleware,
+    validateJoiRequest({ paramsSchema: userIdValidation }),
+    getUserReviews,
+  );
+
 userRouter.route('/:id/role')
   .put(
     authMiddleware,
     adminMiddleware,
-    validateJoiRequest({ paramsSchema: userIdValidation }), // Validate user ID
-    validateJoiRequest({ bodySchema: updateUserRoleValidation }), // Validate role
+    validateJoiRequest({ paramsSchema: userIdValidation }),
+    validateJoiRequest({ bodySchema: updateUserRoleValidation }),
     changeUserRole,
   );
 

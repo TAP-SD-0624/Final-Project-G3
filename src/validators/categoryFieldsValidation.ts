@@ -49,8 +49,9 @@ const updateCategoryValidation = Joi.object({
       'string.base': 'Description should be a type of text.',
       'string.max': 'Description should have a maximum length of {#limit}.',
     }),
-}).min(1).messages({
-  'object.min': 'At least one field is required.',
 });
+// .min(1).messages({
+//   'object.min': 'At least one field is required.',
+// });
 
 export  { createCategoryValidation , categoryIdValidation ,updateCategoryValidation };
