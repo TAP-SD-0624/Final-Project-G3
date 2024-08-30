@@ -29,7 +29,7 @@ const caroselSlideResponseFormatter = (
   responseObject.title = caroselSlide.title;
   responseObject.description = caroselSlide.description;
   responseObject.slideOrder = caroselSlide.slideOrder;
-  responseObject.imageUrl = caroselSlide.imageUrl;
+  responseObject.imageUrl = caroselSlide.imagePath;
   responseObject.category = caroselSlide.categoryName;
   responseObject.brand = caroselSlide.brandName;
   return responseObject;

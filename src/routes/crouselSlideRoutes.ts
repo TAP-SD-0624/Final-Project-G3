@@ -43,8 +43,8 @@ carouselSlideRouter.route('/:id')
     uploadToMemory,
     authMiddleware,
     adminMiddleware,
-    validateJoiRequest({ paramsSchema: carouselSlideIdValidation }),
-    validateJoiRequest({ bodySchema: updateCarouselSlideValidation }),
+    validateJoiRequest({ bodySchema: updateCarouselSlideValidation ,
+      paramsSchema: carouselSlideIdValidation }),
     updateCarouselSlideById,
   )
   .delete(
