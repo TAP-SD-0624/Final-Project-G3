@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../database';
+import sequelize from '../../database';
 
 class CarouselSlide extends Model {
   id!: string;
@@ -7,6 +7,8 @@ class CarouselSlide extends Model {
   imageUrl!: string;
   title!: string;
   description!: string;
+  categoryName?: string;
+  brandName?: string;
 }
 
 CarouselSlide.init(
@@ -31,6 +33,16 @@ CarouselSlide.init(
     description: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    categoryName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: '',
+    },
+    brandName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: '',
     },
   },
   {

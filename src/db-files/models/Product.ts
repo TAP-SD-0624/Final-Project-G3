@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../database';
+import sequelize from '../../database';
 
 class Product extends Model {
   id!: string;
@@ -57,7 +57,7 @@ Product.init(
     isLimitedEdition: {
       type: DataTypes.VIRTUAL,
       get() {
-        return this.stock < 10;
+        return this.stock < 20;
       },
     },
   },

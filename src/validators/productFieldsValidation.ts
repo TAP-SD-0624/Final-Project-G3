@@ -75,15 +75,23 @@ const createProductValidation: ObjectSchema = Joi.object({
     }),
 });
 
-const productIdValidation = Joi.object({
-  id: Joi.string()
+const uuidV4validation = (fieldName: string): Joi.StringSchema =>
+  Joi.string()
     .uuid({ version: 'uuidv4' })
     .required()
     .messages({
-      'string.guid': 'Product ID must be a valid UUID.',
-      'any.required': 'Product ID is required',
-      'string.base': 'Product ID must be a string',
-    }),
+      'string.guid': `${fieldName} ID must be a valid UUID.`,
+      'any.required': `${fieldName} ID is required`,
+      'string.base': `${fieldName} ID must be a string`,
+    });
+
+const productIdValidation: ObjectSchema = Joi.object({
+  id: uuidV4validation('Product'),
+});
+
+const deleteProductImageValidation = Joi.object({
+  id: uuidV4validation('Product'),
+  productImageId: uuidV4validation('Product Image'),
 });
 
 const updateProductValidation = Joi.object({
@@ -124,17 +132,17 @@ const updateProductValidation = Joi.object({
       'number.integer': 'Stock must be an integer.',
       'number.min': 'Stock cannot be less than 0.',
     }),
-  brandId: Joi.string()
-    .uuid({ version: 'uuidv4' })
+  categoryName: Joi.string()
+    .max(50)
     .messages({
-      'string.guid': 'ID must be a valid UUID.',
-      'string.base': 'Brand ID must be a string',
+      'string.base': 'Category name must be a string',
+      'string.max': 'Category Name must be less than 50 characters long',
     }),
-  categoryId: Joi.string()
-    .uuid({ version: 'uuidv4' })
+  brandName: Joi.string()
+    .max(50)
     .messages({
-      'string.guid': 'Category ID must be a valid UUID.',
-      'string.base': 'Category ID must be a string',
+      'string.base': 'Brand name must be a string',
+      'string.max': 'Brand Name must be less than 50 characters long',
     }),
   discountRate: Joi.number()
     .precision(2)
@@ -168,7 +176,8 @@ const getProductsQueryValidation = Joi.object({
 
 export {
   createProductValidation,
-  productIdValidation,
   updateProductValidation,
   getProductsQueryValidation,
+  deleteProductImageValidation,
+  productIdValidation,
 };

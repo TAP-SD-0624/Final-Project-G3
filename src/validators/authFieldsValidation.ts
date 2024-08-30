@@ -26,10 +26,14 @@ const registerValidation = Joi.object({
     'string.email': 'Invalid email format',
     'any.required': 'Email is required',
   }),
-  dateOfBirth: Joi.string().isoDate().required().messages({
-    'string.isoDate': 'Date of birth must be a valid date in ISO 8601 format',
-    'any.required': 'Date of birth is required',
-  }),
+  mobileNumber: Joi.string()
+    .pattern(/^\+\d{10,15}$/)
+    .required()
+    .messages({
+      'any.required': 'Phone number is required. Please provide a valid phone number.',
+      'string.pattern.base': 'Phone number must start with a "+" sign and be followed by \
+      10 to 15 digits. Ensure the number is in the correct international format.',
+    }),
   password: Joi.string()
     .min(8)
     .required()
