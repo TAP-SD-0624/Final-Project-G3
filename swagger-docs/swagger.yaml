@@ -621,28 +621,6 @@ paths:
         '500':
           description: Internal server error
 
-  /api/products/relatedProducts/{productName}:
-    get:
-      tags: [Product]
-      summary: Get related products by product name
-      parameters:
-        - name: productName
-          in: path
-          required: true
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: List of related products
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductListResponse'
-        '500':
-          description: Internal server error
-
   /api/products/search?name=example:
     get:
       tags: [Product]
@@ -978,24 +956,15 @@ components:
           type: string
           format: email
           example: john.doe@example.com
-        mobileNumber:
-          type: string
-          format: international-phone
-          example: "+970123456789"
         password:
           type: string
           minLength: 8
-          example: Password123!
-        confirmPassword:
-          type: string
           example: Password123!
       required:
         - firstName
         - lastName
         - email
-        - mobileNumber
         - password
-        - confirmPassword
 
     LoginUser:
       type: object
@@ -1024,6 +993,16 @@ components:
           type: string
           format: email
           example: 'john_doe_updated@example.com'
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1990-01-01'
+        mobileNumber:
+          type: string
+          pattern: '^\\+\\d{10,15}$'
+          example: '+12345678901'
+          description: 'Phone number must start with a "+" sign and be followed by 10 to 15 digits. Ensure the number is in the correct international format.'
+
     UserListResponse:
       type: array
       items:

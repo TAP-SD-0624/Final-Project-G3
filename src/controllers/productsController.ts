@@ -308,31 +308,6 @@ const getSearchedProducts = errorHandler(
   },
 );
 
-// still under disscussion  ---------------------------------------------------
-const getRelatedProducts = errorHandler(
-  async(req: Request, res: Response, next: NextFunction) => {
-    const { productName } = req.params;
-
-    if (!productName) {
-      return next(new APIError('Product name is required.', 404));
-    }
-
-    const filterOptions = {
-      name: {
-        [Op.iLike]: `%${productName}%`,
-      },
-    };
-
-    const relatedProducts = await productsService({}, undefined, filterOptions);
-
-    res.status(200).json({
-      status: 'success',
-      totalProducts: relatedProducts.length,
-      products: relatedProducts.length > 0 ? relatedProducts : 'No related products found.',
-    });
-  },
-);
-
 const getProductReviews = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { id } = req.params;
@@ -376,7 +351,6 @@ export {
   getLimitedEditionProducts,
   getDiscountedProducts,
   getPopularProducts,
-  getRelatedProducts,
   getSearchedProducts,
   getProductReviews,
 };

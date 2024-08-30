@@ -26,14 +26,6 @@ const registerValidation = Joi.object({
     'string.email': 'Invalid email format',
     'any.required': 'Email is required',
   }),
-  mobileNumber: Joi.string()
-    .pattern(/^\+\d{10,15}$/)
-    .required()
-    .messages({
-      'any.required': 'Phone number is required. Please provide a valid phone number.',
-      'string.pattern.base': 'Phone number must start with a "+" sign and be followed by \
-      10 to 15 digits. Ensure the number is in the correct international format.',
-    }),
   password: Joi.string()
     .min(8)
     .required()
@@ -45,13 +37,6 @@ const registerValidation = Joi.object({
       'string.min': 'Password must be at least 8 characters long',
       'string.pattern.name': 'Password must contain at least one {#name}',
       'any.required': 'Password is required',
-    }),
-  confirmPassword: Joi.any()
-    .equal(Joi.ref('password'))
-    .required()
-    .messages({
-      'any.only': 'Passwords do not match',
-      'any.required': 'Password confirmation is required',
     }),
 });
 
