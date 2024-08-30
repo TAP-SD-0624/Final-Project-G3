@@ -84,7 +84,7 @@ const updateBrandById = errorHandler(
     }
     const brand: Brand | null = await checkIfBrandExists({ id });
     if (!brand) {
-      return next(new APIError('Brand doesn\'t exist', 400));
+      return next(new APIError('Brand doesn\'t exist', 404));
     }
     if (name) {
       if (!isValidFileName(name)){
