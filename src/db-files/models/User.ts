@@ -42,7 +42,6 @@ User.init(
     dateOfBirth: {
       type: DataTypes.DATEONLY,
       allowNull: true,
-      defaultValue: new Date(),
     },
     mobileNumber: {
       type: DataTypes.STRING,
