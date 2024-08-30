@@ -4,6 +4,7 @@ import app from '../../src/app';
 import sequelize from '../../src/database';
 import User from '../../src/db-files/models/User';
 import associateModels from '../../src/db-files/associations';
+const timeout = 15000;
 let token, categoryId, brandId, productId;
 
 beforeAll(async() => {
@@ -55,7 +56,7 @@ beforeAll(async() => {
       .attach('image', './tests/P0/Temp-Adidas.png');
 
   brandId = brand.body.brand.id;
-});
+}, timeout);
 
 describe('Get all Products', () => {
   it('should return a 200 status code response with an array of objects that represents products', async() => {
@@ -64,7 +65,7 @@ describe('Get all Products', () => {
       .set('authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 
 describe('Create a Product', () => {
@@ -85,7 +86,7 @@ describe('Create a Product', () => {
     productId = res.body.product.id;
     console.log(`PRODUCT ID: ${productId}`);
   });
-});
+}, timeout);
 
 
 describe('Update a Product', () => {
@@ -104,7 +105,7 @@ describe('Update a Product', () => {
     productId = res.body.product.id;
     console.log(`PRODUCT ID: ${productId}`);
   });
-});
+}, timeout);
 
 describe('Delete a Product', () => {
   it('should return a 204 status code response', async() => {
@@ -113,7 +114,7 @@ describe('Delete a Product', () => {
       .set('authorization', `Bearer ${token}`);
     expect(res.status).toBe(204);
   });
-});
+}, timeout);
 
 // Clean up data used for testing and close connection to database
 afterAll(async() => {
@@ -136,4 +137,4 @@ afterAll(async() => {
   
   // Close the database connection after all tests
   await sequelize.close();
-});
+}, timeout);

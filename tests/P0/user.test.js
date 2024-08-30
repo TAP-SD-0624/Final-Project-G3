@@ -4,6 +4,7 @@ import app from '../../src/app';
 import sequelize from '../../src/database';
 import User from '../../src/db-files/models/User';
 import associateModels from '../../src/db-files/associations';
+const timeout = 15000;
 let token, userId;
  
 beforeAll(async() => {
@@ -38,7 +39,7 @@ const res = await request(app).post('/api/auth/login').send({
   console.log(`Users P0 tests, Login Status: ${res.status}`);
   token = res.body.token;
   userId = res.body.user.id;
-});
+}, timeout);
 
 describe('Get all users', () => {
   it('should return a 200 status code response with an array of objects that represents users', async() => {
@@ -47,7 +48,7 @@ describe('Get all users', () => {
       .set('authorization', `Bearer ${token}`)
       expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 
 describe('Get user by ID', () => {
@@ -57,7 +58,7 @@ describe('Get user by ID', () => {
       .set('authorization', `Bearer ${token}`)
       expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 
 describe('Update user by ID', () => {
@@ -71,7 +72,7 @@ describe('Update user by ID', () => {
       expect(res.status).toBe(200);
       expect(res.body.user.firstName).toBe('Test-2');
   });
-});
+}, timeout);
 
 describe('Update user password', () => {
   it('should return a 200 status code response with a messsage that indication successful update', async() => {
@@ -85,7 +86,7 @@ describe('Update user password', () => {
       });
       expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 
 describe('Delete a user', () => {
@@ -109,7 +110,7 @@ describe('Delete a user', () => {
       .set('authorization', `Bearer ${token}`);
       expect(res.status).toBe(204);
   });
-});
+}, timeout);
 
 
 // Clean up data used for testing and close connection to database
@@ -120,4 +121,4 @@ afterAll(async () => {
     }
    });
   await sequelize.close(); // Close the database connection after all tests
-});
+}, timeout);

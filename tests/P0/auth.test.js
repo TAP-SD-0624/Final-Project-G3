@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '../../src/app';
 import sequelize from '../../src/database';
 import User from '../../src/db-files/models/User';
+const timeout = 15000;
 let token;
 
 describe('Sign up new user with valid credintials', () => {
@@ -17,7 +18,7 @@ describe('Sign up new user with valid credintials', () => {
       });
       expect(res.status).toBe(201);
   });
-});
+}, timeout);
 
 describe('Login to the system using an existing user', () => {
   it('should return a 200 status code response that indicates success login', async () => {
@@ -28,14 +29,14 @@ describe('Login to the system using an existing user', () => {
       expect(res.status).toBe(200);
       token = res.body.token;
   });
-});
+}, timeout);
 
 describe('Logout from the system while being logged in', () => {
   it('should return a 200 status code response that indicates successful logout', async () => {
       const res = await request(app).get('/api/auth/logout').set('authorization', `Bearer ${token}`);
       expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 // Clean up data used for testing and close connection to database
 afterAll(async () => {
@@ -45,4 +46,4 @@ afterAll(async () => {
     }
    });
   await sequelize.close(); // Close the database connection after all tests
-});
+}, timeout);

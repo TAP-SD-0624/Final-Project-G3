@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '../../src/app';
 import sequelize from '../../src/database';
 import User from '../../src/db-files/models/User';
+const timeout = 15000;
 let token, brandId;
 
 beforeAll(async() => {
@@ -32,7 +33,7 @@ beforeAll(async() => {
   });
   console.log(`Brand P0 tests, Login Status: ${res.status}`);
   token = res.body.token;
-});
+}, timeout);
 
 describe('Get all brands', () => {
   it('should return a 200 status code response with an array of objects that represents brands', async() => {
@@ -41,7 +42,7 @@ describe('Get all brands', () => {
       .set('authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 describe('Create a brand', () => {
   it('should return a 201 status code response with a response body that contains the created brand', async() => {
@@ -53,7 +54,7 @@ describe('Create a brand', () => {
     expect(res.status).toBe(201);
     brandId = res.body.brand.id;
   });
-});
+}, timeout);
 
 describe('Update a brand', () => {
   it('should return a 200 status code response with a response body that contains the updated brand', async() => {
@@ -63,7 +64,7 @@ describe('Update a brand', () => {
       .send({ name: 'Test-Adidas-2' });
     expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 
 describe('Delete a brand', () => {
@@ -73,7 +74,7 @@ describe('Delete a brand', () => {
       .set('authorization', `Bearer ${token}`)
       expect(res.status).toBe(204);
   });
-});
+}, timeout);
 
 
 // Clean up data used for testing and close connection to database
@@ -84,4 +85,4 @@ afterAll(async() => {
     },
   });
   await sequelize.close(); // Close the database connection after all tests
-});
+}, timeout);

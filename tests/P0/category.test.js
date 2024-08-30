@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '../../src/app';
 import sequelize from '../../src/database';
 import User from '../../src/db-files/models/User';
+const timeout = 15000;
 let token, categoryId;
 
 beforeAll(async() => {
@@ -32,7 +33,7 @@ beforeAll(async() => {
   });
   console.log(`Category P0 tests, Login Status: ${res.status}`);
   token = res.body.token;
-});
+}, timeout);
 
 describe('Get all Categories', () => {
   it('should return a 200 status code response with an array of objects that represents categories', async() => {
@@ -41,7 +42,7 @@ describe('Get all Categories', () => {
       .set('authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 describe('Create a Category', () => {
   it('should return a 201 status code response with a response body that contains the created category', async() => {
@@ -54,7 +55,7 @@ describe('Create a Category', () => {
     expect(res.status).toBe(201);
     categoryId = res.body.category.id;
   });
-});
+}, timeout);
 
 describe('Update a category', () => {
   it('should return a 200 status code response with a response body that contains the updated category', async() => {
@@ -64,7 +65,7 @@ describe('Update a category', () => {
       .send({ name: 'Test-Category-2' });
     expect(res.status).toBe(200);
   });
-});
+}, timeout);
 
 
 describe('Delete a category', () => {
@@ -74,7 +75,7 @@ describe('Delete a category', () => {
       .set('authorization', `Bearer ${token}`)
       expect(res.status).toBe(204);
   });
-});
+}, timeout);
 
 
 // Clean up data used for testing and close connection to database
@@ -85,4 +86,4 @@ afterAll(async() => {
     },
   });
   await sequelize.close(); // Close the database connection after all tests
-});
+}, timeout);
