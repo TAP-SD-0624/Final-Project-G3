@@ -23,7 +23,6 @@ import {
   getLimitedEditionProducts,
   getDiscountedProducts,
   getPopularProducts,
-  getRelatedProducts,
   getSearchedProducts } from '../controllers/productsController';
 import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
@@ -74,12 +73,6 @@ productsRouter.route('/popularProducts')
   .get(
     authMiddleware,
     getPopularProducts,
-  );
-
-productsRouter.route('/relatedProducts/:productName')
-  .get(
-    authMiddleware,
-    getRelatedProducts,
   );
 
 productsRouter.route('/search')
