@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import APIError from '../utils/APIError';
 import { ForeignKeyConstraintError } from 'sequelize';
+import { fileLogger } from '../loggers/app-logger';
 
 const errorController = (err: Error, req: Request, res: Response, next: NextFunction): void => {
   if (err instanceof APIError) {
@@ -15,6 +16,7 @@ const errorController = (err: Error, req: Request, res: Response, next: NextFunc
       message = 'SQL Foreign key constraint error happened';
       statusCode = 400;
     }
+    fileLogger.error(`${err.message}`);
     res.status(statusCode || 500).json({
       status: 'error',
       message: message || err.message,
