@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test:p0": "jest ./tests/P0 --coverage",
     "dev": "nodemon ./src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
