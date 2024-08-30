@@ -89,6 +89,18 @@ const checkProductStock = async(
   return true;
 };
 
+const getCategoriesWithProducts = async(productIds: string[]): Promise<Category[]> => {
+  return await Category.findAll({
+    include: [{
+      model: Product,
+      where: {
+        id: productIds,
+      },
+      attributes: [], // Exclude product fields to avoid redundancy
+    }],
+  });
+};
+
 const updateProductService = async(
   product: Product,
   options: { [key: string]: string | number },
@@ -122,4 +134,5 @@ export {
   productsService,
   productResponseFormatter,
   checkProductStock,
-  updateProductService };
+  updateProductService,
+  getCategoriesWithProducts };
