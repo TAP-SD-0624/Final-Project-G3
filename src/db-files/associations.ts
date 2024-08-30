@@ -9,6 +9,7 @@ import User from './models/User';
 import WishList from './models/Wishlist';
 import Review from './models/Review';
 import OrderItem from './models/OrderItem';
+import WishListItem from './models/WishlistItem';
 
 const associateModels = (): void => {
   // --------------- User Associations --------------- :
@@ -189,6 +190,20 @@ OrderItem.belongsTo(Product, {
 // An order has many order items
 Order.hasMany(OrderItem, {
   foreignKey: 'orderId',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+
+// --------------- WishLists & WishListItems Associations --------------- :
+WishList.belongsToMany(Product, {
+  through: WishListItem,
+  foreignKey: 'wishListId',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+Product.belongsToMany(WishList, {
+  through: WishListItem,
+  foreignKey: 'productId',
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
 });
