@@ -76,7 +76,7 @@ describe('Delete a brand', () => {
 });
 
 
-
+// Clean up data used for testing and close connection to database
 afterAll(async() => {
   await User.destroy({
     where: {

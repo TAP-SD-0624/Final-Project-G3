@@ -77,11 +77,11 @@ describe('Delete a category', () => {
 });
 
 
-
+// Clean up data used for testing and close connection to database
 afterAll(async() => {
   await User.destroy({
     where: {
-      email: 'testuser2p0@gmail.com',
+      email: 'testuser3p0@gmail.com',
     },
   });
   await sequelize.close(); // Close the database connection after all tests

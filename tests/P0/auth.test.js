@@ -37,6 +37,7 @@ describe('Logout from the system while being logged in', () => {
   });
 });
 
+// Clean up data used for testing and close connection to database
 afterAll(async () => {
   await User.destroy({ 
     where: {
