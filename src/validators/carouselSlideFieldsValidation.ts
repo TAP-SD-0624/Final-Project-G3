@@ -101,8 +101,6 @@ const updateCarouselSlideValidation = Joi.object({
       'string.base': 'Brand Name should be a type of text.',
       'string.max': 'Brand Name should have a maximum length of {#limit}.',
     }),
-}).min(1).messages({
-  'object.min': 'At least one field is required.',
 });
 
 export { createCarouselSlideValidation, carouselSlideIdValidation, updateCarouselSlideValidation };

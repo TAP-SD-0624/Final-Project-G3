@@ -65,6 +65,7 @@ const getAllCarouselSlides = errorHandler(
     const formattedSlides = carouselSlides.map(caroselSlideResponseFormatter);
     res.status(200).json({
       status: 'success',
+      totalSlides: carouselSlides.length,
       carouselSlides: formattedSlides.length > 0 ? formattedSlides : 'No carousel slides found.',
     });
   },
@@ -105,12 +106,10 @@ const updateCarouselSlideById = errorHandler(
         return next(new APIError('Title already exists.', 400));
       }
     }
-    if (image){
-      if (!title && !image){
-        return next(new APIError(
-          'You should update at least one thing, either the name or the image', 400,
-        ));
-      }
+    if (!title && !image){
+      return next(new APIError(
+        'You should update at least one thing, either the name or the image', 400,
+      ));
     }
     if (categoryName) {
       const category = await checkIfCategoryExists({ name: categoryName });
