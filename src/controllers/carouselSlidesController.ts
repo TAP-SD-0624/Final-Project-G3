@@ -7,7 +7,6 @@ import { checkIfCarouselSlideExists,checkIfSlideOrderExists,
 } from '../services/carouselSlideService';
 import { checkIfBrandExists } from '../services/brandService';
 import checkIfCategoryExists from '../services/categoryService';
-import isValidFileName from '../validators/fileNameValidator';
 import { uploadToFireBase, deleteFromFirebase } from '../utils/firebaseOperations';
 
 const createNewCarouselSlide = errorHandler(
@@ -34,12 +33,6 @@ const createNewCarouselSlide = errorHandler(
     }
     if (!req.file){
       return next(new APIError('No image provided', 400));
-    }
-    if (!isValidFileName(title)){
-      return next(new APIError('Invalid brand name', 400));
-    }
-    if (await checkIfBrandExists({ name: title }) !== null) {
-      return next(new APIError('Brand already exist', 400));
     }
 
     // Create a new carousel slide
