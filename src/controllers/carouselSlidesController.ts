@@ -11,7 +11,7 @@ import { uploadToFireBase, deleteFromFirebase } from '../utils/firebaseOperation
 
 const createNewCarouselSlide = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { slideOrder, imageUrl, title, description, categoryName, brandName } = req.body;
+    const { slideOrder, title, description, categoryName, brandName } = req.body;
 
     // Check if the slideOrder already exists
     const slideOrderExists = await checkIfSlideOrderExists(slideOrder);
@@ -35,26 +35,23 @@ const createNewCarouselSlide = errorHandler(
       return next(new APIError('No image provided', 400));
     }
 
+    const downloadURL = await uploadToFireBase(req, 'carouselSlides');
+
+    if (!downloadURL){
+      return next(new APIError('Carousel Slide image uploading failed', 500));
+    }
+
     // Create a new carousel slide
     const createNewCarouselSlide = await CarouselSlide.create({
       title,
-      imageUrl,
       slideOrder,
-      imagePath: `./temp${Date.now()}`, // just a temp value before we get the value from firebase
+      imagePath: downloadURL,
       description,
       categoryName,
       brandName,
       brandId: brand?.id,
       categoryId: category?.id,
     });
-
-    const downloadURL = await uploadToFireBase(req, 'carouselSlides');
-    if (!downloadURL){
-      createNewCarouselSlide.destroy();
-      await createNewCarouselSlide.save();
-      return next(new APIError('Carousel Slide image uploading failed', 500));
-    }
-    createNewCarouselSlide.imagePath = downloadURL;
 
     const newCarouselSlide =
     caroselSlideResponseFormatter(createNewCarouselSlide);

@@ -11,15 +11,6 @@ const createCarouselSlideValidation = Joi.object({
       'any.required': 'Slide Order is a required field.',
     }),
 
-  imageUrl: Joi.string()
-    .uri()
-    .required()
-    .messages({
-      'string.base': 'Image URL should be a type of text.',
-      'string.uri': 'Image URL must be a valid URI.',
-      'any.required': 'Image URL is a required field.',
-    }),
-
   title: Joi.string()
     .max(50)
     .required()
@@ -77,14 +68,6 @@ const updateCarouselSlideValidation = Joi.object({
     .messages({
       'number.base': 'Slide Order should be a number.',
       'number.integer': 'Slide Order should be an integer.',
-    }),
-
-  imageUrl: Joi.string()
-    .uri()
-    .optional()
-    .messages({
-      'string.base': 'Image URL should be a type of text.',
-      'string.uri': 'Image URL must be a valid URI.',
     }),
 
   title: Joi.string()
