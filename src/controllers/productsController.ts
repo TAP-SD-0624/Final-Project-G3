@@ -81,9 +81,13 @@ const getProduct = errorHandler(
     if (!product){
       return next(new APIError('Product not found', 404));
     }
+    // Count the total number of reviews for the product
+    const totalReviews = await Review.count({
+      where: { productId: product.id },
+    });
+
     res.status(200).json({
-      status: 'success',
-      product,
+      status: 'success', totalReviews, product,
     });
   },
 );
