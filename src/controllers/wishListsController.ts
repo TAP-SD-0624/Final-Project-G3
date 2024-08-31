@@ -9,7 +9,7 @@ import {  getWishlistByUserId } from '../services/wishlistService';
 import APIError from '../utils/APIError';
 
 const toggleProductToUserWishlist = errorHandler(
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { user } = (req as any);
     const { productId } = req.body;
@@ -18,20 +18,17 @@ const toggleProductToUserWishlist = errorHandler(
       return next(new APIError('User not found.', 404));
     }
 
-    // Fetch product with necessary includes
     const product = await oneProductService({ where: { id: productId } });
 
     if (!product) {
       return next(new APIError('Product not found', 404));
     }
 
-    // Find or create wishlist for the user
     let wishlist: WishList | null = await getWishlistByUserId(user.id);
     if (!wishlist) {
       wishlist = await WishList.create({ userId: user.id });
     }
 
-    // Check if the product is already in the wishlist
     const isInWishlist = await WishListItem.findOne({
       where: {
         productId: product.id,
@@ -40,7 +37,6 @@ const toggleProductToUserWishlist = errorHandler(
     });
 
     if (isInWishlist) {
-      // Remove product from wishlist
       await WishListItem.destroy({
         where: {
           productId: product.id,
@@ -49,7 +45,6 @@ const toggleProductToUserWishlist = errorHandler(
       });
       res.status(200).json({ status: 'success', message: 'Product removed from wishlist' });
     } else {
-      // Add product to wishlist
       await WishListItem.create({
         productId: product.id,
         wishListId: wishlist.id,
@@ -59,8 +54,47 @@ const toggleProductToUserWishlist = errorHandler(
   },
 );
 
-
 const getUserWishList = errorHandler(
+  async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { user } = (req as any);
+
+    if (!user) {
+      return next(new APIError('User not found.', 404));
+    }
+
+    const wishlist = await getWishlistByUserId(user.id);
+
+    if (!wishlist) {
+      return next(new APIError('there are no items in your wishlist yet', 404));
+    }
+
+    const wishListItems = await WishListItem.findAll({
+      where: { wishListId: wishlist.id },
+      attributes: ['productId'],
+    });
+
+    if (!wishListItems.length) {
+      return next(new APIError('there are no items in your wishlist yet', 404));
+    }
+
+    const productIds = wishListItems.map((item) => item.productId);
+
+    const products = await Product.findAll({
+      where: {
+        id: productIds,
+      },
+      attributes: {
+        exclude: ['brandId', 'categoryId'],
+      },
+    });
+
+    res.status(200).json({ status: 'success', totalWishListItems: products.length , products });
+  },
+
+);
+
+const deleteUserWishList = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { user } = (req as any);
@@ -73,32 +107,21 @@ const getUserWishList = errorHandler(
     const wishlist = await getWishlistByUserId(user.id);
 
     if (!wishlist) {
-      return next(new APIError('Wishlist not found.', 404));
+      return next(new APIError('there are no items in your wishlist yet', 404));
     }
 
-    // Fetch wishlist items for the given wishlistId
-    const wishListItems = await WishListItem.findAll({
+    // Delete all wishlist items
+    await WishListItem.destroy({
       where: { wishListId: wishlist.id },
-      attributes: ['productId'], // Only fetch productId to reduce overhead
     });
 
-    if (!wishListItems.length) {
-      return next(new APIError('wishlist Items not found', 404));
-    }
-
-    // Extract product IDs from the wishlist items
-    const productIds = wishListItems.map((item) => item.productId);
-
-    // Fetch products related to these product IDs
-    const products = await Product.findAll({
-      where: {
-        id: productIds,
-      },
+    // Delete the wishlist itself
+    await WishList.destroy({
+      where: { id: wishlist.id },
     });
 
-    res.status(200).json({ status: 'success', products });
+    res.status(200).json({ status: 'success', message: 'Wishlist and all items removed' });
   },
-
 );
 
-export { toggleProductToUserWishlist , getUserWishList };
+export { toggleProductToUserWishlist , getUserWishList , deleteUserWishList };

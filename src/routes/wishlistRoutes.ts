@@ -2,11 +2,12 @@ import { Router } from 'express';
 import {
   toggleProductToUserWishlist,
   getUserWishList,
+  deleteUserWishList,
 } from '../controllers/wishListsController';
 import { methodNotAllowed } from '../controllers/suspicionController';
 
 import validateJoiRequest from '../middlewares/validateJoiRequest';
-import { wishlistIdValidation , wishListProductIdValidation} from '../validators/wishlistFieldsValidation';
+import {  wishListProductIdValidation } from '../validators/wishlistFieldsValidation';
 
 import authMiddleware from '../middlewares/authMiddleware';
 
@@ -20,22 +21,12 @@ wishListRouter.route('/')
   )
   .get(
     authMiddleware,
-    validateJoiRequest({ paramsSchema: wishlistIdValidation }),
     getUserWishList,
-
+  )
+  .delete(
+    authMiddleware,
+    deleteUserWishList,
   );
-
-// wishlistRouter.route('/:id')
-//   .get(
-//     authMiddleware,
-//     validateJoiRequest({ paramsSchema: wishlistIdValidation }),
-//     getReviewById,
-//   )
-//   .delete(
-//     authMiddleware,
-//     validateJoiRequest({ paramsSchema: wishlistIdValidation }),
-//     deleteReviewById,
-//   );
 
 wishListRouter.route('*').all(methodNotAllowed);
 
