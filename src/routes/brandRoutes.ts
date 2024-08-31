@@ -11,7 +11,7 @@ import {
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import {
   createBrandValidation, brandIdValidation, updateBrandValidation,
-} from '../validators/brandFileldsValidation';
+} from '../validators/brandFieldsValidation';
 import { methodNotAllowed } from '../controllers/suspicionController';
 import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 

@@ -1,8 +1,10 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../database';
+import Product from './Product';
 
 class WishListItem extends Model {
   id!: string;
+  productId!: string;
 }
 
 WishListItem.init(
@@ -11,6 +13,13 @@ WishListItem.init(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+    },
+    productId: {
+      type: DataTypes.STRING,
+      references: {
+        model: Product,
+        key: 'id',
+      },
     },
   },
   {
