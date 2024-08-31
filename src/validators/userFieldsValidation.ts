@@ -12,7 +12,6 @@ const userIdValidation = Joi.object({
     }),
 });
 
-// Validation schema for updating a user
 const updateUserValidation = Joi.object({
   firstName: Joi.string()
     .max(100)
@@ -30,15 +29,20 @@ const updateUserValidation = Joi.object({
       'string.max': 'Last Name should have a maximum length of {#limit}.',
     }),
 
+  dateOfBirth: Joi.date()
+    .iso()
+    .optional()
+    .messages({
+      'date.base': 'Date of Birth should be a valid date.',
+    }),
+
   mobileNumber: Joi.string()
-    .pattern(/^[0-9]+$/)
-    .min(10)
-    .max(15)
+    .pattern(/^\+?[0-9]{10,15}$/)
     .optional()
     .messages({
       'string.base': 'Mobile Number should be a type of text.',
-      'string.pattern.base': 'Phone number must start with a "+" sign and be followed by \
-      10 to 15 digits. Ensure the number is in the correct international format.',
+      'string.pattern.base': `Mobile Number must be in the correct international format 
+      with 10 to 15 digits, optionally starting with a "+".`,
       'string.min': 'Mobile Number should have at least {#limit} digits.',
       'string.max': 'Mobile Number should have a maximum length of {#limit} digits.',
     }),

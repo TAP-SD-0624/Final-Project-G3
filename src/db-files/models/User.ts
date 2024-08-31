@@ -11,6 +11,7 @@ class User extends Model {
   password!: string;
   imagePath!: string;
   role!: UserRole;
+  dateOfBirth?: Date;
   balance!: number;
 }
 
@@ -39,20 +40,18 @@ User.init(
         },
       },
     },
+    dateOfBirth: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+    },
     mobileNumber: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        isValidPhoneNumber(value : string) {
-          if (!/^\+\d{10,15}$/.test(value)) {
-            throw new Error(
-              `Phone number must start with a "+" sign and be followed by 10 to 15 digits.
-               Ensure the number is in the correct international format.`);
-          }
-        },
-        len: {
-          args: [12, 16], // 1 + 11 digits = 12, 1 + 15 digits = 16
-          msg: 'Mobile number should be between 12 and 16 characters long (including "+").',
+        is: {
+          args: [/^\+\d{1,3}\d{7,14}$/],
+          msg: `Mobile number must start with 
+          a + followed by a country code (1-3 digits) and then 7-14 digits for the phone number`,
         },
       },
     },
