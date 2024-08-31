@@ -13,9 +13,9 @@ import {
   updateCarouselSlideValidation,
 } from '../validators/carouselSlideFieldsValidation';
 import validateJoiRequest from '../middlewares/validateJoiRequest';
-
 import authMiddleware from '../middlewares/authMiddleware';
 import adminMiddleware from '../middlewares/adminMiddleware';
+import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
 const carouselSlideRouter = Router();
 
@@ -25,6 +25,7 @@ carouselSlideRouter.route('/')
     getAllCarouselSlides,
   )
   .post(
+    uploadToMemory,
     authMiddleware,
     adminMiddleware,
     validateJoiRequest({ bodySchema: createCarouselSlideValidation }),
@@ -39,10 +40,12 @@ carouselSlideRouter.route('/:id')
     getCarouselSlideById,
   )
   .put(
+    uploadToMemory,
     authMiddleware,
     adminMiddleware,
-    validateJoiRequest({ paramsSchema: carouselSlideIdValidation }),
-    validateJoiRequest({ bodySchema: updateCarouselSlideValidation }),
+    validateJoiRequest({
+      bodySchema: updateCarouselSlideValidation ,
+      paramsSchema: carouselSlideIdValidation }),
     updateCarouselSlideById,
   )
   .delete(

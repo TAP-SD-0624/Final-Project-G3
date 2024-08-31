@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test:p0": "jest ./tests/P0 --coverage",
     "dev": "nodemon ./src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
@@ -36,6 +36,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.11.0",
     "sequelize": "^6.37.3",
+    "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.14.2",

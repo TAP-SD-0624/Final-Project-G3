@@ -9,6 +9,7 @@ class User extends Model {
   email!: string;
   mobileNumber?: string;
   password!: string;
+  imagePath!: string;
   role!: UserRole;
   dateOfBirth?: Date;
   balance!: number;
@@ -57,6 +58,11 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    imagePath: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
     },
     role: {
       type: DataTypes.ENUM(...Object.values(UserRole)),

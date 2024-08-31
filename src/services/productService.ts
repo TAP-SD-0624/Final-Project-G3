@@ -89,6 +89,18 @@ const checkProductStock = async(
   return true;
 };
 
+const getCategoriesWithProducts = async(productIds: string[]): Promise<Category[]> => {
+  return await Category.findAll({
+    include: [{
+      model: Product,
+      where: {
+        id: productIds,
+      },
+      attributes: [], // Exclude product fields to avoid redundancy
+    }],
+  });
+};
+
 const updateProductService = async(
   product: Product,
   options: { [key: string]: string | number },
@@ -102,6 +114,7 @@ const productResponseFormatter = (
   brand: string,
 ): object => {
   const responseObject: { [key: string]: string | number | boolean | undefined } = {};
+  responseObject.id = product.id;
   responseObject.name = product.name;
   responseObject.brief = product.brief;
   responseObject.description = product.description;
@@ -122,4 +135,5 @@ export {
   productsService,
   productResponseFormatter,
   checkProductStock,
-  updateProductService };
+  updateProductService,
+  getCategoriesWithProducts };

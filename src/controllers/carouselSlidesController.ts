@@ -7,10 +7,11 @@ import { checkIfCarouselSlideExists,checkIfSlideOrderExists,
 } from '../services/carouselSlideService';
 import { checkIfBrandExists } from '../services/brandService';
 import checkIfCategoryExists from '../services/categoryService';
+import { uploadToFireBase, deleteFromFirebase } from '../utils/firebaseOperations';
 
 const createNewCarouselSlide = errorHandler(
   async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { slideOrder, imageUrl, title, description, categoryName, brandName } = req.body;
+    const { slideOrder, title, description, categoryName, brandName } = req.body;
 
     // Check if the slideOrder already exists
     const slideOrderExists = await checkIfSlideOrderExists(slideOrder);
@@ -30,12 +31,21 @@ const createNewCarouselSlide = errorHandler(
     if (brandName && !brand) {
       return next(new APIError('Brand does not exist.', 400));
     }
+    if (!req.file){
+      return next(new APIError('No image provided', 400));
+    }
+
+    const downloadURL = await uploadToFireBase(req, 'carouselSlides');
+
+    if (!downloadURL){
+      return next(new APIError('Carousel Slide image uploading failed', 500));
+    }
 
     // Create a new carousel slide
     const createNewCarouselSlide = await CarouselSlide.create({
       title,
-      imageUrl,
       slideOrder,
+      imagePath: downloadURL,
       description,
       categoryName,
       brandName,
@@ -55,6 +65,7 @@ const getAllCarouselSlides = errorHandler(
     const formattedSlides = carouselSlides.map(caroselSlideResponseFormatter);
     res.status(200).json({
       status: 'success',
+      totalSlides: carouselSlides.length,
       carouselSlides: formattedSlides.length > 0 ? formattedSlides : 'No carousel slides found.',
     });
   },
@@ -77,6 +88,7 @@ const updateCarouselSlideById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { slideOrder , title , categoryName, brandName } = req.body;
+    const image = req.file as Express.Multer.File;
 
     const carouselSlide = await checkIfCarouselSlideExists({ id });
     if (!carouselSlide) {
@@ -94,6 +106,11 @@ const updateCarouselSlideById = errorHandler(
         return next(new APIError('Title already exists.', 400));
       }
     }
+    if (!title && !image){
+      return next(new APIError(
+        'You should update at least one thing, either the name or the image', 400,
+      ));
+    }
     if (categoryName) {
       const category = await checkIfCategoryExists({ name: categoryName });
       if (!category) {
@@ -105,6 +122,17 @@ const updateCarouselSlideById = errorHandler(
       if (!brand) {
         return next(new APIError('Brand does not exist.', 400));
       }
+    }
+
+    if (image) {
+      await deleteFromFirebase(carouselSlide.imagePath);
+      const downloadURL = await uploadToFireBase(req, 'carouselSlides');
+      if (!downloadURL){
+        carouselSlide.destroy();
+        await carouselSlide.save();
+        return next(new APIError('Carousel Slide image uploading falied', 500));
+      }
+      carouselSlide.imagePath = downloadURL;
     }
 
     await carouselSlide.update(req.body);
