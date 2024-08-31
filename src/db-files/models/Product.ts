@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../../database';
+import Category from './Category';
 
 class Product extends Model {
   id!: string;
@@ -11,6 +12,7 @@ class Product extends Model {
   discountRate!:number;
   rating!: number;
   isLimitedEdition!: boolean;
+  categoryId!: string;
 }
 
 Product.init(
@@ -47,6 +49,13 @@ Product.init(
       validate: {
         min: 0.01,
         max: 1.0,
+      },
+    },
+    categoryId: {
+      type: DataTypes.STRING,
+      references: {
+        model: Category,
+        key: 'id',
       },
     },
     rating: {

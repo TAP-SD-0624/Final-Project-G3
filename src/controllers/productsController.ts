@@ -12,6 +12,7 @@ import Brand from '../db-files/models/Brand';
 import {
   productsService,
   oneProductService,
+  getCategoriesWithProducts,
   productResponseFormatter } from '../services/productService';
 import {
   countProductImages,
@@ -80,9 +81,13 @@ const getProduct = errorHandler(
     if (!product){
       return next(new APIError('Product not found', 404));
     }
+    // Count the total number of reviews for the product
+    const totalReviews = await Review.count({
+      where: { productId: product.id },
+    });
+
     res.status(200).json({
-      status: 'success',
-      product,
+      status: 'success', totalReviews, product,
     });
   },
 );
@@ -220,13 +225,22 @@ const getHandpickedCollections = errorHandler(
       price: { [Op.lt]: 100 },
     };
 
-    const handpickedCollections = await productsService({}, undefined, filterOptions);
+    const filteredProducts = await productsService({}, undefined, filterOptions);;
+
+    const productIds = filteredProducts.map((product) => product.id);
+
+    const categories = await getCategoriesWithProducts(productIds);
+
+    const categoriesWithProducts = categories.map((category) => ({
+      ...category.toJSON(),
+      products: filteredProducts.filter((product) => product.categoryId === category.id),
+    }));
 
     res.status(200).json({
       status: 'success',
-      totalProducts: handpickedCollections.length,
-      products: handpickedCollections.length > 0 ?
-        handpickedCollections : 'No handpicked collections found.',
+      totalCategories: categoriesWithProducts.length,
+      categories: categoriesWithProducts.length > 0
+        ? categoriesWithProducts : 'No handpicked collections found.',
     });
   },
 );
