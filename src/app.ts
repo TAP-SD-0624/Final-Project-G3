@@ -7,6 +7,7 @@ import userRouter from './routes/userRoutes';
 import productsRouter from './routes/productRoutes';
 import orderRouter from './routes/orderRoutes';
 import reviewsRouter from './routes/reviewRoutes';
+import wishListRouter from './routes/wishlistRoutes';
 import errorController from './controllers/errorController';
 import rateLimit from 'express-rate-limit';
 import {
@@ -71,6 +72,7 @@ app.use('/api/carouselSlides', carouselSlideRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/reviews', reviewsRouter);
+app.use('/api/wishList', wishListRouter);
 
 // whenever a user sends a request to an unimplemented endpoint,
 // they will get a 404 status code response
