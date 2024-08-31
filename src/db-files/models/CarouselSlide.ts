@@ -4,7 +4,7 @@ import sequelize from '../../database';
 class CarouselSlide extends Model {
   id!: string;
   slideOrder!: number;
-  imageUrl!: string;
+  imagePath!: string;
   title!: string;
   description!: string;
   categoryName?: string;
@@ -22,9 +22,10 @@ CarouselSlide.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    imageUrl: {
+    imagePath: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     title: {
       type: DataTypes.STRING,
