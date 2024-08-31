@@ -1002,10 +1002,21 @@ components:
           type: string
           format: email
           example: 'john_doe_updated@example.com'
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded
+      anyOf:
+        - required: [firstName]
+        - required: [lastName]
+        - required: [email]
+        - required: [image]
+
     UserListResponse:
       type: array
       items:
         $ref: '#/components/schemas/UserResponse'
+
     UserResponse:
       type: object
       properties:
@@ -1020,6 +1031,10 @@ components:
           type: string
           format: email
           example: 'johndoe@example.com'
+        image:
+          type: string
+          format: binary
+          description: The image file to be uploaded
 
     UpdatePassword:
       type: object
