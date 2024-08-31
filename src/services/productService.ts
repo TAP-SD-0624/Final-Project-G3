@@ -102,6 +102,7 @@ const productResponseFormatter = (
   brand: string,
 ): object => {
   const responseObject: { [key: string]: string | number | boolean | undefined } = {};
+  responseObject.id = product.id;
   responseObject.name = product.name;
   responseObject.brief = product.brief;
   responseObject.description = product.description;
