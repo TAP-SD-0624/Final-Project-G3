@@ -9,6 +9,7 @@ import app from './app';
 import sequelize from './database';
 import associateModels from './db-files/associations';
 import { logger, fileLogger } from './loggers/app-logger';
+import { connectRedis, disconnectRedis } from './utils/redisClient';
 
 const PORT: number | undefined = Number(process.env.PORT) || 80;
 
@@ -17,6 +18,7 @@ const startServer = async() => {
   try {
     associateModels();
     await sequelize.sync(); // { force: true } for development only to drop and recreate tables
+    await connectRedis(); // Connect to Redis
     logger.info('Database & tables created!');
     fileLogger.info('Database & tables created!');
     app.listen(PORT, () => {
@@ -37,6 +39,12 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (error) => {
   fileLogger.error('Uncaught Exception:', error);
   process.exit(1); // to indicate that some error happened.
+});
+
+// Disconnect Redis on server shutdown
+process.on('SIGINT', async() => {
+  await disconnectRedis();
+  process.exit(0);
 });
 
 startServer();
