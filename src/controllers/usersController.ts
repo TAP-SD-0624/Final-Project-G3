@@ -10,6 +10,7 @@ import {
   userResponseFormatter,
 } from '../services/userService';
 import { checkIfOwnerUserOrAdmin } from '../services/authService';
+import { uploadToFireBase, deleteFromFirebase } from '../utils/firebaseOperations';
 
 // create user only by sign up
 
@@ -43,14 +44,20 @@ const getUserById = errorHandler(
 // Update a user by ID
 const updateUserById = errorHandler(
   async(req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
+    const { id ,firstName, lastName } = req.params;
+    const image = req.file as Express.Multer.File;
+
+    if (!firstName && !lastName && !image){
+      return next(new APIError(
+        'You should update at least one thing, either the firstName or lastName or the image', 400,
+      ));
+    }
     const user = await checkIfUserExists({ id });
 
     if (!user) {
       return next(new APIError('User not found.', 404));
     }
 
-    // Get the authenticated user from the JWT token
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const authenticatedUser = (req as any).user;
 
@@ -59,6 +66,18 @@ const updateUserById = errorHandler(
       authenticatedUser.id,
       authenticatedUser.role )){
       return next(new APIError('Unauthorized to update user info.', 403));
+    }
+
+    if (image) {
+      await deleteFromFirebase(user.imagePath);
+      const downloadURL = await uploadToFireBase(req, 'users');
+      if (!downloadURL){
+        user.destroy();
+        await user.save();
+        return next(new APIError('User image uploading falied', 500));
+      }
+      user.imagePath = downloadURL;
+      await user.save();
     }
 
     await user.update(req.body);

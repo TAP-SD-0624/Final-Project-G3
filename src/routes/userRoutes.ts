@@ -18,6 +18,7 @@ import {
 import validateJoiRequest from '../middlewares/validateJoiRequest';
 import authMiddleware from '../middlewares/authMiddleware';
 import adminMiddleware from '../middlewares/adminMiddleware';
+import uploadToMemory from '../middlewares/memoryUploadMiddleware';
 
 const userRouter = Router();
 
@@ -36,6 +37,7 @@ userRouter.route('/:id')
     getUserById,
   )
   .put(
+    uploadToMemory,
     authMiddleware,
     validateJoiRequest({ paramsSchema: userIdValidation }),
     validateJoiRequest({ bodySchema: updateUserValidation }),
